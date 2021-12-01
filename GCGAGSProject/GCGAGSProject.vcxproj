@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{1c33e741-6cf9-45fa-9e09-a60faaac3cd2}</ProjectGuid>
+    <RootNamespace>GCGAGSProject</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(DXLIB_DIR);$(IncludePath);$(ProjectDir)\Scene;$(ProjectDir)\routesearch;$(ProjectDir)\common;$(ProjectDir)\ui;$(ProjectDir)\ai;$(ProjectDir)\input\;$(ProjectDir)\Game\;$(ProjectDir)\Mng\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXLIB_DIR);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(DXLIB_DIR);$(IncludePath);$(ProjectDir)\Scene;$(ProjectDir)\routesearch;$(ProjectDir)\common;$(ProjectDir)\ui;$(ProjectDir)\ai;$(ProjectDir)\input\;$(ProjectDir)\Game\;$(ProjectDir)\Mng\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(DXLIB_DIR);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(DXLIB_DIR);$(IncludePath);$(ProjectDir)\Scene;$(ProjectDir)\routesearch;$(ProjectDir)\common;$(ProjectDir)\ui;$(ProjectDir)\ai;$(ProjectDir)\input\;$(ProjectDir)\Game\;$(ProjectDir)\Mng\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(DXLIB_DIR);$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir);$(DXLIB_DIR);$(IncludePath);$(ProjectDir)\Scene;$(ProjectDir)\routesearch;$(ProjectDir)\common;$(ProjectDir)\ui;$(ProjectDir)\ai;$(ProjectDir)\input\;$(ProjectDir)\Game\;$(ProjectDir)\Mng\;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>$(DXLIB_DIR);$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="ai\Adventurer.h" />
+    <ClInclude Include="ai\Desmodus.h" />
+    <ClInclude Include="ai\EnemyPawn.h" />
+    <ClInclude Include="ai\Explorer.h" />
+    <ClInclude Include="ai\Fire.h" />
+    <ClInclude Include="ai\Gate.h" />
+    <ClInclude Include="ai\Goal.h" />
+    <ClInclude Include="ai\Knight.h" />
+    <ClInclude Include="ai\Monster.h" />
+    <ClInclude Include="Game\MapDatList.h" />
+    <ClInclude Include="Mng\KeyMng.h" />
+    <ClInclude Include="ui\gameUI\Monster3.h" />
+    <ClInclude Include="ai\Rook.h" />
+    <ClInclude Include="ai\Spike.h" />
+    <ClInclude Include="common\MyEnergy.h" />
+    <ClInclude Include="common\Vector2.h" />
+    <ClInclude Include="common\WFUtility.h" />
+    <ClInclude Include="Game\MapSelect.h" />
+    <ClInclude Include="Game\RoadTime.h" />
+    <ClInclude Include="MapTest.h" />
+    <ClInclude Include="Mng\CronoMng.h" />
+    <ClInclude Include="input\Controller.h" />
+    <ClInclude Include="input\inputID.h" />
+    <ClInclude Include="input\PadInput.h" />
+    <ClInclude Include="Mng\EnergyMng.h" />
+    <ClInclude Include="Mng\ImageMng.h" />
+    <ClInclude Include="Mng\MapMng.h" />
+    <ClInclude Include="MapRoad.h" />
+    <ClInclude Include="Mng\MoneyMng.h" />
+    <ClInclude Include="Mng\MonsterMng.h" />
+    <ClInclude Include="Mng\MouseMng.h" />
+    <ClInclude Include="Mng\PadMng.h" />
+    <ClInclude Include="Mng\ReadMng.h" />
+    <ClInclude Include="Mng\SoundMng.h" />
+    <ClInclude Include="Game\PlayMode.h" />
+    <ClInclude Include="routesearch\Aster.h" />
+    <ClInclude Include="routesearch\GraphEdge.h" />
+    <ClInclude Include="routesearch\GraphNode.h" />
+    <ClInclude Include="routesearch\NavGraphNode.h" />
+    <ClInclude Include="routesearch\NodeType.h" />
+    <ClInclude Include="routesearch\RightHandSearch.h" />
+    <ClInclude Include="routesearch\RouteSearch.h" />
+    <ClInclude Include="routesearch\SparseGraph.h" />
+    <ClInclude Include="SaveMap.h" />
+    <ClInclude Include="Scene\BaseScene.h" />
+    <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Scene\PoseScene.h" />
+    <ClInclude Include="Scene\sceneMng.h" />
+    <ClInclude Include="Scene\TitleScene.h" />
+    <ClInclude Include="ui\gameUI\Gimmick1.h" />
+    <ClInclude Include="ui\gameUI\Gimmick2.h" />
+    <ClInclude Include="ui\gameUI\Monster2.h" />
+    <ClInclude Include="ui\gameUI\ScrollUIBase.h" />
+    <ClInclude Include="ui\gameUI\Monster1.h" />
+    <ClInclude Include="ui\UIBackPlay.h" />
+    <ClInclude Include="ui\UIBase.h" />
+    <ClInclude Include="ui\UIGimmickMenu.h" />
+    <ClInclude Include="ui\UIMapBGimmick.h" />
+    <ClInclude Include="ui\UIMapBMine.h" />
+    <ClInclude Include="ui\UIMapBMonster.h" />
+    <ClInclude Include="ui\UIMapBuildMenu.h" />
+    <ClInclude Include="ui\UIMng.h" />
+    <ClInclude Include="ui\UIMonsterMenu.h" />
+    <ClInclude Include="ui\UIPlayPopEne1.h" />
+    <ClInclude Include="ui\UIPlayPopEne2.h" />
+    <ClInclude Include="ui\UIScrolller.h" />
+    <ClInclude Include="ui\UIStartPlay.h" />
+    <ClInclude Include="ui\UISubTest.h" />
+    <ClInclude Include="ui\UITest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ai\Adventurer.cpp" />
+    <ClCompile Include="ai\Desmodus.cpp" />
+    <ClCompile Include="ai\EnemyPawn.cpp" />
+    <ClCompile Include="ai\Explorer.cpp" />
+    <ClCompile Include="ai\Fire.cpp" />
+    <ClCompile Include="ai\Gate.cpp" />
+    <ClCompile Include="ai\Goal.cpp" />
+    <ClCompile Include="ai\Knight.cpp" />
+    <ClCompile Include="ai\Monster.cpp" />
+    <ClCompile Include="Game\MapDatList.cpp" />
+    <ClCompile Include="Mng\KeyMng.cpp" />
+    <ClCompile Include="ui\gameUI\Monster3.cpp" />
+    <ClCompile Include="ai\Rook.cpp" />
+    <ClCompile Include="ai\Spike.cpp" />
+    <ClCompile Include="common\MyEnergy.cpp" />
+    <ClCompile Include="common\WFUtility.cpp" />
+    <ClCompile Include="Game\MapSelect.cpp" />
+    <ClCompile Include="Game\RoadTime.cpp" />
+    <ClCompile Include="MapTest.cpp" />
+    <ClCompile Include="Mng\CronoMng.cpp" />
+    <ClCompile Include="input\Controller.cpp" />
+    <ClCompile Include="input\PadInput.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Mng\EnergyMng.cpp" />
+    <ClCompile Include="Mng\ImageMng.cpp" />
+    <ClCompile Include="Mng\MapMng.cpp" />
+    <ClCompile Include="MapRoad.cpp" />
+    <ClCompile Include="Mng\MoneyMng.cpp" />
+    <ClCompile Include="Mng\MonsterMng.cpp" />
+    <ClCompile Include="Mng\MouseMng.cpp" />
+    <ClCompile Include="Mng\PadMng.cpp" />
+    <ClCompile Include="Mng\ReadMng.cpp" />
+    <ClCompile Include="Mng\SoundMng.cpp" />
+    <ClCompile Include="Game\PlayMode.cpp" />
+    <ClCompile Include="routesearch\Aster.cpp" />
+    <ClCompile Include="routesearch\GraphEdge.cpp" />
+    <ClCompile Include="routesearch\GraphNode.cpp" />
+    <ClCompile Include="routesearch\NavGraphNode.cpp" />
+    <ClCompile Include="routesearch\RightHandSearch.cpp" />
+    <ClCompile Include="routesearch\RouteSearch.cpp" />
+    <ClCompile Include="routesearch\SparseGraph.cpp" />
+    <ClCompile Include="SaveMap.cpp" />
+    <ClCompile Include="Scene\BaseScene.cpp" />
+    <ClCompile Include="Scene\GameScene.cpp" />
+    <ClCompile Include="Scene\PoseScene.cpp" />
+    <ClCompile Include="Scene\sceneMng.cpp" />
+    <ClCompile Include="Scene\TitleScene.cpp" />
+    <ClCompile Include="ui\gameUI\Gimmick1.cpp" />
+    <ClCompile Include="ui\gameUI\Gimmick2.cpp" />
+    <ClCompile Include="ui\gameUI\Monster2.cpp" />
+    <ClCompile Include="ui\gameUI\ScrollUIBase.cpp" />
+    <ClCompile Include="ui\gameUI\Monster1.cpp" />
+    <ClCompile Include="ui\UIBackPlay.cpp" />
+    <ClCompile Include="ui\UIBase.cpp" />
+    <ClCompile Include="ui\UIGimmickMenu.cpp" />
+    <ClCompile Include="ui\UIMapBGimmick.cpp" />
+    <ClCompile Include="ui\UIMapBMine.cpp" />
+    <ClCompile Include="ui\UIMapBMonster.cpp" />
+    <ClCompile Include="ui\UIMapBuildMenu.cpp" />
+    <ClCompile Include="ui\UIMng.cpp" />
+    <ClCompile Include="ui\UIMonsterMenu.cpp" />
+    <ClCompile Include="ui\UIPlayPopEne1.cpp" />
+    <ClCompile Include="ui\UIPlayPopEne2.cpp" />
+    <ClCompile Include="ui\UIScrolller.cpp" />
+    <ClCompile Include="ui\UIStartPlay.cpp" />
+    <ClCompile Include="ui\UISubTest.cpp" />
+    <ClCompile Include="ui\UITest.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
