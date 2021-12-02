@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "MouseMng.h"
 #include "ImageMng.h"
+#include "MoneyMng.h"
 
 MouseMng* MouseMng::sInstance = nullptr;
 
@@ -74,7 +75,22 @@ void MouseMng::Draw(void)
 			DrawRotaGraph(clickPos_.x+10, clickPos_.y, static_cast<float>(clickCount_) / 10, 0, lpImglMng.GetGraphHandle("ring2.png"), true);
 		}
 	}
-	DrawGraph(mousePos_.x+10, mousePos_.y, lpImglMng.GetGraphHandle("mouse.png"), true);
+	if (lpMoneyMng.GetStartFlag())
+	{
+		if (grabF_)
+		{
+			DrawGraph(mousePos_.x + 10, mousePos_.y-25, lpImglMng.GetGraphHandle("handGrab.png"), true);
+		}
+		else
+		{
+			DrawGraph(mousePos_.x + 10, mousePos_.y-15, lpImglMng.GetGraphHandle("handNormal.png"), true);
+		}
+	}
+	else
+	{
+		DrawGraph(mousePos_.x+10, mousePos_.y, lpImglMng.GetGraphHandle("mouse.png"), true);
+	}
+
 	SetDrawScreen(DX_SCREEN_BACK);
 	lpImglMng.ScreenAddDrawQue(mouseSclH_, 60);
 }
@@ -103,6 +119,11 @@ void MouseMng::SetMouseClickR(void)
 void MouseMng::SetMouseClickL(void)
 {
 	inputdate_ = MOUSE_INPUT_LEFT;
+}
+
+void MouseMng::SetGrab(bool flag)
+{
+	grabF_ = flag;
 }
 
 void MouseMng::SetOldPos(Vector2 pos)

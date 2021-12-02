@@ -110,6 +110,10 @@ void PlayMode::SetMapDate(mapChipDate mapdate)
 
 void PlayMode::Update(void)
 {
+	if (!lpSoundMng.CheckPlaySound("game.mp3"))
+	{
+		lpSoundMng.SoundPlay("game.mp3");
+	}
 	if (lpCronoMng.IsOneSecond())
 	{
 		con_++;
@@ -722,6 +726,7 @@ void PlayMode::UIInit(void)
 	lpMapMng.SetMapMode(MapMode::Main);
 	//UI‚ðÝ’è
 	uIScrolller_->Init();
+	lpSoundMng.StopSound("crea.mp3");
 }
 
 void PlayMode::DrawEdge(Vector2 pos)

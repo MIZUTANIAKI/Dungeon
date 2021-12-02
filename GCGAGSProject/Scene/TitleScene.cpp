@@ -4,13 +4,19 @@
 #include "PoseScene.h"
 #include "GameScene.h"
 #include "PadMng.h"
+#include "ImageMng.h"
 #include "sceneMng.h"
 #include "soundMng.h"
 #include "MoneyMng.h"
 #include "MouseMng.h"
+#include "KeyMng.h"
 
 UNBS TitleScene::Update(UNBS own)
 {
+	if (!lpSoundMng.CheckPlaySound("title.mp3"))
+	{
+		lpSoundMng.SoundPlay("title.mp3");
+	}
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
 		return std::move(std::make_unique<GameScene>());
@@ -35,12 +41,12 @@ UNBS TitleScene::Update(UNBS own)
 	{
 		if (tmptitleNum_ == -1)
 		{
-			if (lpPadMng.GetControllerData(InputID::Right) || CheckHitKey(KEY_INPUT_RIGHT))
+			if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 			{
 				lpSoundMng.SoundPlay("botan.mp3");
 				isTarget_++;
 			}
-			if (lpPadMng.GetControllerData(InputID::Left) || CheckHitKey(KEY_INPUT_LEFT))
+			if (lpPadMng.GetControllerData(InputID::Left) || lpKeyMng.CheckKeyTrg(KeyBindID::Left))
 			{
 				lpSoundMng.SoundPlay("botan.mp3");
 				isTarget_--;
@@ -53,7 +59,7 @@ UNBS TitleScene::Update(UNBS own)
 			{
 				isTarget_ = 1;
 			}
-			if (lpPadMng.GetControllerData(InputID::BtnB) || CheckHitKey(KEY_INPUT_Z))
+			if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
 			{
 				lpSoundMng.SoundPlay("pusbotan.mp3");
 				if (isTarget_ == 1)
@@ -68,7 +74,7 @@ UNBS TitleScene::Update(UNBS own)
 					return std::move(std::make_unique<GameScene>());
 				}
 			}
-			if (lpPadMng.GetControllerData(InputID::BtnA) || CheckHitKey(KEY_INPUT_X))
+			if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
 			{
 				lpSoundMng.SoundPlay("pusbotan.mp3");
 				isTarget_ = 1;
@@ -92,7 +98,9 @@ UNBS TitleScene::Update(UNBS own)
 
 TitleScene::TitleScene()
 {
-	SetWindowText("::タイトル");
+	lpImglMng.LoadGraph("wood.png");
+	lpImglMng.LoadGraph("titlef.png");
+	SetWindowText("DungeonOwner");
 	scnID_ = SCN_ID::SCN_TITLE;
 	screenSize_.x = 0;
 	screenSize_.y = 0;
@@ -114,7 +122,12 @@ void TitleScene::Draw()
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
 
-	DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 3, 0xffffff, "タイトル画面");
+	//DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 3, 0xffffff, "タイトル画面");
+	lpImglMng.GraphAddDrawQue("titlef.png", { 0,0 }, 0);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	DrawBox(screenSize_.x / 2 - 430, screenSize_.y - screenSize_.y / 5 - 20, screenSize_.x / 2 + 500, screenSize_.y - screenSize_.y / 5 + 40, 0x00000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	if (titleNum_ == 0)
 	{
@@ -166,7 +179,7 @@ void TitleScene::Draw()
 	}
 
 	SetDrawScreen(DX_SCREEN_BACK);
-	lpImglMng.ScreenAddDrawQue(screenH_, { 0,0 }, 0);
+	lpImglMng.ScreenAddDrawQue(screenH_, { 0,0 }, 30);
 }
 
 int TitleScene::title1Update()
@@ -175,12 +188,12 @@ int TitleScene::title1Update()
 	{
 		return 0;
 	}
-	if (lpPadMng.GetControllerData(InputID::Right)||CheckHitKey(KEY_INPUT_RIGHT))
+	if (lpPadMng.GetControllerData(InputID::Right)|| lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
 		isTarget_++;
 	}
-	if (lpPadMng.GetControllerData(InputID::Left) || CheckHitKey(KEY_INPUT_LEFT))
+	if (lpPadMng.GetControllerData(InputID::Left) || lpKeyMng.CheckKeyTrg(KeyBindID::Left))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
 		isTarget_--;
@@ -193,7 +206,7 @@ int TitleScene::title1Update()
 	{
 		isTarget_ = 3;
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || CheckHitKey(KEY_INPUT_Z))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 0)
@@ -287,12 +300,12 @@ int TitleScene::title2Update()
 	{
 		return 0;
 	}
-	if (lpPadMng.GetControllerData(InputID::Right) || CheckHitKey(KEY_INPUT_RIGHT))
+	if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
 		isTarget_++;
 	}
-	if (lpPadMng.GetControllerData(InputID::Left) || CheckHitKey(KEY_INPUT_LEFT))
+	if (lpPadMng.GetControllerData(InputID::Left) || lpKeyMng.CheckKeyTrg(KeyBindID::Left))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
 		isTarget_--;
@@ -305,7 +318,7 @@ int TitleScene::title2Update()
 	{
 		isTarget_ = 3;
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || CheckHitKey(KEY_INPUT_Z))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 1)
@@ -319,7 +332,7 @@ int TitleScene::title2Update()
 		}
 	}
 
-	if (lpPadMng.GetControllerData(InputID::BtnA) || CheckHitKey(KEY_INPUT_X))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		tmptitleNum_ = 0;

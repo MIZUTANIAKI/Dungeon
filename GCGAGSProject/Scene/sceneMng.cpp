@@ -16,6 +16,8 @@
 #include "MouseMng.h"
 #include "RightHandSearch.h"
 #include "CronoMng.h"
+#include "KeyMng.h"
+#include "StartScene.h"
 
 
 SceneMng* SceneMng::sInstance = nullptr;
@@ -37,7 +39,7 @@ SceneMng::SceneMng() :ScreenSize{ 1280,720 }
 	SetDrawScreen(DX_SCREEN_BACK);
 	SetCreate3DSoundFlag(true);
 	SetFontSize(60);
-	SetBackgroundColor(100, 100, 100);
+	//SetBackgroundColor(100, 100, 100);
 	SetUseZBufferFlag(TRUE);
 	SetCameraNearFar(0.1f, 1000.0f);
 	SetLightDifColor(GetColorF(1.0f, 1.0f, 1.0f, 0.0f));
@@ -58,6 +60,7 @@ SceneMng::SceneMng() :ScreenSize{ 1280,720 }
 	lpMouseMng.Create();
 	lpPadMng.Create();
 	lpCronoMng.Create();
+	lpKeyMng.Create();
 	lpSoundMng.Create();
 }
 
@@ -70,6 +73,7 @@ SceneMng::~SceneMng()
 	lpRHSMng.Destroy();
 	lpMouseMng.Destroy();
 	lpPadMng.Destroy();
+	lpKeyMng.Destroy();
 	lpCronoMng.Destroy();
 	lpSoundMng.Destroy();
 }
@@ -80,7 +84,6 @@ void SceneMng::Draw(void)
 	SetDrawScreen(DX_SCREEN_BACK);
 	DxLib::ClsDrawScreen();
 	lpUIMng.FastDraw();
-	lpMoneyMng.Draw();
 	lpUIMng.Draw();
 	lpImglMng.DrawNaw();
 
@@ -113,6 +116,8 @@ void SceneMng::Run(void)
 	lpSoundMng.LoadSound("pusbotan.mp3");
 	lpSoundMng.LoadSound("kaku.mp3");
 	lpSoundMng.LoadSound("koto.mp3");
+	lpImglMng.SetBright(lpReadMng.GetDate(setinglist::Bright));
+	lpSoundMng.SetSoundVol(lpReadMng.GetDate(setinglist::SoundVol));
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && shutdownF_ == false)
 	{
 		if (fcon % 2)
@@ -127,6 +132,7 @@ void SceneMng::Run(void)
 			lpPadMng.Update();
 			lpImglMng.ReSetD();
 			lpUIMng.Update();
+			lpKeyMng.Update();
 			activeScene_ = (*activeScene_).Update(std::move(activeScene_));
 			lpCronoMng.Last();
 			Draw();

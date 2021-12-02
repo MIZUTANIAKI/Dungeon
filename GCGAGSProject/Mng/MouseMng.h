@@ -81,6 +81,7 @@ public:
 	void SetPos(Vector2 pos);
 	void SetMouseClickR(void);
 	void SetMouseClickL(void);
+	void SetGrab(bool flag);
 private:
 	static MouseMng* sInstance;
 
@@ -102,6 +103,9 @@ private:
 
 	//int oldMousePointer_;
 	bool isExclusive_;
+
+	bool grabF_;
+
 	MouseMng();
 	~MouseMng();
 };

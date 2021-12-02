@@ -1,4 +1,11 @@
 #pragma once
+#include <memory>
+#include "KeyBindID.h"
+
+#define lpKeyMng KeyMng::GetInstance()
+
+class KeyCtl;
+
 class KeyMng
 {
 public:
@@ -26,9 +33,13 @@ public:
 		sInstance = nullptr;
 	}
 
+	void Update(void);
+
+	bool CheckKeyNow(KeyBindID id);
+	bool CheckKeyTrg(KeyBindID id);
 private:
 	static KeyMng* sInstance;
-
+	std::unique_ptr< KeyCtl> keyCtl_;
 	KeyMng();
 	~KeyMng();
 };

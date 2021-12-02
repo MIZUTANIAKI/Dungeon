@@ -27,4 +27,5 @@ private:
 
 	bool roadFinishF_;
 	bool isGameNow_;
+	bool startGame_;
 };

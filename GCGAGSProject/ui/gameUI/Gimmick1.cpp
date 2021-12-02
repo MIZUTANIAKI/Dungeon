@@ -1,5 +1,6 @@
 #include "Gimmick1.h"
 #include "ImageMng.h"
+#include "MouseMng.h"
 
 Gimmick1::Gimmick1()
 {
@@ -20,11 +21,7 @@ Gimmick1::~Gimmick1()
 void Gimmick1::Update(void)
 {
 	DragMove();
-	if (lpMapMng.GetDropEndF(id_) == true)
-	{
-		delF_ = true;
-	}
-
+	DeleteUi();
 }
 
 void Gimmick1::Draw(void)

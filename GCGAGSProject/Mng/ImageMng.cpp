@@ -25,7 +25,16 @@ void ImageMng::DrawNaw(void)
 
 	for (auto itr = drawList_.begin(); itr != drawList_.end(); itr++)
 	{
-		DrawGraph(itr->second.x, itr->second.y, itr->first.first, true);
+		if ((30 <= itr->first.second && itr->first.second <= 39) || (70 <= itr->first.second && itr->first.second <= 79))
+		{
+			SetDrawBright(255, 255, 255);
+			DrawGraph(itr->second.x, itr->second.y, itr->first.first, true);
+		}
+		else
+		{
+			SetDrawBright(bright_, bright_, bright_);
+			DrawGraph(itr->second.x, itr->second.y, itr->first.first, true);
+		}
 	}
 }
 

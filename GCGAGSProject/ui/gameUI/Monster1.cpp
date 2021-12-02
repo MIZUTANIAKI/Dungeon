@@ -21,11 +21,7 @@ Monster1::~Monster1()
 void Monster1::Update(void)
 {
 	DragMove();
-	if (lpMapMng.GetDropEndF(id_) == true)
-	{
-		delF_ = true;
-	}
-
+	DeleteUi();
 }
 
 void Monster1::Draw(void)

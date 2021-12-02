@@ -38,6 +38,7 @@ public:
 protected:
 	virtual void Init() = 0;
 	void DragMove(void);
+	void DeleteUi();
 	void GrabDraw(void);
 
 	Vector2 pos_;

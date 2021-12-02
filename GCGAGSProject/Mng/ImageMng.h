@@ -126,7 +126,7 @@ private:
 
 	std::map<std::string, int> imgList_;	//読み込んだ画像リスト
 
-	std::vector< std::pair<std::pair<int, int>, Vector2>> drawList_;						//描画予約キュー//ハンドル、座標、サイズ
+	std::vector< std::pair<std::pair<int, int>, Vector2>> drawList_;						//描画予約キュー//ハンドル&Z、座標
 
 	int bright_;
 	Vector2 screenSize_;

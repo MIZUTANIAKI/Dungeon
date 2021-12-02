@@ -71,6 +71,10 @@ MapSelect::~MapSelect()
 
 void MapSelect::Update(float deltaTime_)
 {
+	if (!lpSoundMng.CheckPlaySound("crea.mp3"))
+	{
+		lpSoundMng.SoundPlay("crea.mp3");
+	}
 	if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_R))
 	{
 		mapPos_.x = -10;
@@ -319,6 +323,7 @@ bool MapSelect::CheckDraw(int x, int y)
 
 void MapSelect::Init()
 {
+	lpSoundMng.StopSound("game.mp3");
 	pressZ_ = false;
 	mapPos_.x = -10;
 	mapPos_.y = 0;	
@@ -326,6 +331,12 @@ void MapSelect::Init()
 	MapDatList::Init();
 	MapDatList::AddDate(mapdat_);
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
+}
+
+void MapSelect::SetStageID(int stageID)
+{
+	RoadMapDat(stageID);
+	MapDatList::AddDate(mapdat_);
 }
 
 
@@ -438,13 +449,13 @@ void MapSelect::ResetMap(void)
 	}
 }
 
-void MapSelect::RoadMapDat(void)
+void MapSelect::RoadMapDat(int stageID)
 {
 	mapPos_.x = -10;
 	mapPos_.y = 0;
 	ResetMap();
 	std::unique_ptr<SaveMap> smap = std::make_unique<SaveMap>();
-	smap->StartInPut(NULL);
+	smap->StartInPut(stageID);
 	mapdat_ = smap->GetMapdate();
 	mapSize_ = Vector2(static_cast<int>(mapdat_[0].size()), static_cast<int>(mapdat_.size()));
 }

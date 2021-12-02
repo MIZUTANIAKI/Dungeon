@@ -168,7 +168,11 @@
     <ClInclude Include="ai\Knight.h" />
     <ClInclude Include="ai\Monster.h" />
     <ClInclude Include="Game\MapDatList.h" />
+    <ClInclude Include="input\KeyBindID.h" />
+    <ClInclude Include="input\KeyCtl.h" />
     <ClInclude Include="Mng\KeyMng.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\StartScene.h" />
     <ClInclude Include="ui\gameUI\Monster3.h" />
     <ClInclude Include="ai\Rook.h" />
     <ClInclude Include="ai\Spike.h" />
@@ -239,7 +243,9 @@
     <ClCompile Include="ai\Knight.cpp" />
     <ClCompile Include="ai\Monster.cpp" />
     <ClCompile Include="Game\MapDatList.cpp" />
+    <ClCompile Include="input\KeyCtl.cpp" />
     <ClCompile Include="Mng\KeyMng.cpp" />
+    <ClCompile Include="Scene\StartScene.cpp" />
     <ClCompile Include="ui\gameUI\Monster3.cpp" />
     <ClCompile Include="ai\Rook.cpp" />
     <ClCompile Include="ai\Spike.cpp" />
@@ -296,6 +302,12 @@
     <ClCompile Include="ui\UIStartPlay.cpp" />
     <ClCompile Include="ui\UISubTest.cpp" />
     <ClCompile Include="ui\UITest.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GCGAGSProject.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resource\img\icon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

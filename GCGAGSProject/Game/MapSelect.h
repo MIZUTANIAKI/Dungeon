@@ -26,6 +26,8 @@ public:
 
 	void Init();
 
+	void SetStageID(int stageID);
+
 	//int GetMapNum() const noexcept
 	//{
 	//	return mapNum_;
@@ -57,7 +59,7 @@ private:
 	BlockEdge isMapEdge(Vector2 pos);
 
 	void ResetMap(void);
-	void RoadMapDat(void);
+	void RoadMapDat(int stageID = 0);
 	void SaveMapDat(void);
 
 	mapChipDate mapdat_;

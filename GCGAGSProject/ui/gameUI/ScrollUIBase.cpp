@@ -3,6 +3,7 @@
 #include "MouseMng.h"
 #include "EnergyMng.h"
 #include "ImageMng.h"
+#include "SoundMng.h"
 
 bool ScrollUIBase::isLock_ = false;
 
@@ -37,6 +38,8 @@ void ScrollUIBase::DragMove(void)
 				isClick_ = true;
 				isLock_ = true;
 				clickPos_ = lpMouseMng.GetMousePos();
+				lpMouseMng.SetGrab(true);
+				lpSoundMng.SoundPlay("grab.mp3");
 			}
 		}
 	}
@@ -44,6 +47,7 @@ void ScrollUIBase::DragMove(void)
 	{
 		if (isClick_&& isLock_)
 		{
+			lpMouseMng.SetGrab(false);
 			if (lpMouseMng.GetMousePos().y < pos_.y)
 			{
 				if (lpEnergyMng.GetEnergy() >= cost_)
@@ -57,6 +61,15 @@ void ScrollUIBase::DragMove(void)
 	}
 }
 
+void ScrollUIBase::DeleteUi()
+{
+	if (lpMapMng.GetDropEndF(id_) == true)
+	{
+		delF_ = true;
+		lpMouseMng.SetGrab(false);
+	}
+}
+
 void ScrollUIBase::GrabDraw(void)
 {
 	if (!isClick_)
@@ -66,19 +79,19 @@ void ScrollUIBase::GrabDraw(void)
 	Vector2 pos = lpMouseMng.GetMousePos();
 	if (id_ == MapDropDateID::Slime)
 	{
-		pos.y -= 60;
+		pos.y -= 50;
 		lpImglMng.GraphAddDrawQue("testC2.png", pos, 50);
 		return;
 	}
 	if (id_ == MapDropDateID::Desmodus)
 	{
-		pos.y -= 60;
+		pos.y -= 50;
 		lpImglMng.GraphAddDrawQue("testC3.png", pos, 50);
 		return;
 	}
 	if (id_ == MapDropDateID::Rook)
 	{
-		pos.y -= 60;
+		pos.y -= 50;
 		lpImglMng.GraphAddDrawQue("testC4.png", pos, 50);
 		return;
 	}
