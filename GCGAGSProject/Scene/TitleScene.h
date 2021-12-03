@@ -25,4 +25,11 @@ private:
 	int isTarget_;
 
 	int changeCount_;
+	int sterangle_;
+	float time_;
+
+	int maskHandle_;
+
+	Vector2 maskPos1_;
+	Vector2 maskPos2_;
 };

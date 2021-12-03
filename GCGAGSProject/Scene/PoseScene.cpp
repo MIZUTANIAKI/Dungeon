@@ -10,6 +10,13 @@
 
 UNBS PoseScene::Update(UNBS own)
 {
+	time_ += lpCronoMng.GetDeltaTime();
+	sterangle_ = static_cast<int>(time_ * 10) % 360;
+	if (sterangle_ > 360)
+	{
+		sterangle_ = 0;
+	}
+
 	if (setingNum_ == 0)
 	{
 		int num = poseUpdate();
@@ -182,7 +189,8 @@ void PoseScene::Draw()
 		pos.y = screenSize_.y / 2 - 20;
 
 		pos.y += 13;
-		DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+		DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+		//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 2 - 130, 0xffffff, "ポーズ中");
 
@@ -298,7 +306,8 @@ void PoseScene::firstDraw()
 	}
 
 	pos.y += 13;
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 	DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 2 - 130, 0xffffff, "ポーズ中");
 
@@ -384,7 +393,8 @@ void PoseScene::poseDraw()
 		pos.y = screenSize_.y / 2 + 90;
 	}
 	pos.y += 13;
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 	DrawFormatString(screenSize_.x / 2 - 60, screenSize_.y / 2 - 130, 0xffffff, "システム設定");
 
@@ -489,7 +499,8 @@ void PoseScene::VolDraw()
 		pos.y = screenSize_.y / 2 + 90;
 	}
 	pos.y += 13;
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 	Vector2 boxPos = screenSize_ / 2;
 	boxPos.y = screenSize_.y / 2 - 60;
@@ -591,7 +602,8 @@ void PoseScene::BrightDraw()
 		pos.y = screenSize_.y / 2 + 90;
 	}
 	pos.y += 13;
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 	Vector2 boxPos = screenSize_ / 2;
 	boxPos.y = screenSize_.y / 2 - 60;

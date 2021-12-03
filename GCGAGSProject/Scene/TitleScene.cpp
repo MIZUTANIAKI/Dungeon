@@ -13,12 +13,34 @@
 
 UNBS TitleScene::Update(UNBS own)
 {
+	time_ += lpCronoMng.GetDeltaTime();
+	//if (lpCronoMng.IsOneSecond())
+	{
+		maskPos1_.x += lpCronoMng.GetDeltaTime() * 60;
+		maskPos1_.y += lpCronoMng.GetDeltaTime() * 60;
+		maskPos2_.x += lpCronoMng.GetDeltaTime() * 60;
+		maskPos2_.y += lpCronoMng.GetDeltaTime() * 60;
+		if (maskPos1_.x >= screenSize_.x || maskPos1_.y >= screenSize_.y)
+		{
+			maskPos1_ = { -screenSize_.x,-screenSize_.y };
+		}
+		if (maskPos2_.x >= screenSize_.x || maskPos2_.y >= screenSize_.y)
+		{
+			maskPos2_ = { -screenSize_.x,-screenSize_.y };
+		}
+	}
+	sterangle_ = static_cast<int>(time_*10) % 360;
+	if (sterangle_ > 360)
+	{
+		sterangle_ = 0;
+	}
 	if (!lpSoundMng.CheckPlaySound("title.mp3"))
 	{
 		lpSoundMng.SoundPlay("title.mp3");
 	}
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
+		lpSoundMng.StopSound("title.mp3");
 		return std::move(std::make_unique<GameScene>());
 	}
 	if (titleNum_ == 0)
@@ -100,6 +122,7 @@ TitleScene::TitleScene()
 {
 	lpImglMng.LoadGraph("wood.png");
 	lpImglMng.LoadGraph("titlef.png");
+	lpImglMng.LoadGraph("titleblack.png");
 	SetWindowText("DungeonOwner");
 	scnID_ = SCN_ID::SCN_TITLE;
 	screenSize_.x = 0;
@@ -109,12 +132,18 @@ TitleScene::TitleScene()
 	isTarget_ = 0;
 	tmptitleNum_ = -1;
 	titleNum_ = 0;
+	sterangle_ = 0;
+	time_ = 0;
 	changeCount_ = 0;
+	maskHandle_ = LoadMask("resource\\img/titlemask.png");
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
+	maskPos1_ = { -screenSize_.x,-screenSize_.y };
+	maskPos2_ = { 0,0 };
 }
 
 TitleScene::~TitleScene()
 {
+	DeleteMask(maskHandle_);
 }
 
 void TitleScene::Draw()
@@ -123,10 +152,29 @@ void TitleScene::Draw()
 	ClsDrawScreen();
 
 	//DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 3, 0xffffff, "タイトル画面");
-	lpImglMng.GraphAddDrawQue("titlef.png", { 0,0 }, 0);
+
+
+	lpImglMng.DrawImg("wood.png", { 0,0 });
+	lpImglMng.DrawImg("title0.png", { 0,0 });
+	lpImglMng.DrawImg("titleblack.png", { 0,0 });
+	lpImglMng.DrawImg("title1.png", { 0,0 });
+	lpImglMng.DrawImg("title2.png", { 0,0 });
+	lpImglMng.DrawImg("title3.png", { 0,0 });
+	CreateMaskScreen();
+	DrawMask(0, 0, maskHandle_, DX_MASKTRANS_BLACK);
+	lpImglMng.DrawImg("space3.png", { 0,0 });
+	lpImglMng.DrawImg("space2.png", maskPos1_);
+	lpImglMng.DrawImg("space2.png", { maskPos1_.x + screenSize_.x,maskPos1_.y });
+	lpImglMng.DrawImg("space2.png", maskPos2_);
+	lpImglMng.DrawImg("space2.png", { maskPos2_.x,maskPos2_.y - screenSize_.y });
+	//lpImglMng.DrawImg("space2.png", maskPos1_);
+	//lpImglMng.DrawImg("space2.png", { maskPos1_.x + 3820,maskPos1_.y });
+	//lpImglMng.DrawImg("space2.png", maskPos2_);
+	//lpImglMng.DrawImg("space2.bmp", { maskPos2_.x,maskPos2_.y - 2160 });
+	DeleteMaskScreen();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
-	DrawBox(screenSize_.x / 2 - 430, screenSize_.y - screenSize_.y / 5 - 20, screenSize_.x / 2 + 500, screenSize_.y - screenSize_.y / 5 + 40, 0x00000, true);
+	DrawBox(screenSize_.x / 2 - 480, screenSize_.y - screenSize_.y / 5 - 20, screenSize_.x / 2 + 450, screenSize_.y - screenSize_.y / 5 + 40, 0x00000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	if (titleNum_ == 0)
@@ -155,7 +203,9 @@ void TitleScene::Draw()
 			pos.x = screenSize_.x / 2 + 50;
 		}
 		pos.y += 13;
-		DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+
+		DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+		//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 		if (isTarget_ != 0)
 		{
@@ -236,24 +286,25 @@ void TitleScene::title1Draw()
 
 	if (isTarget_ == 0)
 	{
-		pos.x = screenSize_.x / 2 - 400;
+		pos.x = screenSize_.x / 2 - 450;
 	}
 
 	if (isTarget_ == 1)
 	{
-		pos.x = screenSize_.x / 2 - 150;
+		pos.x = screenSize_.x / 2 - 200;
 	}
 
 	if (isTarget_ == 2)
 	{
-		pos.x = screenSize_.x / 2 + 150;
+		pos.x = screenSize_.x / 2 + 100;
 	}
 
 	if (isTarget_ == 3)
 	{
-		pos.x = screenSize_.x / 2 + 400;
+		pos.x = screenSize_.x / 2 + 350;
 	}
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 	if (isTarget_ != 0)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -262,7 +313,7 @@ void TitleScene::title1Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 - 400, screenSize_.y - screenSize_.y / 5, 0xffffff, "はじめる");
+	DrawFormatString(screenSize_.x / 2 - 450, screenSize_.y - screenSize_.y / 5, 0xffffff, "はじめる");
 	if (isTarget_ != 1)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -271,7 +322,7 @@ void TitleScene::title1Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 - 150, screenSize_.y - screenSize_.y / 5, 0xffffff, "マニュアルX");
+	DrawFormatString(screenSize_.x / 2 - 200, screenSize_.y - screenSize_.y / 5, 0xffffff, "マニュアルX");
 	if (isTarget_ != 2)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -280,7 +331,7 @@ void TitleScene::title1Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 + 150, screenSize_.y - screenSize_.y / 5, 0xffffff, "設定");
+	DrawFormatString(screenSize_.x / 2 + 100, screenSize_.y - screenSize_.y / 5, 0xffffff, "設定");
 	if (isTarget_ != 3)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -289,7 +340,7 @@ void TitleScene::title1Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 + 400, screenSize_.y - screenSize_.y / 5, 0xffffff, "おわる");
+	DrawFormatString(screenSize_.x / 2 + 350, screenSize_.y - screenSize_.y / 5, 0xffffff, "おわる");
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 }
@@ -364,7 +415,9 @@ void TitleScene::title2Draw()
 	{
 		pos.x = screenSize_.x / 2 + 400;
 	}
-	DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+
+	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
+	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
 	if (isTarget_ != 0)

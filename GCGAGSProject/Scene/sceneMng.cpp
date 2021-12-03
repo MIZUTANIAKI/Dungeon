@@ -108,10 +108,9 @@ void SceneMng::Run(void)
 		return;
 	}
 	ChangeFont("Yusei Magic", DX_CHARSET_DEFAULT);
-	double dNextTime = GetNowCount();
-	activeScene_ = std::make_unique<TitleScene>();
+	//activeScene_ = std::make_unique<TitleScene>();
+	activeScene_ = std::make_unique<StartScene>();
 
-	int fcon = 0;
 	lpSoundMng.LoadSound("botan.mp3");
 	lpSoundMng.LoadSound("pusbotan.mp3");
 	lpSoundMng.LoadSound("kaku.mp3");
@@ -120,14 +119,7 @@ void SceneMng::Run(void)
 	lpSoundMng.SetSoundVol(lpReadMng.GetDate(setinglist::SoundVol));
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && shutdownF_ == false)
 	{
-		if (fcon % 2)
-		{
 			lpCronoMng.Start();
-			dNextTime += 16.66;
-			if (dNextTime > GetNowCount())
-			{
-				WaitTimer((int)dNextTime - GetNowCount());
-			}
 			lpMouseMng.Update();
 			lpPadMng.Update();
 			lpImglMng.ReSetD();
@@ -136,12 +128,6 @@ void SceneMng::Run(void)
 			activeScene_ = (*activeScene_).Update(std::move(activeScene_));
 			lpCronoMng.Last();
 			Draw();
-		}
-		fcon++;
-		if (fcon / 60 != 0)
-		{
-			fcon = 0;
-		}
 	}
 
 	if (RemoveFontResourceEx(fontpath, FR_PRIVATE, NULL))
@@ -172,6 +158,7 @@ bool SceneMng::SysInit(void)
 	SetUseDirect3DVersion(DX_DIRECT3D_11);
 	SetMouseDispFlag(false);
 	SetTransColor(0, 255, 0);
+	SetUseMaskScreenFlag(true);
 	return true;
 }
 

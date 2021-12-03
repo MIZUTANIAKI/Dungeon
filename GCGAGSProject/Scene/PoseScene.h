@@ -33,4 +33,6 @@ private:
 	int tmpSoundVol_;
 
 	bool playsF_;
+	int sterangle_;
+	float time_;
 };
