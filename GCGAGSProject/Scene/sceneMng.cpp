@@ -18,6 +18,7 @@
 #include "CronoMng.h"
 #include "KeyMng.h"
 #include "StartScene.h"
+#include "FPSKeeper.h"
 
 
 SceneMng* SceneMng::sInstance = nullptr;
@@ -86,8 +87,8 @@ void SceneMng::Draw(void)
 	lpUIMng.FastDraw();
 	lpUIMng.Draw();
 	lpImglMng.DrawNaw();
-
 	DxLib::ScreenFlip();
+
 }
 
 void SceneMng::Run(void)
@@ -117,17 +118,22 @@ void SceneMng::Run(void)
 	lpSoundMng.LoadSound("koto.mp3");
 	lpImglMng.SetBright(lpReadMng.GetDate(setinglist::Bright));
 	lpSoundMng.SetSoundVol(lpReadMng.GetDate(setinglist::SoundVol));
+
+	FPSKeeper *fps = new FPSKeeper();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && shutdownF_ == false)
 	{
-			lpCronoMng.Start();
-			lpMouseMng.Update();
-			lpPadMng.Update();
-			lpImglMng.ReSetD();
-			lpUIMng.Update();
-			lpKeyMng.Update();
-			activeScene_ = (*activeScene_).Update(std::move(activeScene_));
-			lpCronoMng.Last();
-			Draw();
+		fps->Update();
+		lpCronoMng.Start();
+		lpMouseMng.Update();
+		lpPadMng.Update();
+		lpImglMng.ReSetD();
+		lpUIMng.Update();
+		lpKeyMng.Update();
+		activeScene_ = (*activeScene_).Update(std::move(activeScene_));
+		lpCronoMng.Last();
+
+		Draw();
+		fps->Wait();
 	}
 
 	if (RemoveFontResourceEx(fontpath, FR_PRIVATE, NULL))
@@ -140,7 +146,7 @@ void SceneMng::Run(void)
 	}
 
 	fontpath = NULL;
-	dNextTime = NULL;
+	delete fps;
 	activeScene_ = nullptr;
 	lpImglMng.DeleteGraph("ring1.png");
 	lpImglMng.DeleteGraph("ring2.png");

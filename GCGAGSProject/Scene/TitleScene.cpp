@@ -16,10 +16,10 @@ UNBS TitleScene::Update(UNBS own)
 	time_ += lpCronoMng.GetDeltaTime();
 	//if (lpCronoMng.IsOneSecond())
 	{
-		maskPos1_.x += lpCronoMng.GetDeltaTime() * 60;
-		maskPos1_.y += lpCronoMng.GetDeltaTime() * 60;
-		maskPos2_.x += lpCronoMng.GetDeltaTime() * 60;
-		maskPos2_.y += lpCronoMng.GetDeltaTime() * 60;
+		maskPos1_.x += static_cast<int>(lpCronoMng.GetDeltaTime() * 60);
+		maskPos1_.y += static_cast<int>(lpCronoMng.GetDeltaTime() * 60);
+		maskPos2_.x += static_cast<int>(lpCronoMng.GetDeltaTime() * 60);
+		maskPos2_.y += static_cast<int>(lpCronoMng.GetDeltaTime() * 60);
 		if (maskPos1_.x >= screenSize_.x || maskPos1_.y >= screenSize_.y)
 		{
 			maskPos1_ = { -screenSize_.x,-screenSize_.y };
@@ -398,24 +398,23 @@ void TitleScene::title2Draw()
 
 	if (isTarget_ == 0)
 	{
-		pos.x = screenSize_.x / 2 - 400;
+		pos.x = screenSize_.x / 2 - 450;
 	}
 
 	if (isTarget_ == 1)
 	{
-		pos.x = screenSize_.x / 2 - 150;
+		pos.x = screenSize_.x / 2 - 200;
 	}
 
 	if (isTarget_ == 2)
 	{
-		pos.x = screenSize_.x / 2 + 150;
+		pos.x = screenSize_.x / 2 + 100;
 	}
 
 	if (isTarget_ == 3)
 	{
-		pos.x = screenSize_.x / 2 + 400;
+		pos.x = screenSize_.x / 2 + 350;
 	}
-
 	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
 	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
 
@@ -428,7 +427,7 @@ void TitleScene::title2Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 - 400, screenSize_.y - screenSize_.y / 5, 0xffffff, "れんしゅうX");
+	DrawFormatString(screenSize_.x / 2 - 450, screenSize_.y - screenSize_.y / 5, 0xffffff, "れんしゅうX");
 	if (isTarget_ != 1)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -437,7 +436,7 @@ void TitleScene::title2Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 - 150, screenSize_.y - screenSize_.y / 5, 0xffffff, "ストーリー");
+	DrawFormatString(screenSize_.x / 2 - 200, screenSize_.y - screenSize_.y / 5, 0xffffff, "ストーリー");
 	if (isTarget_ != 2)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -446,7 +445,7 @@ void TitleScene::title2Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 + 150, screenSize_.y - screenSize_.y / 5, 0xffffff, "エンドレスX");
+	DrawFormatString(screenSize_.x / 2 + 100, screenSize_.y - screenSize_.y / 5, 0xffffff, "エンドレスX");
 	if (isTarget_ != 3)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -455,7 +454,7 @@ void TitleScene::title2Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 + 400, screenSize_.y - screenSize_.y / 5, 0xffffff, "もどる");
+	DrawFormatString(screenSize_.x / 2 + 350, screenSize_.y - screenSize_.y / 5, 0xffffff, "もどる");
 	if (isTarget_ != 4)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);

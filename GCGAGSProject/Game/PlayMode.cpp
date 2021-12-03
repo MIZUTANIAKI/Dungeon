@@ -227,8 +227,8 @@ void PlayMode::Update(void)
 			tmpAdventure->SetDir(lpRHSMng.CheckMove(spawn.first.first, tmpDir));
 			Vector2 movedir;
 			float c = sqrt(spawn.second.first * spawn.second.first + spawn.second.second * spawn.second.second);
-			movedir.x = spawn.second.first / c * 350;
-			movedir.y = spawn.second.second / c * 350;
+			movedir.x = static_cast<int>(spawn.second.first / c * 350.0f);
+			movedir.y = static_cast<int>(spawn.second.second / c * 350.0f);
 			tmpAdventure->SetMoveDir(movedir);
 			if (spawn.first.second)
 			{
@@ -314,9 +314,9 @@ void PlayMode::CheckFireSpawnEnemy(std::unique_ptr<Explorer>& target, std::uniqu
 	{
 		return;
 	}
-	float a = target->GetPos().x - explorer->GetPos().x;
-	float b = target->GetPos().y - explorer->GetPos().y;
-	float c = a * a + b * b;
+	int a = target->GetPos().x - explorer->GetPos().x;
+	int b = target->GetPos().y - explorer->GetPos().y;
+	int c = a * a + b * b;
 	if (c < 100 * 100)
 	{
 		//“G‚ª‚¢‚½B
@@ -333,9 +333,9 @@ void PlayMode::CheckFireSpawnPlayer(std::unique_ptr<Explorer>& target, std::uniq
 	{
 		return;
 	}
-	float a = target->GetPos().x - explorer->GetPos().x;
-	float b = target->GetPos().y - explorer->GetPos().y;
-	float c = a * a + b * b;
+	int a = target->GetPos().x - explorer->GetPos().x;
+	int b = target->GetPos().y - explorer->GetPos().y;
+	int c = a * a + b * b;
 	if (c < 100 * 100)
 	{
 		//“G‚ª‚¢‚½B

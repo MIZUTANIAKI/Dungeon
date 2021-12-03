@@ -115,7 +115,6 @@ UNBS PoseScene::Update(UNBS own)
 
 PoseScene::PoseScene()
 {
-	SetWindowText("::ê›íË");
 	screenSize_.x = 0;
 	screenSize_.y = 0;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
@@ -127,6 +126,8 @@ PoseScene::PoseScene()
 	lpImglMng.SetBright(255);
 	playsF_ = false;
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
+	time_ = 0;
+	sterangle_ = 0;
 }
 
 PoseScene::PoseScene(UNBS own)

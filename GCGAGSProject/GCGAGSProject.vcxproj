@@ -167,6 +167,7 @@
     <ClInclude Include="ai\Goal.h" />
     <ClInclude Include="ai\Knight.h" />
     <ClInclude Include="ai\Monster.h" />
+    <ClInclude Include="common\FPSKeeper.h" />
     <ClInclude Include="Game\MapDatList.h" />
     <ClInclude Include="input\KeyBindID.h" />
     <ClInclude Include="input\KeyCtl.h" />
@@ -242,6 +243,7 @@
     <ClCompile Include="ai\Goal.cpp" />
     <ClCompile Include="ai\Knight.cpp" />
     <ClCompile Include="ai\Monster.cpp" />
+    <ClCompile Include="common\FPSKeeper.cpp" />
     <ClCompile Include="Game\MapDatList.cpp" />
     <ClCompile Include="input\KeyCtl.cpp" />
     <ClCompile Include="Mng\KeyMng.cpp" />

@@ -17,6 +17,7 @@ void CronoMng::Last()
 CronoMng::CronoMng()
 {
 	deltaTime_ = 0.0f;
+	deltaCount_ = 0.0f;
 	end_ = start_ = std::chrono::system_clock::now();
 }
 

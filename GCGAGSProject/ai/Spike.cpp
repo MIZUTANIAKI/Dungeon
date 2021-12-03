@@ -38,11 +38,16 @@ void Spike::Damage(Explorer& target)
 	{
 		HitAttack(target.GetAtk());
 	}
-	if (ObjectID::EFire == target.GetObjectID())
+	if (ObjectID::Knight == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
 	}
-	if (ObjectID::Knight == target.GetObjectID())
+	if (ObjectID::Pawn == target.GetObjectID())
+	{
+		HitAttack(target.GetAtk());
+	}
+
+	if (ObjectID::EFire == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
 	}

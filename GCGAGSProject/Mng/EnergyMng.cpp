@@ -40,6 +40,7 @@ void EnergyMng::Init(void)
 
 EnergyMng::EnergyMng()
 {
+	count_ = 0;
 }
 
 EnergyMng::~EnergyMng()

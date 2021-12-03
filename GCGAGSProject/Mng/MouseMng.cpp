@@ -152,6 +152,7 @@ MouseMng::MouseMng()
 	isMoving_ = false;
 	isExclusive_ = false;
 	mouseSclH_ = -1;
+	grabF_ = false;
 }
 
 MouseMng::~MouseMng()

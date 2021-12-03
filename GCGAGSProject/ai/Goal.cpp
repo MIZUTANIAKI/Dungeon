@@ -58,15 +58,20 @@ void Goal::Init()
 
 void Goal::Damage(Explorer& target)
 {
-	if (target.GetObjectID() != ObjectID::Adventurer)
-	{
-		HitAttack(target.GetAtk());
-	}
-	if (ObjectID::EFire == target.GetObjectID())
+	if (ObjectID::Adventurer == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
 	}
 	if (ObjectID::Knight == target.GetObjectID())
+	{
+		HitAttack(target.GetAtk());
+	}
+	if (ObjectID::Pawn == target.GetObjectID())
+	{
+		HitAttack(target.GetAtk());
+	}
+
+	if (ObjectID::EFire == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
 	}

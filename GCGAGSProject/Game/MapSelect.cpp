@@ -157,7 +157,7 @@ void MapSelect::Update(float deltaTime_)
 			return;
 		}
 		mapNum_ = 1;
-		mapdat_.resize(mapSize_.y + 1);
+		mapdat_.resize(static_cast<size_t>(mapSize_.y) + static_cast<size_t>(1));
 
 		mapdat_[mapSize_.y].resize(mapSize_.x);
 		mapSize_.y += 1;

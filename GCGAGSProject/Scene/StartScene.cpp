@@ -99,7 +99,7 @@ void StartScene::Init()
 	lpSoundMng.LoadSound("title.mp3");
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
 	screenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
-	graphPos_[0] = screenSize_.y - 97;
+	graphPos_[0] = static_cast<float>(screenSize_.y - 97);
 	graphPos_[1] = -100;
 	graphPos_[2] = 100;
 	graphPos_[3] = 0;
