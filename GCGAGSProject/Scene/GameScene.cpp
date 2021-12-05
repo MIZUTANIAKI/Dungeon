@@ -12,6 +12,9 @@
 #include "CronoMng.h"
 #include "UIStartPlay.h"
 #include "UIBackPlay.h"
+#include "SoundMng.h"
+#include "GameOver.h"
+#include "KeyMng.h"
 
 GameScene::GameScene()
 {
@@ -41,11 +44,13 @@ GameScene::GameScene()
 	roadFinishF_ = false;
 	isGameNow_ = false;
 	startGame_ = false;
+	lpSoundMng.StopSound("title.mp3");
+	lpSoundMng.LoadSound("baki.mp3");
 }
 
 UNBS GameScene::Update(UNBS own)
 {
-	if (lpPadMng.GetControllerData(InputID::Menu))
+	if (lpPadMng.GetControllerData(InputID::Menu)||lpKeyMng.CheckKeyTrg(KeyBindID::Pose))
 	{
 		return std::move(std::make_unique<PoseScene>(std::move(own)));
 	}
@@ -57,6 +62,14 @@ UNBS GameScene::Update(UNBS own)
 	{
 		lpMoneyMng.Update();
 		GameNow(lpCronoMng.GetDeltaTime());
+	}
+
+	if (isGameNow_)
+	{
+		if (gamePlay_->GetGoalDelF())
+		{
+			return std::move(std::make_unique<GameOver>(std::move(own)));
+		}
 	}
 	time_ += lpCronoMng.GetDeltaTime();
 	return std::move(own);
@@ -155,6 +168,7 @@ void GameScene::GameNow(float deltaTime)
 			lpUIMng.CreateUI(std::move<>(std::make_unique<UIBackPlay>(tpos, tsize)));
 			srand((unsigned)time(NULL));
 			roadCount_ = 0;
+			gamePlay_->SetSpawnRate(100);
 		}
 
 		gamePlay_->Update();

@@ -2,6 +2,7 @@
 #include "Adventurer.h"
 #include "RightHandSearch.h"
 #include "ImageMng.h"
+#include "MoneyMng.h"
 
 Adventurer::Adventurer()
 {
@@ -76,6 +77,12 @@ void Adventurer::Update(void)
 	}
 }
 
+void Adventurer::SetStatus(int num)
+{
+	atk_ += 0.3 * num;
+	hp_ += 0.3*num;
+}
+
 void Adventurer::MoveTo(float deltaTime)
 {
 	if (static_cast<size_t>(nowMoveVec_) >= moveVec_.size())
@@ -137,11 +144,12 @@ void Adventurer::Damage(Explorer& target)
 {
 	if (ObjectID::Goal == target.GetObjectID())
 	{
-		if (oneTimeRetreatF_)
-		{
-			return;
-		}
-		oneTimeRetreatF_ = true;
+		//target.HitAttack(atk_);
+		//if (oneTimeRetreatF_)
+		//{
+		//	return;
+		//}
+		//oneTimeRetreatF_ = true;
 	}
 	if (ObjectID::Monster == target.GetObjectID())
 	{
@@ -166,5 +174,10 @@ void Adventurer::Damage(Explorer& target)
 	if (ObjectID::Fire == target.GetObjectID())
 	{
 		hp_ -= target.GetAtk();
+	}
+	if (hp_ <= 0)
+	{
+		lpMoneyMng.AddTmpMoney(5);
+		lpSoundMng.LoadSound("baki.mp3");
 	}
 }

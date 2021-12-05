@@ -74,6 +74,12 @@ void Fire::SetEneF(void)
 	id_ = ObjectID::EFire;
 }
 
+void Fire::SetStatus(int num)
+{
+	atk_ += 0.3 * num;
+	hp_ += 0.3 * num;
+}
+
 void Fire::Damage(Explorer& target)
 {
 	if (ObjectID::Adventurer == target.GetObjectID())

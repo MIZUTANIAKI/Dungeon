@@ -32,4 +32,5 @@ private:
 
 	Vector2 maskPos1_;
 	Vector2 maskPos2_;
+
 };

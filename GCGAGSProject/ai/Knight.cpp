@@ -1,6 +1,7 @@
 #include <DxLib.h>
 #include "Knight.h"
 #include "ImageMng.h"
+#include "MoneyMng.h"
 
 Knight::Knight()
 {
@@ -37,6 +38,12 @@ void Knight::Update(void)
 		MoveTo(lpCronoMng.GetDeltaTime());
 		return;
 	}
+}
+
+void Knight::SetStatus(int num)
+{
+	atk_ += 0.3 * num;
+	hp_ += 0.3 * num;
 }
 
 void Knight::MoveTo(float deltaTime)
@@ -128,5 +135,10 @@ void Knight::Damage(Explorer& target)
 	if (ObjectID::Fire == target.GetObjectID())
 	{
 		hp_ -= target.GetAtk();
+	}
+	if (hp_ <= 0)
+	{
+		lpMoneyMng.AddTmpMoney(5);
+		lpSoundMng.LoadSound("baki.mp3");
 	}
 }

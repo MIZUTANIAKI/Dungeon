@@ -172,7 +172,10 @@
     <ClInclude Include="input\KeyBindID.h" />
     <ClInclude Include="input\KeyCtl.h" />
     <ClInclude Include="Mng\KeyMng.h" />
+    <ClInclude Include="Mng\StatusCtr.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\GameOver.h" />
+    <ClInclude Include="Scene\ResultScene.h" />
     <ClInclude Include="Scene\StartScene.h" />
     <ClInclude Include="ui\gameUI\Monster3.h" />
     <ClInclude Include="ai\Rook.h" />
@@ -247,6 +250,9 @@
     <ClCompile Include="Game\MapDatList.cpp" />
     <ClCompile Include="input\KeyCtl.cpp" />
     <ClCompile Include="Mng\KeyMng.cpp" />
+    <ClCompile Include="Mng\StatusCtr.cpp" />
+    <ClCompile Include="Scene\GameOver.cpp" />
+    <ClCompile Include="Scene\ResultScene.cpp" />
     <ClCompile Include="Scene\StartScene.cpp" />
     <ClCompile Include="ui\gameUI\Monster3.cpp" />
     <ClCompile Include="ai\Rook.cpp" />

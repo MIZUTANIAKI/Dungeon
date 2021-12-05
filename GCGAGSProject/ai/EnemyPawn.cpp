@@ -2,6 +2,7 @@
 #include "EnemyPawn.h"
 #include "RightHandSearch.h"
 #include "ImageMng.h"
+#include "MoneyMng.h"
 
 EnemyPawn::EnemyPawn()
 {
@@ -105,6 +106,12 @@ void EnemyPawn::Update(void)
 	}*/
 }
 
+void EnemyPawn::SetStatus(int num)
+{
+	atk_ += 0.3 * num;
+	hp_ += 0.3 * num;
+}
+
 void EnemyPawn::MoveTo(float deltaTime)
 {
 	if (static_cast<size_t>(nowMoveVec_) >= moveVec_.size())
@@ -195,5 +202,10 @@ void EnemyPawn::Damage(Explorer& target)
 	if (ObjectID::Fire == target.GetObjectID())
 	{
 		hp_ -= target.GetAtk();
+	}
+	if (hp_ <= 0)
+	{
+		lpMoneyMng.AddTmpMoney(2);
+		lpSoundMng.LoadSound("baki.mp3");
 	}
 }

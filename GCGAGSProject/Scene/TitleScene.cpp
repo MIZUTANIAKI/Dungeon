@@ -10,6 +10,8 @@
 #include "MoneyMng.h"
 #include "MouseMng.h"
 #include "KeyMng.h"
+#include "ReadMng.h"
+#include "StatusCtr.h"
 
 UNBS TitleScene::Update(UNBS own)
 {
@@ -86,12 +88,15 @@ UNBS TitleScene::Update(UNBS own)
 				lpSoundMng.SoundPlay("pusbotan.mp3");
 				if (isTarget_ == 1)
 				{
-					lpMoneyMng.SetMoney(150);
+					StatusCtr::DelDate();
+					lpMoneyMng.SetMoney(100);
 					tmptitleNum_ = 0;
 					return std::move(std::make_unique<GameScene>());
 				}
 				else
 				{
+					lpMoneyMng.SetMoney(lpReadMng.GetDate(setinglist::Money));
+					StatusCtr::Reset();
 					tmptitleNum_ = 0;
 					return std::move(std::make_unique<GameScene>());
 				}
@@ -156,7 +161,6 @@ void TitleScene::Draw()
 
 	lpImglMng.DrawImg("wood.png", { 0,0 });
 	lpImglMng.DrawImg("title0.png", { 0,0 });
-	lpImglMng.DrawImg("titleblack.png", { 0,0 });
 	lpImglMng.DrawImg("title1.png", { 0,0 });
 	lpImglMng.DrawImg("title2.png", { 0,0 });
 	lpImglMng.DrawImg("title3.png", { 0,0 });

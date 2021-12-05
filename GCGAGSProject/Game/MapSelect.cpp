@@ -14,6 +14,7 @@
 #include "ImageMng.h"
 #include "UIMng.h"
 #include "SoundMng.h"
+#include "StatusCtr.h"
 
 MapSelect::MapSelect()
 {
@@ -75,24 +76,24 @@ void MapSelect::Update(float deltaTime_)
 	{
 		lpSoundMng.SoundPlay("crea.mp3");
 	}
-	if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_R))
-	{
-		mapPos_.x = -10;
-		mapPos_.y = 0;
-		ResetMap();
-		MapDatList::AddDate(mapdat_);
-	}
+	//if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_R))
+	//{
+	//	mapPos_.x = -10;
+	//	mapPos_.y = 0;
+	//	ResetMap();
+	//	MapDatList::AddDate(mapdat_);
+	//}
 
-	if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_C))
-	{
-		SaveMapDat();
-	}
+	//if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_C))
+	//{
+	//	SaveMapDat();
+	//}
 
-	if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_V))
-	{
-		RoadMapDat();
-		MapDatList::AddDate(mapdat_);
-	}
+	//if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_V))
+	//{
+	//	RoadMapDat();
+	//	MapDatList::AddDate(mapdat_);
+	//}
 	
 
 	if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_Z))
@@ -150,38 +151,18 @@ void MapSelect::Update(float deltaTime_)
 		mapNum_ = 1;
 	}
 
-	if (CheckHitKey(KEY_INPUT_SPACE))
-	{
-		if (mapNum_ == 1)
-		{
-			return;
-		}
-		mapNum_ = 1;
-		mapdat_.resize(static_cast<size_t>(mapSize_.y) + static_cast<size_t>(1));
-
-		mapdat_[mapSize_.y].resize(mapSize_.x);
-		mapSize_.y += 1;
-		for (int y = mapSize_.y - 2; y < mapSize_.y; y++)
-		{
-			for (int x = 0; x < mapSize_.x; x++)
-			{
-				if (y == mapSize_.y - 1 && x == mapSize_.x / 2 - 1)
-				{
-					mapdat_[y][x] = BlockDate::Goal;
-				}
-				else
-				{
-					mapdat_[y][x] = BlockDate::Block;
-				}
-			}
-		}
-		MapDatList::Init();
-		MapDatList::AddDate(mapdat_);
-	}
-	else
-	{
-		mapNum_ = 0;
-	}
+	//if (CheckHitKey(KEY_INPUT_SPACE))
+	//{
+	//	if (mapNum_ == 1)
+	//	{
+	//		return;
+	//	}
+	//	mapNum_ = 1;
+	//}
+	//else
+	//{
+	//	mapNum_ = 0;
+	//}
 
 	SetPlaterPos();
 }
@@ -331,6 +312,42 @@ void MapSelect::Init()
 	MapDatList::Init();
 	MapDatList::AddDate(mapdat_);
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
+
+	for (int y = 0; y < mapSize_.y; y++)
+	{
+		for (int x = 0; x < mapSize_.x; x++)
+		{
+			if(mapdat_[y][x] == BlockDate::Road)
+			{
+				mapdat_[y][x] = BlockDate::DRoad;
+			}
+		}
+	}
+	
+	do
+	{
+		mapdat_.resize(static_cast<size_t>(mapSize_.y) + static_cast<size_t>(1));
+
+		mapdat_[mapSize_.y].resize(mapSize_.x);
+		mapSize_.y += 1;
+		for (int y = mapSize_.y - 2; y < mapSize_.y; y++)
+		{
+
+			for (int x = 0; x < mapSize_.x; x++)
+			{
+				if (y == mapSize_.y - 1 && x == mapSize_.x / 2 - 1)
+				{
+					mapdat_[y][x] = BlockDate::Goal;
+				}
+				else
+				{
+					mapdat_[y][x] = BlockDate::Block;
+				}
+			}
+		}
+	} while (StatusCtr::GetStates(StatusID::MapSize) >= mapSize_.y);
+	StatusCtr::SetStates(StatusID::MapSize, mapSize_.y);
+	StatusCtr::OutPutD();
 }
 
 void MapSelect::SetStageID(int stageID)
@@ -342,7 +359,6 @@ void MapSelect::SetStageID(int stageID)
 
 bool MapSelect::IsDubDate(Vector2 pos)
 {
-
 	for (auto& dbox : dateBox_)
 	{
 		if (dbox->GetPos() / 32 == pos)

@@ -63,6 +63,18 @@ public:
 		return money_ += num;
 	}
 
+	int AddTmpMoney(int num)
+	{
+		return tmpmoney_ += num;
+	}
+
+	int GettmpMoney(void)
+	{
+		int rtnMoney = tmpmoney_;
+		tmpmoney_ = 0;
+		return rtnMoney;
+	}
+
 	void SetMoney(int num)
 	{
 		money_ = num;
@@ -76,6 +88,7 @@ private:
 	bool startF_;
 
 	int money_;
+	int tmpmoney_;
 
 	Vector2 mouseSubpos_;
 

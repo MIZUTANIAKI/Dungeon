@@ -35,6 +35,10 @@ void MapDatList::Init(void)
 {
 	nowPos_ = 0;
 	getPos_ = -1;
+	for (int i = 0; i < 20; i++)
+	{
+		oldmapdatalist_[i] = mapChipDate();
+	}
 }
 
 void MapDatList::SetPos(void)

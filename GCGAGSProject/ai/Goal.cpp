@@ -23,7 +23,7 @@ void Goal::Update(void)
 {
 	if (dir_ == MoveDir::None)
 	{
-		int tnum = rand() % 5;
+		int tnum = rand() % 4;
 		if (tnum == 0)
 		{
 			dir_ = MoveDir::Up;
@@ -54,6 +54,11 @@ void Goal::Draw()
 void Goal::Init()
 {
 	id_ = ObjectID::Goal;
+}
+
+void Goal::SetStatus(int num)
+{
+	hp_ = num;
 }
 
 void Goal::Damage(Explorer& target)

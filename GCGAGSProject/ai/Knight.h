@@ -30,6 +30,7 @@ public:
 		defhp_ = static_cast<float>(num);
 		hp_ = static_cast<float>(num);
 	}
+	void SetStatus(int num) override;
 private:
 	void MoveTo(float deltaTime);
 	virtual void Damage(Explorer& target);

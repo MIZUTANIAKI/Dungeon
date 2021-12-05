@@ -9,6 +9,7 @@ enum class setinglist
 {
 	Bright,
 	SoundVol,
+	Money,
 };
 
 class ReadMng
@@ -49,6 +50,7 @@ private:
 
 	int soundVol_;
 	int bright_;
+	int money_;
 
 	ReadMng();
 	~ReadMng();

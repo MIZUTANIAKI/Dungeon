@@ -9,6 +9,7 @@
 #include "EnergyMng.h"
 #include "UIMng.h"
 #include "SoundMng.h"
+#include "KeyMng.h"
 
 #include "Aster.h"
 #include "UIScrolller.h"
@@ -23,6 +24,7 @@
 #include "Gate.h"
 #include "Fire.h"
 #include "EnemyPawn.h"
+#include "StatusCtr.h"
 
 PlayMode::PlayMode()
 {
@@ -118,6 +120,11 @@ void PlayMode::Update(void)
 	{
 		con_++;
 	}
+	if (enemyKillCount_ >= 30 + 10 * nowStage_)
+	{
+		lpMoneyMng.SetStartFlag(false);
+		return;
+	}
 	lpEnergyMng.Update();
 	uIScrolller_->Update();
 	//if (con_ / 30 % 2 == 0)
@@ -141,7 +148,7 @@ void PlayMode::Update(void)
 			}
 			else
 			{
-				if (!BoseF_)
+				if (!BoseF_ && eneSpawnCount_ <= 30 + 10 * nowStage_)
 				{
 					SpawnEnemy();
 				}
@@ -165,7 +172,7 @@ void PlayMode::Update(void)
 		}
 	}
 
-	if (CheckHitKey(KEY_INPUT_W))
+	if (lpKeyMng.CheckKeyNow(KeyBindID::Up))
 	{
 		if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
 		{
@@ -178,7 +185,7 @@ void PlayMode::Update(void)
 		}
 	}
 
-	if (CheckHitKey(KEY_INPUT_S))
+	if (lpKeyMng.CheckKeyNow(KeyBindID::Up))
 	{
 		if (mapPos_.y < 1)
 		{
@@ -245,19 +252,26 @@ void PlayMode::Update(void)
 		{
 			if ((*itr)->GetObjectID() == ObjectID::Adventurer)
 			{
-				lpMoneyMng.AddMoney(rand() % 50);
+				enemyKillCount_++;
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Knight)
 			{
-				lpMoneyMng.AddMoney(rand() % 50);
-				knightKillCount_++;
-
+				enemyKillCount_++;
+			}
+			if ((*itr)->GetObjectID() == ObjectID::Pawn)
+			{
+				enemyKillCount_++;
+			}
+			if ((*itr)->GetObjectID() == ObjectID::Goal)
+			{
+				goalDelF_ = true; 
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Gate || (*itr)->GetObjectID() == ObjectID::Spike)
 			{
 				mapdat_[(*itr)->GetPos().y / 32][(*itr)->GetPos().x / 32] = BlockDate::Road;
 				CheckGoal();
 			}
+
 			itr = explorerVector_.erase(itr);
 		}
 		else
@@ -271,14 +285,17 @@ void PlayMode::SpawnEnemy()
 {
 	if (rand() % 10 == 0)
 	{
+		eneSpawnCount_++;
 		SpawnAdventer();
 	}
 	else if (rand() % 5 == 0)
 	{
+		eneSpawnCount_++;
 		SpawnKnight();
 	}
 	else
 	{
+		eneSpawnCount_++;
 		SpawnPawn();
 	}
 }
@@ -310,7 +327,7 @@ void PlayMode::CheckFireSpawnEnemy(std::unique_ptr<Explorer>& target, std::uniqu
 	{
 		return;
 	}
-	if (target->GetObjectID() == ObjectID::Adventurer || target->GetObjectID() == ObjectID::Knight)
+	if (target->GetObjectID() == ObjectID::Adventurer || target->GetObjectID() == ObjectID::Knight || target->GetObjectID() == ObjectID::Pawn)
 	{
 		return;
 	}
@@ -439,6 +456,7 @@ void PlayMode::SpawnGimmick2(Vector2& droppos, MapDropDateID id)
 		stable_sort(explorerVector_.begin(), explorerVector_.end(), [](auto& x, auto& y) {
 			return x->GetPos().y < y->GetPos().y;
 			});
+		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick2));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -458,6 +476,7 @@ void PlayMode::SpawnGimmick1(Vector2& droppos, MapDropDateID id)
 		stable_sort(explorerVector_.begin(), explorerVector_.end(), [](auto& x, auto& y) {
 			return x->GetPos().y < y->GetPos().y;
 			});
+		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick1));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -491,6 +510,7 @@ void PlayMode::SpawnMonster3(const Vector2& droppos, MapDropDateID id)
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
+		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster3));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -524,6 +544,7 @@ void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
+		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster2));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -557,6 +578,7 @@ void PlayMode::SpawnMonster1(const Vector2& droppos, MapDropDateID id)
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
+		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster1));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -620,12 +642,12 @@ void PlayMode::Draw(void)
 				DrawEdge(Vector2{ x,y });
 			}
 			DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
-#ifdef _DEBUG
-			{
-				std::unique_lock<std::mutex> lock(mapG_);
-				DrawFormatString(x * 32 + mapPos_.x, y * 32 + mapPos_.y, 0xff0000, "%d", map_[y][x].nowstep);
-			}
-#endif // _DEBUG
+//#ifdef _DEBUG
+//			{
+//				std::unique_lock<std::mutex> lock(mapG_);
+//				DrawFormatString(x * 32 + mapPos_.x, y * 32 + mapPos_.y, 0xff0000, "%d", map_[y][x].nowstep);
+//			}
+//#endif // _DEBUG
 
 		}
 	}
@@ -650,11 +672,15 @@ void PlayMode::Init(void)
 	BoseF_ = false;
 	nowStage_ = 0;
 	con_ = 0;
+	eneSpawnCount_ = 0;
+	enemyKillCount_ = 0;
 	knightHP_ = 500;
+	goalDelF_ = false;
 	spawnRate_ = 500;
 	mapPos_.x = -10;
 	mapPos_.y = 0;
 	explorerVector_.clear();
+	srand(100);
 	//UI初期化
 	UIInit();
 	//Energy初期化
@@ -709,10 +735,10 @@ void PlayMode::InitGoalNode(void)
 	std::unique_ptr<Goal> tmpGoal = std::make_unique<Goal>();
 	tmpGoal->Init();
 	tmpGoal->SetMapMos(mapPos_);
-	tmpGoal->ReSetPos(Vector2(static_cast<int>(mapdat_.size()) - 1, static_cast<int>(mapdat_[0].size()) / 2 - 1));
-	//１万ポイントに設定
-	tmpGoal->SetHp(10000);
-	tmpGoal->SetDir(lpRHSMng.CheckMove(Vector2(tmpGoal->GetPos().x / 32, tmpGoal->GetPos().y / 32), MoveDir::Up));
+	tmpGoal->ReSetPos(goalPos_);
+	//１0ポイントに設定
+	tmpGoal->SetHp(10);
+	tmpGoal->SetDir(MoveDir::Up);
 	explorerVector_.emplace_back(std::move<>(tmpGoal));
 }
 

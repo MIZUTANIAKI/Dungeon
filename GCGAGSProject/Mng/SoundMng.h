@@ -45,7 +45,7 @@ public:
 	/// </summary>
 	/// <param name="id">音声ハンドル</param>
 	/// <param name="PlayType">再生タイプ</param>
-	void SoundPlay(std::string id, int PlayType = DX_PLAYTYPE_BACK);
+	void SoundPlay(std::string id, int PlayType = 0x0001);
 
 	/// <summary>
 	/// 音声が再生されているか調べる

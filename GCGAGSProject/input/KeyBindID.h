@@ -8,5 +8,6 @@ enum class KeyBindID
 	Left,
 	Ok,
 	No,
+	Pose,
 	Max,
 };

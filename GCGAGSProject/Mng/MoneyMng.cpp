@@ -125,7 +125,7 @@ MoneyMng::MoneyMng()
 	grabF_ = false;
 	subUIDispF_ = false;
 	mousecount_ = 0;
-
+	tmpmoney_ = 0;
 	screeenH_ = MakeScreen(size_.x, size_.y + 10, TRUE);
 }
 

@@ -67,6 +67,10 @@ void KeyCtl::CheckKeyHit(void)
 	{
 		SetKeyDate(KeyBindID::No, true);
 	}
+	if (KeyBuf[KEY_INPUT_P])
+	{
+		SetKeyDate(KeyBindID::Pose, true);
+	}
 }
 
 void KeyCtl::SetKeyDate(KeyBindID id, bool flg)

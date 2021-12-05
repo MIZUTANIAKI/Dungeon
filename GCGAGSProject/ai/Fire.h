@@ -14,6 +14,7 @@ public:
 		moveDir_ = dir;
 	}
 	void SetEneF(void);
+	void SetStatus(int num) override;
 private:
 	void Damage(Explorer& target)override;
 	Vector2 moveDir_;

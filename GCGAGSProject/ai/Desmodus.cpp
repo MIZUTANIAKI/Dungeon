@@ -71,6 +71,12 @@ void Desmodus::Init()
 	defhp_ = hp_;
 }
 
+void Desmodus::SetStatus(int num)
+{
+	atk_ += 0.3 * num;
+	hp_ += 0.3 * num;
+}
+
 void Desmodus::Damage(Explorer& target)
 {
 	if (ObjectID::Adventurer == target.GetObjectID())
@@ -89,5 +95,9 @@ void Desmodus::Damage(Explorer& target)
 	if (ObjectID::EFire == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
+	}
+	if (hp_ <= 0)
+	{
+		lpSoundMng.LoadSound("baki.mp3");
 	}
 }

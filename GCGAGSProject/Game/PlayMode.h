@@ -32,6 +32,11 @@ public:
 		spawnRate_ = num;
 	}
 
+	bool GetGoalDelF(void)
+	{
+		return goalDelF_;
+	}
+
 	void SetMapDate(mapChipDate mapdate);
 
 	void Update(void);
@@ -61,9 +66,9 @@ public:
 			return clearF_;
 		}
 	}
-	int GetKnightKillCount(void)
+	int GetEnemyKillCount(void)
 	{
-		return knightKillCount_;
+		return enemyKillCount_;
 	}
 private:
 	void CheckFireSpawnEnemy(std::unique_ptr<Explorer>& target, std::unique_ptr<Explorer>& explorer, bool& spawnF, std::vector<std::pair<std::pair<Vector2, bool>, std::pair<float, float>>>& spawnFireVec_);
@@ -143,8 +148,9 @@ private:
 	std::vector < std::vector<nodepoint>> map_;
 	int con_;
 	int spawnRate_;
+	int eneSpawnCount_;
 	int knightHP_;
-	int knightKillCount_;
+	int enemyKillCount_;
 
 	bool eneF;
 
@@ -154,5 +160,6 @@ private:
 	bool BoseF_;
 	bool finF_;
 	bool clearF_;
+	bool goalDelF_;
 };
 

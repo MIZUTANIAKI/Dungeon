@@ -4,6 +4,7 @@
 #include "WFUtility.h"
 #include "MapMng.h"
 #include "CronoMng.h"
+#include "SoundMng.h"
 
 enum class MoveDir
 {
@@ -134,6 +135,8 @@ public:
 	}
 
 	void HitAttack(float atk);
+
+	virtual void SetStatus(int num)=0;
 protected:
 	virtual void Damage(Explorer& target) = 0;
 

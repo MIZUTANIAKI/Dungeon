@@ -32,6 +32,7 @@ public:
 		MoveF_ = true;
 		MoveFCon_ = 1.0f;
 	}
+	void SetStatus(int num) override;
 private:
 	void MoveTo(float deltaTime);
 	virtual void Damage(Explorer& target);

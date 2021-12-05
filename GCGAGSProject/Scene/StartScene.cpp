@@ -159,7 +159,7 @@ void StartScene::Draw()
 			}
 			if (graphAlpha_[1] < 255)
 			{
-				graphAlpha_[1] += 255 / 5;
+				graphAlpha_[1] += 5;
 			}
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, graphAlpha_[1]);
 			lpImglMng.DrawImg("title2.png", { 0,static_cast<int>(graphPos_[1]) });
@@ -173,7 +173,7 @@ void StartScene::Draw()
 				}
 				if (graphAlpha_[2] < 255)
 				{
-					graphAlpha_[2] += 255 / 5;
+					graphAlpha_[2] += 5;
 				}
 				SetDrawBlendMode(DX_BLENDMODE_ALPHA, graphAlpha_[2]);
 				lpImglMng.DrawImg("title3.png", { 0,static_cast<int>(graphPos_[2]) });

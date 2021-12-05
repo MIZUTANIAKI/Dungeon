@@ -28,7 +28,7 @@ SceneMng::SceneMng() :ScreenSize{ 1280,720 }
 {
 	shutdownF_ = false;
 	SetAlwaysRunFlag(true);
-	SetWindowText("‹N“®");
+	SetWindowText("DungeonOwner");
 
 	SetLightEnable(FALSE);
 

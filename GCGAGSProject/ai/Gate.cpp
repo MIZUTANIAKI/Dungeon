@@ -32,6 +32,12 @@ void Gate::Init()
 	defhp_ = hp_;
 }
 
+void Gate::SetStatus(int num)
+{
+	atk_ += 0.05f * num;
+	hp_ += 0.010f * num;
+}
+
 void Gate::Damage(Explorer& target)
 {
 	if (ObjectID::Adventurer == target.GetObjectID())
@@ -50,5 +56,9 @@ void Gate::Damage(Explorer& target)
 	if (ObjectID::EFire == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
+	}
+	if (hp_ <= 0)
+	{
+		lpSoundMng.LoadSound("baki.mp3");
 	}
 }
