@@ -98,7 +98,9 @@ UNBS TitleScene::Update(UNBS own)
 					lpMoneyMng.SetMoney(lpReadMng.GetDate(setinglist::Money));
 					StatusCtr::Reset();
 					tmptitleNum_ = 0;
-					return std::move(std::make_unique<GameScene>());
+					auto gamaescene = std::make_unique<GameScene>();
+					gamaescene->RoadGameDate();
+					return std::move(gamaescene);
 				}
 			}
 			if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
@@ -193,7 +195,7 @@ void TitleScene::Draw()
 	{
 		Vector2 pos;
 		DrawBox(screenSize_.x / 2 - 150, screenSize_.y / 2 - 50, screenSize_.x / 2 + 160, screenSize_.y / 2 + 100, 0x121212, true);
-		DrawFormatString(screenSize_.x / 2 - 70, screenSize_.y / 2 - 35, 0xffffff, "Ç¬Ç√Ç´Ç©ÇÁÅH\n(ñ¢é¿ëï)");
+		DrawFormatString(screenSize_.x / 2 - 70, screenSize_.y / 2 - 35, 0xffffff, "Ç¬Ç√Ç´Ç©ÇÁÅH\n");
 		pos.x = screenSize_.x / 2 - 100;
 		pos.y = screenSize_.y / 2 + 50;
 
@@ -265,7 +267,7 @@ int TitleScene::title1Update()
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 0)
 		{
-			tmptitleNum_ = 1;
+			tmptitleNum_ = 2;
 			return 0;
 		}
 		if (isTarget_ == 2)

@@ -14,6 +14,7 @@
 #include "UIBackPlay.h"
 #include "SoundMng.h"
 #include "GameOver.h"
+#include "ResultScene.h"
 #include "KeyMng.h"
 
 GameScene::GameScene()
@@ -70,6 +71,20 @@ UNBS GameScene::Update(UNBS own)
 		{
 			return std::move(std::make_unique<GameOver>(std::move(own)));
 		}
+
+		if (!lpMoneyMng.GetStartFlag())
+		{
+			lpUIMng.DeleteAllUI();
+			mapSelect_->Init();
+			Vector2 tpos = { 15,25 + 600 };
+			Vector2 tsize = { 100,50 };
+			lpUIMng.CreateUI(std::move<>(std::make_unique<UIStartPlay>(tpos, tsize)));
+			lpMoneyMng.SetStartFlag(false);
+			isGameNow_ = false;
+			roadCount_ = 0;
+			roadTime_->Init(0);
+			return std::move(std::make_unique<ResultScene>(std::move(own)));
+		}
 	}
 	time_ += lpCronoMng.GetDeltaTime();
 	return std::move(own);
@@ -106,6 +121,11 @@ void GameScene::Draw()
 		return;
 	}
 	gamePlay_->Draw();
+}
+
+void GameScene::RoadGameDate(void)
+{
+	mapSelect_->SetStageID(2);
 }
 
 void GameScene::RoadNow(float deltaTime)
@@ -160,6 +180,7 @@ void GameScene::GameNow(float deltaTime)
 	{
 		if (!startGame_)
 		{
+			mapSelect_->SaveStage();
 			lpUIMng.DeleteAllUI();
 			startGame_ = true;
 			gamePlay_->Init();
@@ -172,17 +193,5 @@ void GameScene::GameNow(float deltaTime)
 		}
 
 		gamePlay_->Update();
-		if (!lpMoneyMng.GetStartFlag())
-		{
-			lpUIMng.DeleteAllUI();
-			mapSelect_->Init();
-			Vector2 tpos = { 15,25 + 600 };
-			Vector2 tsize = { 100,50 };
-			lpUIMng.CreateUI(std::move<>(std::make_unique<UIStartPlay>(tpos, tsize)));
-			lpMoneyMng.SetStartFlag(false);
-			isGameNow_ = false;
-			roadCount_ = 0;
-			roadTime_->Init(0);
-		}
 	}
 }

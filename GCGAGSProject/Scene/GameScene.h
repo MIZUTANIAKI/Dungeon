@@ -15,6 +15,7 @@ public:
 	GameScene();
 	~GameScene();
 	void Draw()override;
+	void RoadGameDate(void);
 private:
 	void RoadNow(float deltaTime);
 	void GameNow(float deltaTime);

@@ -356,6 +356,11 @@ void MapSelect::SetStageID(int stageID)
 	MapDatList::AddDate(mapdat_);
 }
 
+void MapSelect::SaveStage(void)
+{
+	SaveMapDat(2);
+}
+
 
 bool MapSelect::IsDubDate(Vector2 pos)
 {
@@ -476,9 +481,9 @@ void MapSelect::RoadMapDat(int stageID)
 	mapSize_ = Vector2(static_cast<int>(mapdat_[0].size()), static_cast<int>(mapdat_.size()));
 }
 
-void MapSelect::SaveMapDat(void)
+void MapSelect::SaveMapDat(int num)
 {
 	std::unique_ptr<SaveMap> smap = std::make_unique<SaveMap>();
 	smap->SetMapdate(mapdat_);
-	smap->StartOutPut();
+	smap->StartOutPut(num);
 }

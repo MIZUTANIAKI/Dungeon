@@ -309,6 +309,7 @@ void PlayMode::SpawnPawn()
 	tmpAdventure->ReSetPos(firstPos_);
 	tmpAdventure->EnemyPawn::SetHP(10);
 	tmpAdventure->SetDir(MoveDir::Down);
+	tmpAdventure->SetStatus(nowStage_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 
@@ -450,13 +451,13 @@ void PlayMode::SpawnGimmick2(Vector2& droppos, MapDropDateID id)
 		tmpMonster->Init();
 		tmpMonster->SetMapMos(mapPos_);
 		tmpMonster->ReSetPos(droppos);
+		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick2));
 		explorerVector_.emplace_back(std::move<>(tmpMonster));
 		mapdat_[droppos.y][droppos.x] = BlockDate::Gate;
 		CheckGoal();
 		stable_sort(explorerVector_.begin(), explorerVector_.end(), [](auto& x, auto& y) {
 			return x->GetPos().y < y->GetPos().y;
 			});
-		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick2));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -470,13 +471,13 @@ void PlayMode::SpawnGimmick1(Vector2& droppos, MapDropDateID id)
 		tmpMonster->Init();
 		tmpMonster->SetMapMos(mapPos_);
 		tmpMonster->ReSetPos(droppos);
+		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick1));
 		explorerVector_.emplace_back(std::move<>(tmpMonster));
 		mapdat_[droppos.y][droppos.x] = BlockDate::Spike;
 		CheckGoal();
 		stable_sort(explorerVector_.begin(), explorerVector_.end(), [](auto& x, auto& y) {
 			return x->GetPos().y < y->GetPos().y;
 			});
-		tmpMonster->SetStatus(StatusCtr::GetStates(StatusID::GImmick1));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -509,8 +510,8 @@ void PlayMode::SpawnMonster3(const Vector2& droppos, MapDropDateID id)
 			tmpDir = MoveDir::Left;
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
-		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster3));
+		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -543,8 +544,8 @@ void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
 			tmpDir = MoveDir::Left;
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
-		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster2));
+		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -577,8 +578,8 @@ void PlayMode::SpawnMonster1(const Vector2& droppos, MapDropDateID id)
 			tmpDir = MoveDir::Left;
 		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
-		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster1));
+		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
@@ -593,6 +594,7 @@ void PlayMode::SpawnKnight()
 	tmpAdventure->ReSetPos(firstPos_);
 	tmpAdventure->Knight::SetHP(100);
 	tmpAdventure->SetDir(MoveDir::Down);
+	tmpAdventure->SetStatus(nowStage_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 
@@ -605,6 +607,7 @@ void PlayMode::SpawnAdventer()
 	tmpAdventure->ReSetPos(firstPos_);
 	tmpAdventure->Adventurer::SetHP(2);
 	tmpAdventure->SetDir(MoveDir::Down);
+	tmpAdventure->SetStatus(nowStage_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 

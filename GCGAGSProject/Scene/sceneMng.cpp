@@ -19,6 +19,7 @@
 #include "KeyMng.h"
 #include "StartScene.h"
 #include "FPSKeeper.h"
+#include "StatusCtr.h"
 
 
 SceneMng* SceneMng::sInstance = nullptr;
@@ -119,6 +120,7 @@ void SceneMng::Run(void)
 	lpImglMng.SetBright(lpReadMng.GetDate(setinglist::Bright));
 	lpSoundMng.SetSoundVol(lpReadMng.GetDate(setinglist::SoundVol));
 
+	StatusCtr::DelDate();
 	FPSKeeper *fps = new FPSKeeper();
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0 && shutdownF_ == false)
 	{

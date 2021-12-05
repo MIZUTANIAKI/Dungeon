@@ -15,15 +15,17 @@ SaveMap::~SaveMap()
 {
 }
 
-void SaveMap::StartOutPut()
+void SaveMap::StartOutPut(int num)
 {
 	if (mapdat_.empty())
 	{
 		return;
 	}
 
-    std::ofstream ofs;
-    ofs.open("savedate/savemap.gmp", std::ios::out);
+	std::ofstream ofs;
+	std::string fname = "savedate/savemap_";
+	fname = fname + std::to_string(num) + ".gmp";
+	ofs.open(fname, std::ios::out);
 	Vector2 mapSize = Vector2(static_cast<int>(mapdat_[0].size()), static_cast<int>(mapdat_.size()));
 	for (int y = 0; y < mapSize.y; y++)
 	{

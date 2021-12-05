@@ -10,7 +10,7 @@ public:
 	SaveMap();
 	~SaveMap();
 
-	void StartOutPut();
+	void StartOutPut(int num = 0);
 	void StartInPut(int num);
 
 	mapChipDate GetMapdate()

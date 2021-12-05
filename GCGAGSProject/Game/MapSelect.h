@@ -27,6 +27,7 @@ public:
 	void Init();
 
 	void SetStageID(int stageID);
+	void SaveStage(void);
 
 	//int GetMapNum() const noexcept
 	//{
@@ -60,7 +61,7 @@ private:
 
 	void ResetMap(void);
 	void RoadMapDat(int stageID = 0);
-	void SaveMapDat(void);
+	void SaveMapDat(int num = 0);
 
 	mapChipDate mapdat_;
 
