@@ -17,7 +17,7 @@ private:
 	Vector2 screenSize_;
 	UNBS ownS_;
 	int isTarget_;
-	int time_;
+	float time_;
 	int sterangle_;
 	int resultNum_;
 

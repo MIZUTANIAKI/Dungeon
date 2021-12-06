@@ -148,7 +148,7 @@ void PlayMode::Update(void)
 			}
 			else
 			{
-				if (!BoseF_ && eneSpawnCount_ <= 30 + 10 * nowStage_)
+				if (!BoseF_ && eneSpawnCount_ < 30 + 10 * nowStage_)
 				{
 					SpawnEnemy();
 				}

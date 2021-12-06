@@ -5,9 +5,11 @@
 #include "PadMng.h"
 #include "KeyMng.h"
 #include "moneyMng.h"
+#include "mouseMng.h"
 #include "soundMng.h"
 #include "StatusCtr.h"
 #include "ReadMng.h"
+#include "gameUI/ScrollUIBase.h"
 
 UNBS ResultScene::Update(UNBS own)
 {
@@ -82,7 +84,7 @@ UNBS ResultScene::Update(UNBS own)
 			}
 			if (isTarget_ == 3)
 			{
-				isTarget_ = 1;
+				isTarget_ = 0;
 				resultNum_ = 1;
 			}
 		}
@@ -182,10 +184,10 @@ void ResultScene::Draw()
 	ownS_->Draw();
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
 	DrawBox(0, 0, screenSize_.x, screenSize_.y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 20 });
+	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 30 });
 
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 140, 0xffffff, "ゲットしたゴールド　%4d", resultMoney_);
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 100, 0xffffff, "もっているゴールド　%4d", lpMoneyMng.GetMoney());
@@ -286,11 +288,11 @@ void ResultScene::Draw()
 
 	if (resultNum_ == 0)
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
+		DrawFormatString(screenSize_.x - screenSize_.x/5, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
 	}
 	else
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでもどる");
+		DrawFormatString(screenSize_.x - screenSize_.x / 5, screenSize_.y - 100, 0xffffff, "Xでもどる");
 	}
 
 	lpImglMng.ScreenAddDrawQue(screenH_, 79);
@@ -310,8 +312,10 @@ void ResultScene::Init(void)
 	isTarget_ = 0;
 	time_ = 0;
 	graphY_ = 0;
+	resultNum_ = 0;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
 	screenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
 	lpImglMng.LoadGraph("gameWin.png");
 	lpSoundMng.LoadSound("not.mp3");
+	ScrollUIBase::SetLockOff();
 }
