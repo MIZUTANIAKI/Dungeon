@@ -44,7 +44,10 @@ UNBS StartScene::Update(UNBS own)
 			atenNum_++;
 		}
 	}
-
+	if (atenNum_ >= 4 && (lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || lpKeyMng.CheckKeyTrg(KeyBindID::No)))
+	{
+		return std::move(std::make_unique<TitleScene>());
+	}
 	if (time_ >= 4)
 	{
 		if (atenNum_ >= 8)

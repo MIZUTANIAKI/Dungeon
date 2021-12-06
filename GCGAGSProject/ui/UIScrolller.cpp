@@ -206,6 +206,7 @@ void UIScrolller::Draw(void)
 
 void UIScrolller::Init(void)
 {
+	ScrollUIBase::SetLockOff();
 	UIVector_.clear();
 	uiF_.clear();
 	for (MapDropDateID id = MapDropDateID::None; id != MapDropDateID::Max; id = static_cast<MapDropDateID>(static_cast<int>(id) + 1))

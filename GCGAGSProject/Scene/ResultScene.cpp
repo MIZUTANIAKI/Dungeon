@@ -32,9 +32,9 @@ UNBS ResultScene::Update(UNBS own)
 	{
 		isTarget_ = 0;
 	}
-	if (isTarget_ > 1)
+	if (isTarget_ > 3)
 	{
-		isTarget_ = 1;
+		isTarget_ = 3;
 	}
 	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
 	{
@@ -185,7 +185,7 @@ void ResultScene::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 	DrawBox(0, 0, screenSize_.x, screenSize_.y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 10 });
+	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 20 });
 
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 140, 0xffffff, "ゲットしたゴールド　%4d", resultMoney_);
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 100, 0xffffff, "もっているゴールド　%4d", lpMoneyMng.GetMoney());
@@ -282,16 +282,18 @@ void ResultScene::Draw()
 		DrawFormatString(screenSize_.x / 2 + 350, screenSize_.y - screenSize_.y / 5, 0xffffff, "じぶん");
 	}
 
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
 	if (resultNum_ == 0)
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - screenSize_.y / 4, 0xffffff, "Xでキャンセルする");
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
 	}
 	else
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - screenSize_.y / 4, 0xffffff, "Xでもどる");
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでもどる");
 	}
 
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+	lpImglMng.ScreenAddDrawQue(screenH_, 79);
 }
 
 void ResultScene::SetOwn(UNBS own)

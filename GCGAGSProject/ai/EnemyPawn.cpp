@@ -206,6 +206,6 @@ void EnemyPawn::Damage(Explorer& target)
 	if (hp_ <= 0)
 	{
 		lpMoneyMng.AddTmpMoney(2);
-		lpSoundMng.LoadSound("baki.mp3");
+		lpSoundMng.SoundPlay("baki.mp3");
 	}
 }

@@ -139,6 +139,6 @@ void Knight::Damage(Explorer& target)
 	if (hp_ <= 0)
 	{
 		lpMoneyMng.AddTmpMoney(5);
-		lpSoundMng.LoadSound("baki.mp3");
+		lpSoundMng.SoundPlay("baki.mp3");
 	}
 }

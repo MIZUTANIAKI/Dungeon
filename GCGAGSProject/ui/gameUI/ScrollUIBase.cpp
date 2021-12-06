@@ -23,6 +23,11 @@ ScrollUIBase::ScrollUIBase(Vector2 pos)
 	isClick_ = false;
 }
 
+void ScrollUIBase::SetLockOff(void)
+{
+	isLock_ = false;
+}
+
 void ScrollUIBase::DragMove(void)
 {
 	if (!isClick_ && !isLock_)

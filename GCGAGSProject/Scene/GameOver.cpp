@@ -11,13 +11,13 @@
 UNBS GameOver::Update(UNBS own)
 {
 	time_++;
-	if (screenSize_.y - 10 >= backWPosY_ + 1070)
+	if (screenSize_.y >= backWPosY_)
 	{
-		if (screenSize_.y - 10 == backWPosY_ + 1080)
+		if (screenSize_.y == backWPosY_)
 		{
 			lpSoundMng.SoundPlay("don.mp3");
 		}
-		backWPosY_ += 5;
+		backWPosY_++;
 	}
 	if (CheckHitKeyAll())
 	{
@@ -90,9 +90,27 @@ void GameOver::Draw()
 	ownS_->Draw();
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
-	lpImglMng.DrawImg("GameOverWall.png", { -10 + (rand() % 20 - 10),backWPosY_ });
+	//lpImglMng.DrawImg("GameOverWall.png", { -10 + (rand() % 20 - 10),backWPosY_ });
+	for (int i = 0; i < 50; i++)
+	{
+		int id = 0;
+		if (i % 3 == 0)
+		{
+			id = lpImglMng.GetGraphHandle("testC2.png");
+		}
+		else if (i % 3 == 1)
+		{
+			id = lpImglMng.GetGraphHandle("testC4.png");
+		}
+		else
+		{
+			id = lpImglMng.GetGraphHandle("testC3.png");
+		}
+		DrawRotaGraph(dropPosAngle_[i].first.x, backWPosY_+ dropPosAngle_[i].first.y, 10.0, dropPosAngle_[i].second, id, true);
+	}
 
-	if (screenSize_.y-10 <= backWPosY_ + 1070)
+
+	if (screenSize_.y <= backWPosY_)
 	{
 		if (time_ / 5 % 30 == 29 || time_ / 5 % 30 == 20)
 		{
@@ -121,12 +139,12 @@ void GameOver::Draw()
 
 		if (isTarget_ == 0)
 		{
-			pos.x = screenSize_.x / 2 - 110;
+			pos.x = screenSize_.x / 2 - 130;
 		}
 
 		if (isTarget_ == 1)
 		{
-			pos.x = screenSize_.x / 2 + 50;
+			pos.x = screenSize_.x / 2 + 70;
 		}
 		pos.y += 13;
 
@@ -141,7 +159,7 @@ void GameOver::Draw()
 		{
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
-		DrawFormatString(screenSize_.x / 2 - 100, screenSize_.y / 2 + 50, 0xffffff, "タイトルへ");
+		DrawFormatString(screenSize_.x / 2 - 120, screenSize_.y / 2 + 50, 0xffffff, "タイトルへ");
 		if (isTarget_ != 1)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -150,7 +168,7 @@ void GameOver::Draw()
 		{
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 		}
-		DrawFormatString(screenSize_.x / 2 + 60, screenSize_.y / 2 + 50, 0xffffff, "もうやめる");
+		DrawFormatString(screenSize_.x / 2 + 50, screenSize_.y / 2 + 50, 0xffffff, "やめる");
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
 	lpImglMng.ScreenAddDrawQue(screenH_, 79);
@@ -170,11 +188,15 @@ void GameOver::Init(void)
 	isTarget_ = 0;
 	sterangle_ = 0;
 	pressKeyF_ = false;
-	backWPosY_ = -1130;
+	backWPosY_ = 0;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
 	screenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
 	lpImglMng.LoadGraph("GameOverWall.png");
 	lpImglMng.LoadGraph("GameOver1.png");
 	lpImglMng.LoadGraph("GameOver2.png");
 	lpImglMng.LoadGraph("GameOver3.png");
+	for (int i = 0; i < 50; i++)
+	{
+		dropPosAngle_.emplace_back(Vector2{ rand() % screenSize_.x ,rand() % 500 - 200 }, rand() % 360);
+	}
 }

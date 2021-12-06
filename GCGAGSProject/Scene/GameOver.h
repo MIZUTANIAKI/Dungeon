@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "BaseScene.h"
 #include "Vector2.h"
 class GameOver :
@@ -21,5 +22,7 @@ private:
 	int time_;
 	float sterangle_;
 	bool pressKeyF_;
+
+	std::vector<std::pair<Vector2, int>> dropPosAngle_;
 };
 

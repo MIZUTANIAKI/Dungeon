@@ -45,12 +45,26 @@ GameScene::GameScene()
 	roadFinishF_ = false;
 	isGameNow_ = false;
 	startGame_ = false;
+	initGame_ = false;
 	lpSoundMng.StopSound("title.mp3");
 	lpSoundMng.LoadSound("baki.mp3");
 }
 
 UNBS GameScene::Update(UNBS own)
 {
+	if (initGame_)
+	{
+		initGame_ = false;
+		lpUIMng.DeleteAllUI();
+		mapSelect_->Init();
+		Vector2 tpos = { 15,25 + 600 };
+		Vector2 tsize = { 100,50 };
+		lpUIMng.CreateUI(std::move<>(std::make_unique<UIStartPlay>(tpos, tsize)));
+		lpMoneyMng.SetStartFlag(false);
+		isGameNow_ = false;
+		roadCount_ = 0;
+		roadTime_->Init(0);
+	}
 	if (lpPadMng.GetControllerData(InputID::Menu)||lpKeyMng.CheckKeyTrg(KeyBindID::Pose))
 	{
 		return std::move(std::make_unique<PoseScene>(std::move(own)));
@@ -74,15 +88,7 @@ UNBS GameScene::Update(UNBS own)
 
 		if (!lpMoneyMng.GetStartFlag())
 		{
-			lpUIMng.DeleteAllUI();
-			mapSelect_->Init();
-			Vector2 tpos = { 15,25 + 600 };
-			Vector2 tsize = { 100,50 };
-			lpUIMng.CreateUI(std::move<>(std::make_unique<UIStartPlay>(tpos, tsize)));
-			lpMoneyMng.SetStartFlag(false);
-			isGameNow_ = false;
-			roadCount_ = 0;
-			roadTime_->Init(0);
+			initGame_ = true;
 			return std::move(std::make_unique<ResultScene>(std::move(own)));
 		}
 	}

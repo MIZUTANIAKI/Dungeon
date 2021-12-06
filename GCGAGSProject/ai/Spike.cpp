@@ -59,6 +59,6 @@ void Spike::Damage(Explorer& target)
 	}
 	if (hp_ <= 0)
 	{
-		lpSoundMng.LoadSound("baki.mp3");
+		lpSoundMng.SoundPlay("baki.mp3");
 	}
 }

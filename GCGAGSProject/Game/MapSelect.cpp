@@ -345,7 +345,7 @@ void MapSelect::Init()
 				}
 			}
 		}
-	} while (StatusCtr::GetStates(StatusID::MapSize) >= mapSize_.y);
+	} while (StatusCtr::GetStates(StatusID::MapSize) > mapSize_.y);
 	StatusCtr::SetStates(StatusID::MapSize, mapSize_.y);
 	StatusCtr::OutPutD();
 }

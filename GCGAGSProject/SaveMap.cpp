@@ -35,7 +35,7 @@ void SaveMap::StartOutPut(int num)
 			{
 				ofs << 0;
 			}
-			if (mapdat_[y][x] == BlockDate::Road)
+			if (mapdat_[y][x] == BlockDate::Road|| mapdat_[y][x] == BlockDate::DRoad)
 			{
 				ofs << 1;
 			}

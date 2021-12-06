@@ -12,6 +12,7 @@ public:
 	virtual void Update(void) = 0;
 	virtual void Draw(void) = 0;
 
+	static void SetLockOff(void);
 
 	bool GetDelFlag()const noexcept
 	{

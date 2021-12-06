@@ -21,6 +21,10 @@ int ReadMng::GetDate(setinglist set)noexcept
 	{
 		return soundVol_;
 	}
+	if (set == setinglist::Money)
+	{
+		return money_;
+	}
 	return 255;
 }
 

@@ -94,10 +94,10 @@ void Desmodus::Damage(Explorer& target)
 
 	if (ObjectID::EFire == target.GetObjectID())
 	{
-		HitAttack(target.GetAtk());
+		hp_ -= target.GetAtk();
 	}
 	if (hp_ <= 0)
 	{
-		lpSoundMng.LoadSound("baki.mp3");
+		lpSoundMng.SoundPlay("baki.mp3");
 	}
 }
