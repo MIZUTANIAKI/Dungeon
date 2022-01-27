@@ -10,6 +10,7 @@ public:
 	ResultScene(UNBS own);
 	~ResultScene();
 	void Draw()override;
+	void DrawName();
 	void SetOwn(UNBS own);
 private:
 	void Init(void);

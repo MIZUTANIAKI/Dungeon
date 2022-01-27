@@ -41,6 +41,8 @@ public:
 
 	void Update(void);
 
+	void CheckRouteForPlay();
+
 	void SpawnEnemy();
 
 	void SpawnPawn();
@@ -88,6 +90,8 @@ private:
 	void SpawnGimmick1(Vector2& droppos, MapDropDateID id);
 
 	void SpawnMonster3(const Vector2& droppos, MapDropDateID id);
+
+	void SetDropDir(MoveDir& tmpDir);
 
 	void SpawnMonster2(const Vector2& droppos, MapDropDateID id);
 
@@ -161,5 +165,7 @@ private:
 	bool finF_;
 	bool clearF_;
 	bool goalDelF_;
+
+	int dorpDir_;
 };
 

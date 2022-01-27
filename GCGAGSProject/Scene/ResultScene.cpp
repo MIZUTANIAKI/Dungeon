@@ -5,11 +5,9 @@
 #include "PadMng.h"
 #include "KeyMng.h"
 #include "moneyMng.h"
-#include "mouseMng.h"
 #include "soundMng.h"
 #include "StatusCtr.h"
 #include "ReadMng.h"
-#include "gameUI/ScrollUIBase.h"
 
 UNBS ResultScene::Update(UNBS own)
 {
@@ -84,7 +82,7 @@ UNBS ResultScene::Update(UNBS own)
 			}
 			if (isTarget_ == 3)
 			{
-				isTarget_ = 0;
+				isTarget_ = 1;
 				resultNum_ = 1;
 			}
 		}
@@ -184,10 +182,10 @@ void ResultScene::Draw()
 	ownS_->Draw();
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 	DrawBox(0, 0, screenSize_.x, screenSize_.y, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 30 });
+	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 20 });
 
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 140, 0xffffff, "ゲットしたゴールド　%4d", resultMoney_);
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 100, 0xffffff, "もっているゴールド　%4d", lpMoneyMng.GetMoney());
@@ -219,6 +217,44 @@ void ResultScene::Draw()
 	}
 	DrawRotaGraph(pos.x - 10, pos.y, 1.0, sterangle_, lpImglMng.GetGraphHandle("ster.png"), true);
 	//DrawTriangle(pos.x - 20, pos.y - 15, pos.x - 20, pos.y + 15, pos.x, pos.y, 0xffffff, false);
+	if (isTarget_ == 0)
+	{
+		if (resultNum_ == 0)
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "マップのたてのながさがふえるよ。\nいまのマップサイズ　%d", StatusCtr::GetStates(StatusID::MapSize));
+		}
+		else
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ビショップのかたさ、こうげきりょくがあがるよ。\nいまのビショップレベル　%d", StatusCtr::GetStates(StatusID::Monster3));
+		}
+	}
+	if (isTarget_ == 1)
+	{
+		if (resultNum_ == 0)
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ポーンのかたさ、こうげきりょくがあがるよ\nいまのポーンレベル　%d", StatusCtr::GetStates(StatusID::Monster1));
+		}
+		else
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "スパイクのかたさ、こうげきりょくがあがるよ\nいまのビショップレベル　%d", StatusCtr::GetStates(StatusID::GImmick1));
+		}
+	}
+	DrawName();
+
+	if (resultNum_ == 0)
+	{
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
+	}
+	else
+	{
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでもどる");
+	}
+
+	lpImglMng.ScreenAddDrawQue(screenH_, 79);
+}
+
+void ResultScene::DrawName()
+{
 	if (isTarget_ != 0)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -285,17 +321,6 @@ void ResultScene::Draw()
 	}
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
-
-	if (resultNum_ == 0)
-	{
-		DrawFormatString(screenSize_.x - screenSize_.x/5, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
-	}
-	else
-	{
-		DrawFormatString(screenSize_.x - screenSize_.x / 5, screenSize_.y - 100, 0xffffff, "Xでもどる");
-	}
-
-	lpImglMng.ScreenAddDrawQue(screenH_, 79);
 }
 
 void ResultScene::SetOwn(UNBS own)
@@ -312,10 +337,8 @@ void ResultScene::Init(void)
 	isTarget_ = 0;
 	time_ = 0;
 	graphY_ = 0;
-	resultNum_ = 0;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
 	screenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
 	lpImglMng.LoadGraph("gameWin.png");
 	lpSoundMng.LoadSound("not.mp3");
-	ScrollUIBase::SetLockOff();
 }

@@ -17,7 +17,7 @@ UNBS GameOver::Update(UNBS own)
 		{
 			lpSoundMng.SoundPlay("don.mp3");
 		}
-		backWPosY_++;
+		backWPosY_ += 5;
 	}
 	if (CheckHitKeyAll())
 	{
@@ -91,6 +91,9 @@ void GameOver::Draw()
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
 	//lpImglMng.DrawImg("GameOverWall.png", { -10 + (rand() % 20 - 10),backWPosY_ });
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	DrawBox(0, backWPosY_ - screenSize_.y - 10 , screenSize_.x, backWPosY_, 0x000000, true);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	for (int i = 0; i < 50; i++)
 	{
 		int id = 0;
@@ -124,8 +127,11 @@ void GameOver::Draw()
 		{
 			lpImglMng.DrawImg("GameOver1.png", { rand() % 10 == 0 ? rand() % 10 - 5 : 0,0 });
 		}
-		if (time_ / 20 % 3 != 0)
+		if (time_ / 20 % 6 != 0)
 		{
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+			DrawBox(screenSize_.x / 2 - 150, screenSize_.y - 200 - 5, screenSize_.x / 2 - 150 + 300, screenSize_.y - 200 + 40, 0x000000, true);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 			DrawFormatString(screenSize_.x / 2 - 150, screenSize_.y - 200, 0xffffff, "‚È‚É‚©ƒL[‚ð‰Ÿ‚µ‚Ä‚­‚¾‚³‚¢");
 		}
 	}

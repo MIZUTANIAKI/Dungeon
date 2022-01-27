@@ -348,7 +348,6 @@ void MapSelect::Init()
 	} while (StatusCtr::GetStates(StatusID::MapSize) > mapSize_.y);
 	StatusCtr::SetStates(StatusID::MapSize, mapSize_.y);
 	StatusCtr::OutPutD();
-	lpMoneyMng.SetStartFlag(false);
 }
 
 void MapSelect::SetStageID(int stageID)

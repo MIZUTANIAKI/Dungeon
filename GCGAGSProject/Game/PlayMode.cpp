@@ -50,6 +50,7 @@ PlayMode::PlayMode()
 	mapSize_.x = 35;
 	mapSize_.y = 17;
 	mapdat_.resize(mapSize_.y);
+	dorpDir_ = 0;
 	for (int y = 0; y < mapSize_.y; y++)
 	{
 		mapdat_[y].resize(mapSize_.x);
@@ -112,6 +113,15 @@ void PlayMode::SetMapDate(mapChipDate mapdate)
 
 void PlayMode::Update(void)
 {
+	if (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT&& !lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)
+	{
+		dorpDir_++;
+		if (dorpDir_ >= 4)
+		{
+			dorpDir_ = 0;
+		}
+	}
+
 	if (!lpSoundMng.CheckPlaySound("game.mp3"))
 	{
 		lpSoundMng.SoundPlay("game.mp3");
@@ -148,7 +158,7 @@ void PlayMode::Update(void)
 			}
 			else
 			{
-				if (!BoseF_ && eneSpawnCount_ < 30 + 10 * nowStage_)
+				if (!BoseF_ && eneSpawnCount_ <= 30 + 10 * nowStage_)
 				{
 					SpawnEnemy();
 				}
@@ -281,6 +291,28 @@ void PlayMode::Update(void)
 	}
 }
 
+void PlayMode::CheckRouteForPlay()
+{
+	for (auto& explorer : explorerVector_)
+	{
+		if (explorer->GetObjectID() != ObjectID::Adventurer &&
+			explorer->GetObjectID() != ObjectID::Knight &&
+			explorer->GetObjectID() != ObjectID::Pawn)
+		{
+		}
+		else
+		{
+			goalNoade_.clear();
+			//‰Šú‰»
+			lpAsterMng.Init(mapdat_, mapSize_);
+			//’TõŠJŽn
+			lpAsterMng.Start(explorer->GetPos() / 32);
+			InitMovingDate();
+			explorer->SetMoveVec(goalNoade_);
+		}
+	}
+}
+
 void PlayMode::SpawnEnemy()
 {
 	if (rand() % 10 == 0)
@@ -347,7 +379,7 @@ void PlayMode::CheckFireSpawnEnemy(std::unique_ptr<Explorer>& target, std::uniqu
 void PlayMode::CheckFireSpawnPlayer(std::unique_ptr<Explorer>& target, std::unique_ptr<Explorer>& explorer, bool& spawnF, std::vector<std::pair<std::pair<Vector2, bool>, std::pair<float, float>>>& spawnFireVec_)
 {
 	//”ÍˆÍ“à‚É“G‚ª‚¢‚é‚©
-	if (target->GetObjectID() != ObjectID::Adventurer && target->GetObjectID() != ObjectID::Knight)
+	if (target->GetObjectID() != ObjectID::Adventurer && target->GetObjectID() != ObjectID::Knight && target->GetObjectID() != ObjectID::Pawn)
 	{
 		return;
 	}
@@ -491,30 +523,42 @@ void PlayMode::SpawnMonster3(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
-		int tnum = rand() % 4;
 		MoveDir tmpDir = MoveDir::Down;
-		if (tnum == 0)
-		{
-			tmpDir = MoveDir::Up;
-		}
-		if (tnum == 1)
-		{
-			tmpDir = MoveDir::Right;
-		}
-		if (tnum == 2)
-		{
-			tmpDir = MoveDir::Down;
-		}
-		if (tnum == 3)
-		{
-			tmpDir = MoveDir::Left;
-		}
+		SetDropDir(tmpDir);
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster3));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
+}
+
+void PlayMode::SetDropDir(MoveDir& tmpDir)
+{
+	int tnum = dorpDir_;
+	if (tnum == 0)
+	{
+		tmpDir = MoveDir::Up;
+	}
+	else
+		if (tnum == 1)
+		{
+			tmpDir = MoveDir::Right;
+		}
+		else
+			if (tnum == 2)
+			{
+				tmpDir = MoveDir::Down;
+			}
+			else
+				if (tnum == 3)
+				{
+					tmpDir = MoveDir::Left;
+				}
+				else
+				{
+					tmpDir = MoveDir::None;
+				}
 }
 
 void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
@@ -525,24 +569,8 @@ void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
-		int tnum = rand() % 4;
 		MoveDir tmpDir = MoveDir::Down;
-		if (tnum == 0)
-		{
-			tmpDir = MoveDir::Up;
-		}
-		if (tnum == 1)
-		{
-			tmpDir = MoveDir::Right;
-		}
-		if (tnum == 2)
-		{
-			tmpDir = MoveDir::Down;
-		}
-		if (tnum == 3)
-		{
-			tmpDir = MoveDir::Left;
-		}
+		SetDropDir(tmpDir);
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster2));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
@@ -559,24 +587,8 @@ void PlayMode::SpawnMonster1(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
-		int tnum = rand() % 4;
 		MoveDir tmpDir = MoveDir::Down;
-		if (tnum == 0)
-		{
-			tmpDir = MoveDir::Up;
-		}
-		if (tnum == 1)
-		{
-			tmpDir = MoveDir::Right;
-		}
-		if (tnum == 2)
-		{
-			tmpDir = MoveDir::Down;
-		}
-		if (tnum == 3)
-		{
-			tmpDir = MoveDir::Left;
-		}
+		SetDropDir(tmpDir);
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster1));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
@@ -645,12 +657,12 @@ void PlayMode::Draw(void)
 				DrawEdge(Vector2{ x,y });
 			}
 			DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
-//#ifdef _DEBUG
-//			{
-//				std::unique_lock<std::mutex> lock(mapG_);
-//				DrawFormatString(x * 32 + mapPos_.x, y * 32 + mapPos_.y, 0xff0000, "%d", map_[y][x].nowstep);
-//			}
-//#endif // _DEBUG
+#ifdef _DEBUG
+			{
+				std::unique_lock<std::mutex> lock(mapG_);
+				DrawFormatString(x * 32 + mapPos_.x, y * 32 + mapPos_.y, 0xff0000, "%d", map_[y][x].nowstep);
+			}
+#endif // _DEBUG
 
 		}
 	}

@@ -350,65 +350,93 @@ int Aster::CheckMapPointStep(int x, int y, int num)
 	return true;
 }
 
-std::list<Vector2> Aster::CheckMap(int x, int y, int num)
+std::list<Vector2> Aster::CheckMap(int x, int y, int point)
 {
+	//もし現在地がゴールならば
 	if (goalPos_.x == x && goalPos_.y == y)
 	{
+		//終わったフラグを立てて地点をリターンする
 		std::list<Vector2> tmp;
 		tmp.push_back({ x,y });
 		finish_ = true;
 		return tmp;
 	}
-	//if (finish_)
-	//{
-	//	std::list<Vector2> tmp;
-	//	tmp.push_back({ x,y });
-	//	return tmp;
-	//}
-	num += map_[y][x].StepCost;
-	Vector2 pos;
+	//この地点のコストを保存する。
+	point += map_[y][x].StepCost;
+	Vector2 pos = { 0,0 };
+	//隣接した地点の方向に進めた場合のコストを格納する変数
 	std::list<std::pair<Vector2, int>> node;
-	if (CheckMapPoint(x, y - 1, num))
+	//下方向を調べる
+	if (CheckMapPoint(x, y - 1, point))
 	{
+		//一つ下に行くことができる/自分のほうが軽い　ならば
 		pos = { x,y - 1 };
-		map_[pos.y][pos.x].nowstep = num;
+		//ポイントを格納する
+		map_[pos.y][pos.x].nowstep = point;
+		//予想この地点からのコスト
 		map_[pos.y][pos.x].aboutstep = (x - (y - 1)) - (goalPos_.x - startPos_.y);
+		//想定合計コスト
 		map_[pos.y][pos.x].aboutAlltep = map_[pos.y][pos.x].nowstep + map_[pos.y][pos.x].aboutstep;
+		//この方向のコストを格納する
 		node.push_back(std::pair<Vector2, int>(Vector2{ x, y - 1 }, map_[pos.y][pos.x].aboutAlltep));
 	}
-	if (CheckMapPoint(x, y + 1, num))
+	//上方向を調べる
+	if (CheckMapPoint(x, y + 1, point))
 	{
+		//一つ上に行くことができる/自分のほうが軽い　ならば
 		pos = { x,y + 1 };
-		map_[pos.y][pos.x].nowstep = num;
+		//ポイントを格納する
+		map_[pos.y][pos.x].nowstep = point;
+		//予想この地点からのコスト
 		map_[pos.y][pos.x].aboutstep = (x - (y - 1)) - (goalPos_.x - startPos_.y);
+		//想定合計コスト
 		map_[pos.y][pos.x].aboutAlltep = map_[pos.y][pos.x].nowstep + map_[pos.y][pos.x].aboutstep;
+		//この方向のコストを格納する
 		node.push_back(std::pair<Vector2, int>(Vector2{ x, y + 1 }, map_[pos.y][pos.x].aboutAlltep));
 	}
-	if (CheckMapPoint(x - 1, y, num))
+	//左方向を調べる
+	if (CheckMapPoint(x - 1, y, point))
 	{
+		//一つ左に行くことができる/自分のほうが軽い　ならば
 		pos = { x - 1,y };
-		map_[pos.y][pos.x].nowstep = num;
+		//ポイントを格納する
+		map_[pos.y][pos.x].nowstep = point;
+		//予想この地点からのコスト
 		map_[pos.y][pos.x].aboutstep = (x - (y - 1)) - (goalPos_.x - startPos_.y);
+		//想定合計コスト
 		map_[pos.y][pos.x].aboutAlltep = map_[pos.y][pos.x].nowstep + map_[pos.y][pos.x].aboutstep;
+		//この方向のコストを格納する
 		node.push_back(std::pair<Vector2, int>(Vector2{ x - 1 , y }, map_[pos.y][pos.x].aboutAlltep));
 	}
-	if (CheckMapPoint(x + 1, y, num))
+	//右方向を調べる
+	if (CheckMapPoint(x + 1, y, point))
 	{
+		//一つ右に行くことができる/自分のほうが軽い　ならば
 		pos = { x + 1,y };
-		map_[pos.y][pos.x].nowstep = num;
+		//ポイントを格納する
+		map_[pos.y][pos.x].nowstep = point;
+		//予想この地点からのコスト
 		map_[pos.y][pos.x].aboutstep = (x - (y - 1)) - (goalPos_.x - startPos_.y);
+		//想定合計コスト
 		map_[pos.y][pos.x].aboutAlltep = map_[pos.y][pos.x].nowstep + map_[pos.y][pos.x].aboutstep;
+		//この方向のコストを格納する
 		node.push_back(std::pair<Vector2, int>(Vector2{ x + 1 , y }, map_[pos.y][pos.x].aboutAlltep));
 	}
 	if (node.empty())
 	{
+		//もし隣接した地点が移動不可だったらリターンする
 		return std::list<Vector2>();
 	}
+	//コストの軽い順でソート
+	std::stable_sort(node.begin(), node.end(), [](auto& node1, auto& node2) {
+		return node1.second > node2.second;
+		});
 
 	std::vector<std::pair<std::list<Vector2>, int>> tmplisvector;
 	for (const auto& date : node)
 	{
-		auto mc = CheckMap(date.first.x, date.first.y, num);
+		//各方向をチェックする。
+		auto mc = CheckMap(date.first.x, date.first.y, point);
 		if (!mc.empty())
 		{
 			mc.push_back({ x,y });
@@ -417,8 +445,10 @@ std::list<Vector2> Aster::CheckMap(int x, int y, int num)
 	}
 	if (tmplisvector.empty())
 	{
+		//ゴールできなかったらリターンする
 		return std::list<Vector2>();
 	}
+	//コストの軽い順でソート
 	std::stable_sort(tmplisvector.begin(), tmplisvector.end(), [](auto& node1, auto& node2) {
 		return node1.second > node2.second;
 		});
