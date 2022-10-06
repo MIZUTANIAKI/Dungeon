@@ -60,6 +60,7 @@ public:
 
 	MoveDir CheckMove(Vector2 pos, MoveDir dir);
 	MoveDir CheckMoveSweev(Vector2 pos, MoveDir dir);
+	MoveDir CheckMoveBlock(Vector2 pos, MoveDir dir);
 	MoveDir CheckMoveL(Vector2 pos, MoveDir dir);
 	MoveDir CheckMoveRL(Vector2 pos, MoveDir dir);
 	
@@ -70,6 +71,8 @@ private:
 
 	bool Check(Vector2 pos);
 	mapChipDate mapdat_;
+
+	int movenum = -1;
 
 	RightHandSearch();
 	~RightHandSearch();

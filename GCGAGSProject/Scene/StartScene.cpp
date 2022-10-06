@@ -6,6 +6,7 @@
 #include "CronoMng.h"
 #include "KeyMng.h"
 #include "SoundMng.h"
+#include "MouseMng.h"
 
 UNBS StartScene::Update(UNBS own)
 {
@@ -44,7 +45,7 @@ UNBS StartScene::Update(UNBS own)
 			atenNum_++;
 		}
 	}
-	if (atenNum_ >= 4 && (lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || lpKeyMng.CheckKeyTrg(KeyBindID::No)))
+	if (atenNum_ >= 4 && (lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() && !lpMouseMng.GetOldInputDat())))
 	{
 		return std::move(std::make_unique<TitleScene>());
 	}
@@ -55,7 +56,7 @@ UNBS StartScene::Update(UNBS own)
 			return std::move(std::make_unique<TitleScene>());
 		}
 	}
-	if (lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() && !lpMouseMng.GetOldInputDat()))
 	{
 		if (atenNum_ == 3)
 		{
@@ -88,6 +89,7 @@ void StartScene::Init()
 	atenNum_ = 0;
 	lpImglMng.LoadGraph("aten0.png");
 	lpImglMng.LoadGraph("aten1.png");
+	lpImglMng.LoadGraph("aten2.png");
 	lpImglMng.LoadGraph("title0.png");
 	lpImglMng.LoadGraph("title1.png");
 	lpImglMng.LoadGraph("title2.png");
@@ -133,6 +135,7 @@ void StartScene::Draw()
 	{
 		lpImglMng.GraphAddDrawQue("aten0.png", { 0,0 }, 0);
 	}
+	else
 	if (atenNum_ == 3)
 	{
 		lpImglMng.GraphAddDrawQue("aten1.png", { 0,0 }, 0);
@@ -234,6 +237,11 @@ void StartScene::Draw()
 	{
 	}
 
+	if (atenNum_ > 3)
+	{
+		lpImglMng.GraphAddDrawQue("aten2.png", { 0, static_cast<int>(time_) / 5 % 10 > 5 ? static_cast<int>(time_) / 5 % 5 : -static_cast<int>(time_) / 5 % 5 }, 79);
+	}
+
 	SetDrawScreen(DX_SCREEN_BACK);
-	lpImglMng.ScreenAddDrawQue(screenH_);
+	lpImglMng.ScreenAddDrawQue(screenH_,1);
 }

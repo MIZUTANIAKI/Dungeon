@@ -9,6 +9,7 @@ Explorer::Explorer()
 {
 	nowMoveVec_ = 0;
 	hp_ = 1;
+	MoveFMAX_ = 1.0f;
 	pos_ = { 0,0 };
 	dir_ = MoveDir::None;
 	MoveF_ = true;
@@ -126,6 +127,18 @@ bool Explorer::DrawCheck(Vector2& pos)const
 	return true;
 }
 
+void Explorer::SetMoveing(std::vector<Vector2>& vec)
+{
+	enemymove_->StartCheck(pos_.x / 32, pos_.y / 32);
+	vec.clear();
+	auto route = enemymove_->GetGoalRoute();
+	vec.emplace_back(Vector2(pos_.x / 32, pos_.y / 32));
+	for (auto& r : route)
+	{
+		vec.emplace_back(r);
+	}
+}
+
 void Explorer::Init()
 {
 }
@@ -185,6 +198,13 @@ void Explorer::HitAttack(float atk)
 	hp_ -= atk;
 }
 
+void Explorer::BuildEnemyMoveDate(mapChipDate date, Vector2 size, Vector2 pos)
+{
+	enemymove_ = std::make_unique<EnemyMove>();
+	enemymove_->Init(date, size);
+	enemymove_->SetGoalPos(pos);
+}
+
 bool Explorer::DoMove()
 {
 	if (hp_ > defhp_)
@@ -194,7 +214,7 @@ bool Explorer::DoMove()
 
 	if (!MoveF_)
 	{
-		if (MoveFCon_ > 1.0f)
+		if (MoveFCon_ > MoveFMAX_)
 		{
 			MoveF_ = true;
 		}

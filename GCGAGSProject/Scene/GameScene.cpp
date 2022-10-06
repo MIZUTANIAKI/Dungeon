@@ -48,6 +48,7 @@ GameScene::GameScene()
 	initGame_ = false;
 	lpSoundMng.StopSound("title.mp3");
 	lpSoundMng.LoadSound("baki.mp3");
+	lpMoneyMng.SetStartFlag(false);
 }
 
 UNBS GameScene::Update(UNBS own)

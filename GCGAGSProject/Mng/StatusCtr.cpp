@@ -28,6 +28,7 @@ void StatusCtr::SetStates(StatusID id, int num)
 void StatusCtr::Reset(void)
 {
     statusMap_.clear();
+	DelDate();
 	InputD();
 }
 
@@ -53,11 +54,16 @@ void StatusCtr::DelDate(void)
 	statusMap_.try_emplace(StatusID::GImmick1, 1);
 	statusMap_.try_emplace(StatusID::GImmick2, 1);
 	statusMap_.try_emplace(StatusID::PlayerHP, 10);
+	statusMap_.try_emplace(StatusID::Stage, 1);
 }
 
 void StatusCtr::InputD(void)
 {
-	std::string tstr = "MySetting/PlayerDat.txt";
+	if (statusMap_.size() !=8)
+	{
+		DelDate();
+	}
+	std::string tstr = "savedate/PlayerDat.txt";
 	std::ifstream ifs(tstr);
 	if (!ifs)
 	{
@@ -81,38 +87,37 @@ void StatusCtr::InputD(void)
 		do
 		{
 			std::getline(iss, tmpStr, ',');
-
 			if (dcon == 0)
 			{
-				statusMap_.try_emplace(StatusID::MapSize, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::MapSize]=atoi(tmpStr.c_str());
 			}
 			if (dcon == 1)
 			{
-				statusMap_.try_emplace(StatusID::Monster1, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::Monster1] = atoi(tmpStr.c_str());
 			}
 			if (dcon == 2)
 			{
-				statusMap_.try_emplace(StatusID::Monster1, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::Monster2] = atoi(tmpStr.c_str());
 			}
 			if (dcon == 3)
 			{
-				statusMap_.try_emplace(StatusID::Monster2, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::Monster3] = atoi(tmpStr.c_str());
 			}
 			if (dcon == 4)
 			{
-				statusMap_.try_emplace(StatusID::Monster3, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::GImmick1] = atoi(tmpStr.c_str());
 			}
 			if (dcon == 5)
 			{
-				statusMap_.try_emplace(StatusID::GImmick1, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::GImmick2] = atoi(tmpStr.c_str());
 			}
 			if (dcon == 6)
 			{
-				statusMap_.try_emplace(StatusID::GImmick2, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::PlayerHP] = atoi(tmpStr.c_str());
 			}
-			if (dcon == 6)
+			if (dcon == 7)
 			{
-				statusMap_.try_emplace(StatusID::PlayerHP, atoi(tmpStr.c_str()));
+				statusMap_[StatusID::Stage] = atoi(tmpStr.c_str());
 			}
 			dcon++;
 		} while (!iss.eof());

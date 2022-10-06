@@ -10,6 +10,7 @@ enum class StatusID
 	GImmick1,
 	GImmick2,
 	PlayerHP,
+	Stage,
 	Max,
 };
 

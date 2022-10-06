@@ -6,6 +6,7 @@
 
 Adventurer::Adventurer()
 {
+	MoveFMAX_ = 10.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -129,8 +130,11 @@ void Adventurer::MoveTo(float deltaTime)
 void Adventurer::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 - 32 };
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("testP2.png", pos, 21);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("testP2.png", pos,ShadName::dot, 21);
 }
 
 void Adventurer::Init()
@@ -144,6 +148,7 @@ void Adventurer::Damage(Explorer& target)
 {
 	if (ObjectID::Goal == target.GetObjectID())
 	{
+		hp_ = 0;
 		//target.HitAttack(atk_);
 		//if (oneTimeRetreatF_)
 		//{
@@ -161,10 +166,12 @@ void Adventurer::Damage(Explorer& target)
 	}
 	if (ObjectID::Gate == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		HitAttack(target.GetAtk());
 	}
 	if (ObjectID::Spike == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		hp_ -= target.GetAtk();
 	}
 	if (ObjectID::Rook == target.GetObjectID())

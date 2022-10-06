@@ -11,5 +11,5 @@ BaseScene::~BaseScene()
 
 SCN_ID BaseScene::GetSCNID(void)
 {
-	return SCN_ID::SCN_BASE;
+	return scnID_;
 }

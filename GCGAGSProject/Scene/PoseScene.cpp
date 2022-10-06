@@ -7,10 +7,12 @@
 #include "ReadMng.h"
 #include "CronoMng.h"
 #include "KeyMng.h"
+#include "MouseMng.h"
 
 UNBS PoseScene::Update(UNBS own)
 {
 	time_ += lpCronoMng.GetDeltaTime();
+	vstime_ += lpCronoMng.GetDeltaTime();
 	sterangle_ = static_cast<int>(time_ * 10) % 360;
 	if (sterangle_ > 360)
 	{
@@ -33,6 +35,7 @@ UNBS PoseScene::Update(UNBS own)
 		{
 			if (ownS_->GetSCNID() == SCN_ID::SCN_GAME)
 			{
+				lpMouseMng.SetNowGame(false);
 				setingNum_ = -1;
 			}
 			else
@@ -62,6 +65,7 @@ UNBS PoseScene::Update(UNBS own)
 		}
 		if (num == 3)
 		{
+			lpMouseMng.SetNowGame(false);
 			lpReadMng.SetDate(setinglist::Bright, tmpbright_);
 			lpImglMng.SetBright(tmpbright_);
 			return std::move(ownS_);
@@ -69,6 +73,25 @@ UNBS PoseScene::Update(UNBS own)
 	}
 	else
 	{
+		Vector2 mpos = lpMouseMng.GetMousePos();
+		if (mpos.x > screenSize_.x / 2 - 100 &&
+			mpos.x < screenSize_.x / 2 - 50)
+		{
+			if (isTarget_ != 0)
+			{
+				lpSoundMng.SoundPlay("botan.mp3");
+			}
+			isTarget_ = 0;
+		}
+		if (mpos.x > screenSize_.x / 2 + 60 &&
+			mpos.x < screenSize_.x / 2 + 110)
+		{
+			if (isTarget_ != 1)
+			{
+				lpSoundMng.SoundPlay("botan.mp3");
+			}
+			isTarget_ = 1;
+		}
 		if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 		{
 			lpSoundMng.SoundPlay("botan.mp3");
@@ -87,7 +110,7 @@ UNBS PoseScene::Update(UNBS own)
 		{
 			isTarget_ = 1;
 		}
-		if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+		if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 		{
 			lpSoundMng.SoundPlay("pusbotan.mp3");
 			if (isTarget_ == 1)
@@ -102,7 +125,7 @@ UNBS PoseScene::Update(UNBS own)
 				setingNum_ = -1;
 			}
 		}
-		if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+		if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 		{
 			lpSoundMng.SoundPlay("pusbotan.mp3");
 			isTarget_ = 0;
@@ -115,6 +138,7 @@ UNBS PoseScene::Update(UNBS own)
 
 PoseScene::PoseScene()
 {
+	circlePosx_ = 728;
 	screenSize_.x = 0;
 	screenSize_.y = 0;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
@@ -127,11 +151,14 @@ PoseScene::PoseScene()
 	playsF_ = false;
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
 	time_ = 0;
+	vstime_ = 0;
 	sterangle_ = 0;
 }
 
 PoseScene::PoseScene(UNBS own)
 {
+	circlePosx_ = 728;
+	lpMouseMng.SetNowGame(true);
 	setingNum_ = 0;
 	if (own->GetSCNID() == SCN_ID::SCN_TITLE)
 	{
@@ -149,6 +176,8 @@ PoseScene::PoseScene(UNBS own)
 	tmpbright_ = bright_ = lpImglMng.GetBright();
 	tmpSoundVol_ = soundVol_ = lpSoundMng.GetSoundVol();
 	playsF_ = false;
+	time_ = 0;
+	vstime_ = 0;
 }
 
 PoseScene::~PoseScene()
@@ -157,6 +186,7 @@ PoseScene::~PoseScene()
 
 void PoseScene::Draw()
 {
+	lpMouseMng.Draw();
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
 	ownS_->Draw();
@@ -222,16 +252,51 @@ void PoseScene::Draw()
 		DrawFormatString(screenSize_.x / 2 + 60, screenSize_.y / 2 + 50, 0xffffff, "‚Í‚¢");
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	lpImglMng.ScreenAddDrawQue(screenH_, { 0,0 }, 75);
+	lpImglMng.ScreenAddDrawQue(screenH_, { 0,0 }, 59);
 }
 
 void PoseScene::SetOwn(UNBS own)
 {
 	ownS_ = std::move(own);
+	if (own->GetSCNID() == SCN_ID::SCN_TITLE)
+	{
+	}
+	else if (own->GetSCNID() == SCN_ID::SCN_GAME)
+	{
+		setingNum_ = -1;
+	}
 }
 
 int PoseScene::firstUpdate()
 {
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (mpos.y > screenSize_.y / 2 - 80 &&
+		mpos.y < screenSize_.y / 2 - 48)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.y > screenSize_.y / 2 - 20 &&
+		mpos.y < screenSize_.y / 2 + 12)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (mpos.y > screenSize_.y / 2 + 90 &&
+		mpos.y < screenSize_.y / 2 + 122)
+	{
+		if (isTarget_ != 2)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 2;
+	}
 	if (lpPadMng.GetControllerData(InputID::Up) || lpKeyMng.CheckKeyTrg(KeyBindID::Up))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
@@ -251,7 +316,7 @@ int PoseScene::firstUpdate()
 		isTarget_ = 2;
 	}
 
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 0)
@@ -271,7 +336,7 @@ int PoseScene::firstUpdate()
 		}
 	}
 
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		isTarget_ = 0;
@@ -321,6 +386,34 @@ void PoseScene::firstDraw()
 
 int PoseScene::poseUpdate()
 {
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (/*mpos.y > screenSize_.y / 2 - 80 &&*/
+		mpos.y < screenSize_.y / 2 - 48)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.y > screenSize_.y / 2 - 20 &&
+		mpos.y < screenSize_.y / 2 + 12)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (mpos.y > screenSize_.y / 2 + 90/* &&
+		mpos.y < screenSize_.y / 2 + 122*/)
+	{
+		if (isTarget_ != 2)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 2;
+	}
 	if (lpPadMng.GetControllerData(InputID::Up) || lpKeyMng.CheckKeyTrg(KeyBindID::Up))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
@@ -340,8 +433,10 @@ int PoseScene::poseUpdate()
 		isTarget_ = 2;
 	}
 
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
+		vstime_ = 0;
+		circlePosx_ = 728;
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 0)
 		{
@@ -359,8 +454,10 @@ int PoseScene::poseUpdate()
 			return 4;
 		}
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
+		vstime_ = 0;
+		circlePosx_ = 728;
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		isTarget_ = 0;
 		return 4;
@@ -408,6 +505,56 @@ void PoseScene::poseDraw()
 
 void PoseScene::VolUpdate()
 {
+	Vector2 pos;
+	pos.x = screenSize_.x / 2 - 100;
+	pos.y = screenSize_.y / 2 - 15;
+	pos.x += 25;
+	int circlePosx;
+	circlePosx = static_cast<int>((tmpSoundVol_) / 150.0f * 205.0f);
+	circlePosx += pos.x;
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (mpos.y > screenSize_.y / 2 - 80 &&
+		mpos.y < screenSize_.y / 2 + 90)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.y > screenSize_.y / 2 + 90 &&
+		mpos.y < screenSize_.y / 2 + 122)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (time_ > 1)
+	{
+		if (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT)
+		{
+			if (isTarget_ == 0)
+			{
+				if (mpos.x > pos.x &&
+					mpos.x < pos.x + 165)
+				{
+					circlePosx_ = mpos.x;
+					mpos.x -= pos.x;
+					if (tmpSoundVol_ > 160)
+					{
+						tmpSoundVol_ = mpos.x + 82;
+					}
+					else
+					{
+						tmpSoundVol_ = mpos.x;
+					}
+					lpSoundMng.SetSoundVol(tmpSoundVol_);
+				}
+			}
+		}
+	}
 	if (lpPadMng.GetControllerData(InputID::Up) || lpKeyMng.CheckKeyTrg(KeyBindID::Up))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
@@ -426,37 +573,39 @@ void PoseScene::VolUpdate()
 	{
 		isTarget_ = 1;
 	}
-	if (isTarget_ == 0)
-	{
-		if (lpPadMng.GetNowControllerData(InputID::Right) || lpKeyMng.CheckKeyNow(KeyBindID::Right))
+		if (isTarget_ == 0)
 		{
-			ChangeVolumeSoundMem(tmpSoundVol_, lpSoundMng.GetSoundHandle("pusbotan.mp3"));
-			tmpSoundVol_++;
-			playsF_ = true;
-		}
-		else
-			if (lpPadMng.GetNowControllerData(InputID::Left) || lpKeyMng.CheckKeyNow(KeyBindID::Left))
+			if (lpPadMng.GetNowControllerData(InputID::Right) || lpKeyMng.CheckKeyNow(KeyBindID::Right))
 			{
 				ChangeVolumeSoundMem(tmpSoundVol_, lpSoundMng.GetSoundHandle("pusbotan.mp3"));
-				tmpSoundVol_--;
+				tmpSoundVol_++;
+				lpSoundMng.SetSoundVol(tmpSoundVol_);
 				playsF_ = true;
 			}
-			else if (playsF_)
+			else
+				if (lpPadMng.GetNowControllerData(InputID::Left) || lpKeyMng.CheckKeyNow(KeyBindID::Left))
+				{
+					ChangeVolumeSoundMem(tmpSoundVol_, lpSoundMng.GetSoundHandle("pusbotan.mp3"));
+					tmpSoundVol_--;
+					playsF_ = true;
+					lpSoundMng.SetSoundVol(tmpSoundVol_);
+				}
+				else if (playsF_)
+				{
+					playsF_ = false;
+					lpSoundMng.StopSound("pusbotan.mp3");
+					lpSoundMng.SoundPlay("pusbotan.mp3");
+				}
+			if (tmpSoundVol_ < 0)
 			{
-				playsF_ = false;
-				lpSoundMng.StopSound("pusbotan.mp3");
-				lpSoundMng.SoundPlay("pusbotan.mp3");
+				tmpSoundVol_ = 0;
 			}
-		if (tmpSoundVol_ < 0)
-		{
-			tmpSoundVol_ = 0;
+			if (tmpSoundVol_ > 180)
+			{
+				tmpSoundVol_ = 180;
+			}
 		}
-		if (tmpSoundVol_ > 120)
-		{
-			tmpSoundVol_ = 120;
-		}
-	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 1)
@@ -467,11 +616,12 @@ void PoseScene::VolUpdate()
 			isTarget_ = 0;
 		}
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
 		ChangeVolumeSoundMem(soundVol_, lpSoundMng.GetSoundHandle("pusbotan.mp3"));
 		tmpSoundVol_ = soundVol_;
 		lpSoundMng.SoundPlay("pusbotan.mp3");
+		lpSoundMng.SetSoundVol(tmpSoundVol_);
 		tmpbright_ = bright_;
 		isTarget_ = 0;
 		setingNum_ = 0;
@@ -514,16 +664,56 @@ void PoseScene::VolDraw()
 
 	DrawGraph(pos.x, pos.y, lpImglMng.GetGraphHandle("bars.png"), true);
 	DrawBox(pos.x, pos.y, pos.x + 165, pos.y + 25, 0xffffff, false);
-	int circlePosx;
-	circlePosx = static_cast<int>((tmpSoundVol_) / 150.0f * 205.0f);
-	circlePosx += pos.x;
-	DrawCircle(circlePosx, pos.y + 13, 16, 0xffffff, true);
+	DrawCircle(circlePosx_, pos.y + 13, 16, 0xffffff, true);
 
 	DrawFormatString(screenSize_.x / 2 - 100, screenSize_.y / 2 + 90, 0xffffff, "‚à‚Ç‚é");
 }
 
 void PoseScene::BrightUpdate()
 {
+	Vector2 pos;
+	pos.x = screenSize_.x / 2 - 100;
+	pos.y = screenSize_.y / 2 - 15;
+	pos.x += 25;
+	int circlePosx;
+	circlePosx = static_cast<int>((tmpSoundVol_) / 150.0f * 205.0f);
+	circlePosx += pos.x;
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (mpos.y > screenSize_.y / 2 - 80 &&
+		mpos.y < screenSize_.y / 2 + 90)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.y > screenSize_.y / 2 + 90 &&
+		mpos.y < screenSize_.y / 2 + 122)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (time_ > 1)
+	{
+		if (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT)
+		{
+			if (isTarget_ == 0)
+			{
+				if (mpos.x > pos.x &&
+					mpos.x < pos.x + 165)
+				{
+					circlePosx_ = mpos.x;
+					mpos.x -= pos.x;
+					tmpbright_ = mpos.x + 82;
+					lpImglMng.SetBright(tmpbright_);
+				}
+			}
+		}
+	}
 	if (lpPadMng.GetControllerData(InputID::Up) || lpKeyMng.CheckKeyTrg(KeyBindID::Up))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
@@ -561,7 +751,7 @@ void PoseScene::BrightUpdate()
 			tmpbright_ = 255;
 		}
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 1)
@@ -572,10 +762,11 @@ void PoseScene::BrightUpdate()
 			isTarget_ = 0;
 		}
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		tmpbright_ = bright_;
+		lpImglMng.SetBright(tmpbright_);
 		isTarget_ = 0;
 		setingNum_ = 0;
 		isTarget_ = 0;
@@ -634,10 +825,8 @@ void PoseScene::BrightDraw()
 
 	DrawGraph(pos.x, pos.y, lpImglMng.GetGraphHandle("barg.png"), true);
 	DrawBox(pos.x, pos.y, pos.x + 165, pos.y + 25, 0xffffff, false);
-	int circlePosx;
-	circlePosx = static_cast<int>((tmpbright_ - 50) / 255.0f * 205.0f);
-	circlePosx += pos.x;
-	DrawCircle(circlePosx, pos.y + 13, 16, 0xffffff, true);
+
+	DrawCircle(circlePosx_, pos.y + 13, 16, 0xffffff, true);
 
 	DrawFormatString(screenSize_.x / 2 - 100, screenSize_.y / 2 + 90, 0xffffff, "‚à‚Ç‚é");
 }

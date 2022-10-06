@@ -43,12 +43,16 @@ void Monster::Update(void)
 void Monster::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 -32};
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("testC2.png", pos, 22);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("testC2.png", pos, ShadName::cross, 22);
 }
 
 void Monster::Init()
 {
+	MoveFMAX_ = 3.0f;
 	hp_ = 0;
 	atk_ = 0;
 	id_ = ObjectID::Monster;

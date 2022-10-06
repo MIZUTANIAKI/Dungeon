@@ -35,4 +35,7 @@ private:
 	bool playsF_;
 	int sterangle_;
 	float time_;
+	float vstime_;
+
+	int circlePosx_;
 };

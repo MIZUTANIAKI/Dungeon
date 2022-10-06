@@ -23,6 +23,13 @@ private:
 	float sterangle_;
 	bool pressKeyF_;
 
-	std::vector<std::pair<Vector2, int>> dropPosAngle_;
+	bool dropF_;
+
+	float count_;
+
+	std::vector<std::pair<std::pair<Vector2flt,int>, std::pair<int,float>>> dropPosAngle_;		//座標、「角度、速度」
+	std::vector<bool> dropFVector_;
+	std::vector<int> dropSoundVector_;
+
 };
 

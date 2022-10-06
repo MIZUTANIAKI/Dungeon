@@ -18,6 +18,15 @@ FastUI　30～39
 UI　70～79
 */
 
+enum class ShadName
+{
+	none,
+	gray,
+	dot,
+	cross,
+	slash,
+};
+
 class ImageMng
 {
 public:
@@ -63,12 +72,14 @@ public:
 	/// </summary>
 	/// <param name="id">画像ハンドル</param>
 	/// <param name="pos">座標</param>
+	void GraphAddDrawQue(std::string id, Vector2 pos, ShadName name = ShadName::none, int z = 10);
 	void GraphAddDrawQue(std::string id, Vector2 pos, int z = 10);
 
 	/// <summary>
 	/// 別スクリーンを描画するように頼む
 	/// </summary>
 	/// <param name="id">スクリーンハンドル</param>
+	void ScreenAddDrawQue(int id, ShadName name = ShadName::none, int z = 1);
 	void ScreenAddDrawQue(int id, int z = 1);
 
 	/// <summary>
@@ -76,6 +87,7 @@ public:
 	/// </summary>
 	/// <param name="id">スクリーンハンドル</param>
 	/// <param name="pos">座標</param>
+	void ScreenAddDrawQue(int id, Vector2 pos,ShadName name = ShadName::none, int z = 10);
 	void ScreenAddDrawQue(int id, Vector2 pos, int z = 10);
 
 	/// <summary>
@@ -120,16 +132,36 @@ public:
 		return bright_;
 	}
 
-	static void DrawImg(std::string name,Vector2 pos);
+	void DrawImg(std::string name,Vector2 pos, ShadName shad = ShadName::none);
+	void DrawMyImg(int texH, int x, int y, ShadName name);
 private:
+	void MyDrawScreen(int x, int y, int graphH, int shaderH, int non);
+	void MyDrawScreen(int texH, int normH, int shaderH, int x, int y, int width, int height);
+
 	static ImageMng* sInstance;
+
+	int SetShadImg(ShadName shad);
+
+	void MyDrawScreen(int x, int y, int width, int height);
+	void SetDrawMyImg(int texH, int shaderH, int x, int y);
 
 	std::map<std::string, int> imgList_;	//読み込んだ画像リスト
 
-	std::vector< std::pair<std::pair<int, int>, Vector2>> drawList_;						//描画予約キュー//ハンドル&Z、座標
+	std::vector< std::pair<std::pair<int, int>, std::pair<Vector2,ShadName>>> drawList_;						//描画予約キュー//ハンドル&Z、座標&shadName
+
+	int dScreenH_;
 
 	int bright_;
+
+	std::map<ShadName,int> pshandle_;
+
+	int cbuffer_;
+
+	bool useGray_;
+	bool useShade_;
+
 	Vector2 screenSize_;
 	ImageMng();
+	void BuildBufferDate();
 	~ImageMng();
 };

@@ -49,8 +49,10 @@ void Fire::Update(void)
 void Fire::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 };
-	DrawCheck(pos);
-
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
 	if (ObjectID::Fire == id_)
 	{
 		lpImglMng.GraphAddDrawQue("fire.png", pos, 22);
@@ -82,8 +84,38 @@ void Fire::SetStatus(int num)
 
 void Fire::Damage(Explorer& target)
 {
-	if (ObjectID::Adventurer == target.GetObjectID())
+	if (id_ != ObjectID::EFire)
 	{
-		HitAttack(target.GetAtk());
+		if (ObjectID::Adventurer == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+		if (ObjectID::Knight == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+		if (ObjectID::Pawn == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+	}
+	else
+	{
+		if (ObjectID::Monster == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+		if (ObjectID::Desmodus == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+		if (ObjectID::Gate == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
+		if (ObjectID::Rook == target.GetObjectID())
+		{
+			hp_ = 0;
+		}
 	}
 }

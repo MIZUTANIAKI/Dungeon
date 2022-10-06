@@ -9,6 +9,7 @@ KeyCtl::KeyCtl()
 	keyDate_.try_emplace(KeyBindID::Left,false);
 	keyDate_.try_emplace(KeyBindID::Ok,false);
 	keyDate_.try_emplace(KeyBindID::No,false);
+	keyDate_.try_emplace(KeyBindID::Pose,false);
 	oldKeyDate_ = keyDate_;
 }
 
@@ -23,6 +24,7 @@ void KeyCtl::Update(void)
 	SetKeyDate(KeyBindID::Up, false);
 	SetKeyDate(KeyBindID::Ok, false);
 	SetKeyDate(KeyBindID::No, false);
+	SetKeyDate(KeyBindID::Pose, false);
 	CheckKeyHit();
 }
 

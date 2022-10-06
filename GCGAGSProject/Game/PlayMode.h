@@ -41,6 +41,8 @@ public:
 
 	void Update(void);
 
+	void MapDragNow();
+
 	void CheckRouteForPlay();
 
 	void SpawnEnemy();
@@ -91,8 +93,6 @@ private:
 
 	void SpawnMonster3(const Vector2& droppos, MapDropDateID id);
 
-	void SetDropDir(MoveDir& tmpDir);
-
 	void SpawnMonster2(const Vector2& droppos, MapDropDateID id);
 
 	void SpawnMonster1(const Vector2& droppos, MapDropDateID id);
@@ -113,6 +113,8 @@ private:
 
 	void InitMapDate(void);
 	void AsterCheck(void);
+
+	void AsterForNowPos();
 
 	void InitMovingDate(void);
 
@@ -165,7 +167,6 @@ private:
 	bool finF_;
 	bool clearF_;
 	bool goalDelF_;
-
-	int dorpDir_;
+	int mouseOldPosY_;
 };
 

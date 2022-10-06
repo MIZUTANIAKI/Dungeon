@@ -7,6 +7,7 @@
 
 Desmodus::Desmodus()
 {
+	MoveFMAX_ = 5.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -57,8 +58,11 @@ void Desmodus::Update(void)
 void Desmodus::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 -32};
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("testC3.png", pos, 22);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("testC3.png", pos, ShadName::dot, 22);
 }
 
 void Desmodus::Init()

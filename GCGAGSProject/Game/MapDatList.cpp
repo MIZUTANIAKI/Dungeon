@@ -1,30 +1,29 @@
 #include "MapDatList.h"
-std::array<mapChipDate, 20> MapDatList::oldmapdatalist_;
+std::vector<mapChipDate> MapDatList::oldmapdatalist_;
 int MapDatList::nowPos_ = 0;
 int MapDatList::getPos_ = 0;
 void MapDatList::AddDate(mapChipDate dat)
 {
-	getPos_ = nowPos_;
-	oldmapdatalist_[nowPos_] = dat;
+	oldmapdatalist_.emplace_back(dat);
 	SetPos();
 }
 
 mapChipDate MapDatList::GetDate(void)
 {
+	if (oldmapdatalist_.size() == 0)
+	{
+		return mapChipDate();
+	}
 	if (getPos_ == -1)
 	{
-		return mapChipDate();;
+		return mapChipDate();
 	}
 	int tmpPos = getPos_;
-	if (getPos_ - 1 < 0 && nowPos_ != oldmapdatalist_.size() - static_cast<size_t>(1))
-	{
-		getPos_ = static_cast<int>(oldmapdatalist_.size()) - 1;
-		return oldmapdatalist_[tmpPos];
-	}
-	if (getPos_ - 1 == nowPos_)
+	if (getPos_ - 1 < 0)
 	{
 		auto tmpdat = oldmapdatalist_[tmpPos];
 		Init();
+		getPos_ = -1;
 		return tmpdat;
 	}
 	getPos_--;
@@ -35,17 +34,11 @@ void MapDatList::Init(void)
 {
 	nowPos_ = 0;
 	getPos_ = -1;
-	for (int i = 0; i < 20; i++)
-	{
-		oldmapdatalist_[i] = mapChipDate();
-	}
+	oldmapdatalist_.clear();
 }
 
 void MapDatList::SetPos(void)
 {
+	getPos_ = nowPos_;
 	nowPos_++;
-	if (nowPos_ >= oldmapdatalist_.size())
-	{
-		nowPos_ = 0;
-	}
 }

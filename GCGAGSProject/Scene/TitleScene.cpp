@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include <DxLib.h>
 #include "ImageMng.h"
 #include "TitleScene.h"
@@ -40,77 +41,119 @@ UNBS TitleScene::Update(UNBS own)
 	{
 		lpSoundMng.SoundPlay("title.mp3");
 	}
-	if (CheckHitKey(KEY_INPUT_SPACE))
-	{
-		lpSoundMng.StopSound("title.mp3");
-		return std::move(std::make_unique<GameScene>());
-	}
-	if (titleNum_ == 0)
-	{
-		int num = title1Update();
-		if (num == 1)
+	//if (CheckHitKey(KEY_INPUT_SPACE))
+	//{
+	//	lpSoundMng.StopSound("title.mp3");
+	//	lpMouseMng.SetNowGame(false);
+	//	return std::move(std::make_unique<GameScene>());
+	//}
+	
+		if (titleNum_ == 0)
 		{
-			return std::move(std::make_unique<PoseScene>(std::move(own)));
+			int num = title1Update();
+			if (num == 1)
+			{
+				return std::move(std::make_unique<PoseScene>(std::move(own)));
+			}
 		}
-	}
-	else if (titleNum_ == 1)
-	{
-		int num = title2Update();
-		if (num == 1)
+		else if (titleNum_ == 1)
 		{
-			tmptitleNum_ = 2;
+			int num = title2Update();
+			if (num == 1)
+			{
+				tmptitleNum_ = 2;
+			}
 		}
-	}
-	else if (titleNum_ == 2)
-	{
-		if (tmptitleNum_ == -1)
+		else if (titleNum_ == 2)
 		{
-			if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
+			if (tmptitleNum_ == -1)
 			{
-				lpSoundMng.SoundPlay("botan.mp3");
-				isTarget_++;
-			}
-			if (lpPadMng.GetControllerData(InputID::Left) || lpKeyMng.CheckKeyTrg(KeyBindID::Left))
-			{
-				lpSoundMng.SoundPlay("botan.mp3");
-				isTarget_--;
-			}
-			if (isTarget_ < 0)
-			{
-				isTarget_ = 0;
-			}
-			if (isTarget_ > 1)
-			{
-				isTarget_ = 1;
-			}
-			if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
-			{
-				lpSoundMng.SoundPlay("pusbotan.mp3");
-				if (isTarget_ == 1)
+				IsReStartGame();
+				if (time_ > 1)
 				{
-					StatusCtr::DelDate();
-					lpMoneyMng.SetMoney(100);
-					tmptitleNum_ = 0;
-					return std::move(std::make_unique<GameScene>());
-				}
-				else
-				{
-					lpMoneyMng.SetMoney(lpReadMng.GetDate(setinglist::Money));
-					StatusCtr::Reset();
-					tmptitleNum_ = 0;
-					auto gamaescene = std::make_unique<GameScene>();
-					gamaescene->RoadGameDate();
-					return std::move(gamaescene);
+					if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
+					{
+						lpMouseMng.SetNowGame(false);
+						lpSoundMng.SoundPlay("pusbotan.mp3");
+						if (isTarget_ == 1)
+						{
+							StatusCtr::DelDate();
+							lpMoneyMng.SetMoney(100);
+							tmptitleNum_ = 0;
+							return std::move(std::make_unique<GameScene>());
+						}
+						else
+						{
+							lpMoneyMng.SetMoney(lpReadMng.GetDate(setinglist::Money));
+							StatusCtr::Reset();
+							tmptitleNum_ = 0;
+							auto gamaescene = std::make_unique<GameScene>();
+							gamaescene->RoadGameDate();
+							return std::move(gamaescene);
+						}
+					}
+					if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+					{
+						lpMouseMng.SetNowGame(false);
+						lpSoundMng.SoundPlay("pusbotan.mp3");
+						isTarget_ = 1;
+						tmptitleNum_ = 1;
+					}
 				}
 			}
-			if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
-			{
-				lpSoundMng.SoundPlay("pusbotan.mp3");
-				isTarget_ = 1;
-				tmptitleNum_ = 1;
-			}
 		}
+		TitleNumChange();
+	lpMouseMng.Draw();
+	return std::move(own);
+}
+
+void TitleScene::IsReStartGame()
+{
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (/*mpos.x > screenSize_.x / 2 - 100 &&*/
+		mpos.x < screenSize_.x / 2 - 50)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
 	}
+	if (mpos.x > screenSize_.x / 2 + 60/* &&
+		mpos.x < screenSize_.x / 2 + 110*/)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT))
+	{
+		tmptitleNum_ = 0;
+	}
+	if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
+	{
+		lpSoundMng.SoundPlay("botan.mp3");
+		isTarget_++;
+	}
+	if (lpPadMng.GetControllerData(InputID::Left) || lpKeyMng.CheckKeyTrg(KeyBindID::Left))
+	{
+		lpSoundMng.SoundPlay("botan.mp3");
+		isTarget_--;
+	}
+	if (isTarget_ < 0)
+	{
+		isTarget_ = 0;
+	}
+	if (isTarget_ > 1)
+	{
+		isTarget_ = 1;
+	}
+}
+
+void TitleScene::TitleNumChange()
+{
 	if (tmptitleNum_ != -1)
 	{
 		if (changeCount_ / 30 % 2 != 0)
@@ -122,11 +165,11 @@ UNBS TitleScene::Update(UNBS own)
 		}
 		changeCount_++;
 	}
-	return std::move(own);
 }
 
 TitleScene::TitleScene()
 {
+	lpMouseMng.SetNowGame(true);
 	lpImglMng.LoadGraph("wood.png");
 	lpImglMng.LoadGraph("titlef.png");
 	lpImglMng.LoadGraph("titleblack.png");
@@ -161,18 +204,28 @@ void TitleScene::Draw()
 	//DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y / 3, 0xffffff, "タイトル画面");
 
 
-	lpImglMng.DrawImg("wood.png", { 0,0 });
-	lpImglMng.DrawImg("title0.png", { 0,0 });
-	lpImglMng.DrawImg("title1.png", { 0,0 });
-	lpImglMng.DrawImg("title2.png", { 0,0 });
-	lpImglMng.DrawImg("title3.png", { 0,0 });
+	//lpImglMng.DrawImg("wood.png", { 0,0 });
+	//lpImglMng.DrawImg("title0.png", { 0,0 });
+	//lpImglMng.DrawImg("title1.png", { 0,0 });
+	//lpImglMng.DrawImg("title2.png", { 0,0 });
+	//lpImglMng.DrawImg("title3.png", { 0,0 });
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("wood.png"), true);
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("title0.png"), true);
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("title1.png"), true);
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("title2.png"), true);
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("title3.png"), true);
 	CreateMaskScreen();
 	DrawMask(0, 0, maskHandle_, DX_MASKTRANS_BLACK);
-	lpImglMng.DrawImg("space3.png", { 0,0 });
-	lpImglMng.DrawImg("space2.png", maskPos1_);
-	lpImglMng.DrawImg("space2.png", { maskPos1_.x + screenSize_.x,maskPos1_.y });
-	lpImglMng.DrawImg("space2.png", maskPos2_);
-	lpImglMng.DrawImg("space2.png", { maskPos2_.x,maskPos2_.y - screenSize_.y });
+	//lpImglMng.DrawImg("space3.png", { 0,0 });
+	//lpImglMng.DrawImg("space2.png", maskPos1_);
+	//lpImglMng.DrawImg("space2.png", { maskPos1_.x + screenSize_.x,maskPos1_.y });
+	//lpImglMng.DrawImg("space2.png", maskPos2_);
+	//lpImglMng.DrawImg("space2.png", { maskPos2_.x,maskPos2_.y - screenSize_.y });
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("space3.png"), true);
+	DrawGraph(maskPos1_.x, maskPos1_.y, lpImglMng.GetGraphHandle("space2.png"), true);
+	DrawGraph(maskPos1_.x + screenSize_.x, maskPos1_.y, lpImglMng.GetGraphHandle("space2.png"), true);
+	DrawGraph(maskPos2_.x, maskPos2_.y, lpImglMng.GetGraphHandle("space2.png"), true);
+	DrawGraph(maskPos2_.x, maskPos2_.y - screenSize_.y, lpImglMng.GetGraphHandle("space2.png"), true);
 	//lpImglMng.DrawImg("space2.png", maskPos1_);
 	//lpImglMng.DrawImg("space2.png", { maskPos1_.x + 3820,maskPos1_.y });
 	//lpImglMng.DrawImg("space2.png", maskPos2_);
@@ -244,7 +297,44 @@ int TitleScene::title1Update()
 	{
 		return 0;
 	}
-	if (lpPadMng.GetControllerData(InputID::Right)|| lpKeyMng.CheckKeyTrg(KeyBindID::Right))
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (/*mpos.x > screenSize_.x / 2 - 450 &&*/
+		mpos.x < screenSize_.x / 2 - 350)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.x > screenSize_.x / 2 - 200 &&
+		mpos.x < screenSize_.x / 2 - 100)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (mpos.x > screenSize_.x / 2 + 100 &&
+		mpos.x < screenSize_.x / 2 + 200)
+	{
+		if (isTarget_ != 2)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 2;
+	}
+	if (mpos.x > screenSize_.x / 2 + 350/* &&
+		mpos.x < screenSize_.x / 2 + 450*/)
+	{
+		if (isTarget_ != 3)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 3;
+	}
+	if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
 		isTarget_++;
@@ -262,24 +352,33 @@ int TitleScene::title1Update()
 	{
 		isTarget_ = 3;
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (time_ > 1)
 	{
-		lpSoundMng.SoundPlay("pusbotan.mp3");
-		if (isTarget_ == 0)
+		if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 		{
-			tmptitleNum_ = 2;
-			return 0;
-		}
-		if (isTarget_ == 2)
-		{
-			return 1;
-		}
-		if (isTarget_ == 3)
-		{
-			tmptitleNum_ = 0;
-			Sleep(300);
-			lpSceneMng.SetShutdown();
-			return 0;
+			lpSoundMng.SoundPlay("pusbotan.mp3");
+			time_ = 0;
+			if (isTarget_ == 0)
+			{
+				tmptitleNum_ = 2;
+				return 0;
+			}
+			if (isTarget_ == 1)
+			{
+				system("start resource/html/マニュアル.html");
+				return 0;
+			}
+			if (isTarget_ == 2)
+			{
+				return 1;
+			}
+			if (isTarget_ == 3)
+			{
+				tmptitleNum_ = 0;
+				Sleep(300);
+				lpSceneMng.SetShutdown();
+				return 0;
+			}
 		}
 	}
 	return 0;
@@ -328,7 +427,7 @@ void TitleScene::title1Draw()
 	{
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 	}
-	DrawFormatString(screenSize_.x / 2 - 200, screenSize_.y - screenSize_.y / 5, 0xffffff, "マニュアルX");
+	DrawFormatString(screenSize_.x / 2 - 200, screenSize_.y - screenSize_.y / 5, 0xffffff, "マニュアル");
 	if (isTarget_ != 2)
 	{
 		SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
@@ -357,6 +456,43 @@ int TitleScene::title2Update()
 	{
 		return 0;
 	}
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (mpos.x > screenSize_.x / 2 - 450 &&
+		mpos.x < screenSize_.x / 2 - 350)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.x > screenSize_.x / 2 - 200 &&
+		mpos.x < screenSize_.x / 2 - 100)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (mpos.x > screenSize_.x / 2 + 100 &&
+		mpos.x < screenSize_.x / 2 + 200)
+	{
+		if (isTarget_ != 2)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 2;
+	}
+	if (mpos.x > screenSize_.x / 2 + 350 &&
+		mpos.x < screenSize_.x / 2 + 450)
+	{
+		if (isTarget_ != 3)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 3;
+	}
 	if (lpPadMng.GetControllerData(InputID::Right) || lpKeyMng.CheckKeyTrg(KeyBindID::Right))
 	{
 		lpSoundMng.SoundPlay("botan.mp3");
@@ -375,7 +511,7 @@ int TitleScene::title2Update()
 	{
 		isTarget_ = 3;
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !!(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		if (isTarget_ == 1)
@@ -389,7 +525,7 @@ int TitleScene::title2Update()
 		}
 	}
 
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !!(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		tmptitleNum_ = 0;

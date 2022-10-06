@@ -20,6 +20,11 @@ void SoundMng::SoundPlay(std::string id, int PlayType)
 	PlaySoundMem(GetSoundHandle(id), PlayType);
 }
 
+void SoundMng::DirectSoudPlay(int id, int PlayType)
+{
+	PlaySoundMem(id, PlayType);
+}
+
 bool SoundMng::CheckPlaySound(std::string id)
 {
 	if (CheckSoundMem(GetSoundHandle(id)) == 1)

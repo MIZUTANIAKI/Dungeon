@@ -97,11 +97,16 @@ void SceneMng::Run(void)
 	if (!SysInit())
 	{
 		return;
-	}   
+	}
+	lpImglMng.ReSetD();
 
 	lpImglMng.LoadGraph("ring1.png");
 	lpImglMng.LoadGraph("ring2.png");
 	lpImglMng.LoadGraph("mouse.png");
+	lpImglMng.LoadGraph("CheckMouse1.png");
+	lpImglMng.LoadGraph("CheckMouse2.png");
+	lpImglMng.LoadGraph("CheckMouse3.png");
+	lpImglMng.LoadGraph("arrow.png");
 
 	LPCSTR fontpath = "font/YuseiMagic-Regular.ttf";
 	if (AddFontResourceEx(fontpath, FR_PRIVATE, NULL) <= 0)
@@ -153,6 +158,9 @@ void SceneMng::Run(void)
 	lpImglMng.DeleteGraph("ring1.png");
 	lpImglMng.DeleteGraph("ring2.png");
 	lpImglMng.DeleteGraph("mouse.png");
+	lpImglMng.DeleteGraph("CheckMouse1.png");
+	lpImglMng.DeleteGraph("CheckMouse2.png");
+	lpImglMng.DeleteGraph("CheckMouse3.png");
 }
 
 bool SceneMng::SysInit(void)

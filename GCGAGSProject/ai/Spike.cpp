@@ -20,12 +20,16 @@ void Spike::Update(void)
 void Spike::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 };
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("drop.png", pos, 20);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("drop.png", pos, ShadName::dot, 20);
 }
 
 void Spike::Init()
 {
+	MoveFMAX_ = 0.0f;
 	id_ = ObjectID::Spike;
 	hp_ = 1;
 	atk_ = 60.0f;
@@ -34,8 +38,8 @@ void Spike::Init()
 
 void Spike::SetStatus(int num)
 {
-	atk_ += 0.3 * num;
-	hp_ += 0.3 * num;
+	atk_ += 0.3f * num;
+	hp_ += 0.3f * num;
 }
 
 void Spike::Damage(Explorer& target)
@@ -49,11 +53,6 @@ void Spike::Damage(Explorer& target)
 		HitAttack(target.GetAtk());
 	}
 	if (ObjectID::Pawn == target.GetObjectID())
-	{
-		HitAttack(target.GetAtk());
-	}
-
-	if (ObjectID::EFire == target.GetObjectID())
 	{
 		HitAttack(target.GetAtk());
 	}

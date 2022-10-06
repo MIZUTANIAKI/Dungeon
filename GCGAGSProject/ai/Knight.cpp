@@ -5,6 +5,7 @@
 
 Knight::Knight()
 {
+	MoveFMAX_ = 5.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -91,8 +92,11 @@ void Knight::MoveTo(float deltaTime)
 void Knight::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 - 32 };
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("testP.png", pos, 21);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("testP.png", pos, ShadName::slash, 21);
 }
 
 void Knight::Init()
@@ -106,11 +110,12 @@ void Knight::Damage(Explorer& target)
 {
 	if (ObjectID::Goal == target.GetObjectID())
 	{
-		if (oneTimeRetreatF_)
-		{
-			return;
-		}
-		oneTimeRetreatF_ = true;
+		hp_ = 0;
+		//if (oneTimeRetreatF_)
+		//{
+		//	return;
+		//}
+		//oneTimeRetreatF_ = true;
 	}
 	if (ObjectID::Monster == target.GetObjectID())
 	{
@@ -122,10 +127,12 @@ void Knight::Damage(Explorer& target)
 	}
 	if (ObjectID::Gate == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		HitAttack(target.GetAtk());
 	}
 	if (ObjectID::Spike == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		hp_ -= target.GetAtk();
 	}
 	if (ObjectID::Rook == target.GetObjectID())

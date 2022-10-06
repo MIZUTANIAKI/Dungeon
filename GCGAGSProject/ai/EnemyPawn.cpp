@@ -6,6 +6,7 @@
 
 EnemyPawn::EnemyPawn()
 {
+	MoveFMAX_ = 3.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -30,25 +31,27 @@ void EnemyPawn::Update(void)
 	if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
 	{
 		ChangeNone();
-		auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
 
-		{
-			if (dir.up && dir.right && dir.down && dir.left)
-			{
-				dir_ = lpRHSMng.CheckMoveSweev(tmpPos / 32, dir_); \
-			}
-			else
-			{
-				if (rand() % 2)
-				{
-					dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
-				}
-				else
-				{
-					dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
-				}
-			}
-		}
+		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+		//auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
+
+		//{
+		//	if (dir.up && dir.right && dir.down && dir.left)
+		//	{
+		//		dir_ = lpRHSMng.CheckMoveSweev(tmpPos / 32, dir_); \
+		//	}
+		//	else
+		//	{
+		//		if (rand() % 2)
+		//		{
+		//			dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
+		//		}
+		//		else
+		//		{
+		//			dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
+		//		}
+		//	}
+		//}
 	}
 	/*if (WFUtility::VecFltToVecInt(pos_) <= goalPos_ && WFUtility::VecFltToVecInt(pos_) >= goalPos_)
 	{
@@ -158,8 +161,11 @@ void EnemyPawn::MoveTo(float deltaTime)
 void EnemyPawn::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 155, static_cast<int>(pos_.y) + mapPos_.y + 65 - 32 };
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("testP3.png", pos, 21);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("testP3.png", pos, ShadName::dot, 21);
 }
 
 void EnemyPawn::Init()
@@ -173,11 +179,12 @@ void EnemyPawn::Damage(Explorer& target)
 {
 	if (ObjectID::Goal == target.GetObjectID())
 	{
-		if (oneTimeRetreatF_)
-		{
-			return;
-		}
-		oneTimeRetreatF_ = true;
+		hp_ = 0;
+		//if (oneTimeRetreatF_)
+		//{
+		//	return;
+		//}
+		//oneTimeRetreatF_ = true;
 	}
 	if (ObjectID::Monster == target.GetObjectID())
 	{
@@ -189,10 +196,12 @@ void EnemyPawn::Damage(Explorer& target)
 	}
 	if (ObjectID::Gate == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		HitAttack(target.GetAtk());
 	}
 	if (ObjectID::Spike == target.GetObjectID())
 	{
+		SetMoveing(moveVec_);
 		hp_ -= target.GetAtk();
 	}
 	if (ObjectID::Rook == target.GetObjectID())

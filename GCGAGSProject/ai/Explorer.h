@@ -5,6 +5,7 @@
 #include "MapMng.h"
 #include "CronoMng.h"
 #include "SoundMng.h"
+#include "EnemyMove.h"
 
 enum class MoveDir
 {
@@ -137,6 +138,7 @@ public:
 	void HitAttack(float atk);
 
 	virtual void SetStatus(int num)=0;
+	void BuildEnemyMoveDate(mapChipDate date, Vector2 size,Vector2 pos);
 protected:
 	virtual void Damage(Explorer& target) = 0;
 
@@ -146,7 +148,6 @@ protected:
 	void MoveMagic(Vector2& mdir, float deltaTime);
 
 	void MoveNext(Vector2& tpos);
-
 
 	bool DoMove();
 	bool DrawCheck(Vector2& pos)const;
@@ -163,8 +164,12 @@ protected:
 
 	bool MoveF_;
 	float MoveFCon_;
+	float MoveFMAX_;
 
 	ObjectID id_;
 
 	bool oneTimeRetreatF_;
+
+	std::unique_ptr<EnemyMove> enemymove_;
+	void SetMoveing(std::vector<Vector2>& vec);
 };

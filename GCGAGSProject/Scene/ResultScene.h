@@ -24,6 +24,9 @@ private:
 
 	int resultMoney_;
 
-	int graphY_;
+	float graphY_;
+	float graphSpeedY_;
+
+	int paVal_;
 };
 

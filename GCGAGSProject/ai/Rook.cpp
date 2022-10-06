@@ -7,6 +7,7 @@
 
 Rook::Rook()
 {
+	MoveFMAX_ = 10.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -55,7 +56,7 @@ void Rook::Draw()
 	{
 		return;
 	}
-	lpImglMng.GraphAddDrawQue("testC4.png", pos, 22);
+	lpImglMng.GraphAddDrawQue("testC4.png", pos, ShadName::cross, 22);
 }
 
 void Rook::Init()
@@ -70,8 +71,8 @@ void Rook::Init()
 
 void Rook::SetStatus(int num)
 {
-	atk_ += 0.3 * num;
-	hp_ += 0.3 * num;
+	atk_ += 0.3f * num;
+	hp_ += 0.3f * num;
 }
 
 void Rook::Damage(Explorer& target)

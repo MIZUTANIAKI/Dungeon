@@ -68,6 +68,11 @@ public:
 		return isExclusive_;
 	}
 
+	int GetGrabAngl(void)
+	{
+		return grabAngl_;
+	}
+
 	void SetExclusive(bool flag)
 	{
 		isExclusive_ = flag;
@@ -82,6 +87,8 @@ public:
 	void SetMouseClickR(void);
 	void SetMouseClickL(void);
 	void SetGrab(bool flag);
+
+	void SetNowGame(bool nowtrg);
 private:
 	static MouseMng* sInstance;
 
@@ -96,6 +103,7 @@ private:
 	int inputdateold_;
 
 	Vector2 mousePos_;
+	int grabAngl_;
 
 	std::array<Vector2, 10> oldMousePos_;
 
@@ -105,6 +113,10 @@ private:
 	bool isExclusive_;
 
 	bool grabF_;
+
+	bool notGameF_;
+
+	float count_;
 
 	MouseMng();
 	~MouseMng();

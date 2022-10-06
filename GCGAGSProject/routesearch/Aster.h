@@ -57,7 +57,6 @@ public:
 	{
 		return goalRoute_;
 	}
-
 private:
 	static Aster* sInstance;
 

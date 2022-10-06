@@ -41,7 +41,7 @@ void Aster::Init(mapChipDate date, Vector2 mapsize)
 			}
 			if (date[y][x] == BlockDate::Gate)
 			{
-				map_[y][x].StepCost = 15;
+				map_[y][x].StepCost = 50;
 			}
 			if (date[y][x] == BlockDate::Spike)
 			{

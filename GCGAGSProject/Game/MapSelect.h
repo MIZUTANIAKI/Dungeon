@@ -77,4 +77,6 @@ private:
 	int screenH_;
 	Vector2 screenSize_;
 	bool pressZ_;
+	
+	int mouseOldPosY_;
 };

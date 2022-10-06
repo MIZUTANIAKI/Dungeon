@@ -190,11 +190,13 @@ void MapTest::Draw()
 				DrawEdge(Vector2{ x,y });
 				break;
 			case BlockDate::Start:
-				DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
+				lpImglMng.DrawImg(blockImg_[mapdat_[y][x]], Vector2(x * 32 + mapPos_.x, y * 32 + mapPos_.y));
+				//DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
 				DrawEdge(Vector2{ x,y });
 				break;
 			case BlockDate::Goal:
-				DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
+				lpImglMng.DrawImg(blockImg_[mapdat_[y][x]], Vector2(x * 32 + mapPos_.x, y * 32 + mapPos_.y));
+				//DrawGraph(x * 32 + mapPos_.x, y * 32 + mapPos_.y, lpImglMng.GetGraphHandle(blockImg_[mapdat_[y][x]]), true);
 				DrawEdge(Vector2{ x,y });
 				break;
 			default:
@@ -211,7 +213,7 @@ void MapTest::Draw()
 		lpImglMng.GraphAddDrawQue("testC3.png", desmodusPos, 20);
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
-	lpImglMng.ScreenAddDrawQue(screenH_, Vector2(145, 65));
+	lpImglMng.ScreenAddDrawQue(screenH_, Vector2(145, 65),10);
 }
 
 void MapTest::Init()

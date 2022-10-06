@@ -8,9 +8,56 @@
 #include "soundMng.h"
 #include "StatusCtr.h"
 #include "ReadMng.h"
+#include "MouseMng.h"
+#include "MapMng.h"
+
 
 UNBS ResultScene::Update(UNBS own)
 {
+	if (!lpSoundMng.CheckPlaySound("fanfan.mp3"))
+	{
+		if (!lpSoundMng.CheckPlaySound("finfin.mp3"))
+		{
+			lpSoundMng.SoundPlay("finfin.mp3");
+		}
+	}
+	Vector2 mpos = lpMouseMng.GetMousePos();
+	if (mpos.x > screenSize_.x / 2 - 450 &&
+		mpos.x < screenSize_.x / 2 - 350)
+	{
+		if (isTarget_ != 0)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 0;
+	}
+	if (mpos.x > screenSize_.x / 2 - 200 &&
+		mpos.x < screenSize_.x / 2 - 100)
+	{
+		if (isTarget_ != 1)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 1;
+	}
+	if (mpos.x > screenSize_.x / 2 + 100 &&
+		mpos.x < screenSize_.x / 2 + 200)
+	{
+		if (isTarget_ != 2)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 2;
+	}
+	if (mpos.x > screenSize_.x / 2 + 350 &&
+		mpos.x < screenSize_.x / 2 + 450)
+	{
+		if (isTarget_ != 3)
+		{
+			lpSoundMng.SoundPlay("botan.mp3");
+		}
+		isTarget_ = 3;
+	}
 	time_ += lpCronoMng.GetDeltaTime();
 	sterangle_ = static_cast<int>(time_ * 10) % 360;
 	if (sterangle_ > 360)
@@ -36,7 +83,7 @@ UNBS ResultScene::Update(UNBS own)
 	{
 		isTarget_ = 3;
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok))
+	if (lpPadMng.GetControllerData(InputID::BtnB) || lpKeyMng.CheckKeyTrg(KeyBindID::Ok) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_LEFT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_LEFT)))
 	{
 		if (resultNum_ == 0)
 		{
@@ -143,13 +190,14 @@ UNBS ResultScene::Update(UNBS own)
 			}
 		}
 	}
-	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No))
+	if (lpPadMng.GetControllerData(InputID::BtnA) || lpKeyMng.CheckKeyTrg(KeyBindID::No) || (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)))
 	{
 		lpSoundMng.SoundPlay("pusbotan.mp3");
 		isTarget_ = 1;
 		if (resultNum_ == 0)
 		{
 			lpReadMng.SetDate(setinglist::Money, lpMoneyMng.GetMoney());
+			StatusCtr::SetStates(StatusID::Stage, StatusCtr::GetStates(StatusID::Stage) + 1);
 			return std::move(ownS_);
 		}
 		else
@@ -157,7 +205,26 @@ UNBS ResultScene::Update(UNBS own)
 			resultNum_ = 0;
 		}
 	}
-	graphY_++;
+
+	//else if (graphY_ < 0)
+	//{
+	//	graphSpeedY_ = 0.5;
+	//}
+
+	graphY_ += graphSpeedY_;
+	if (graphY_ > 30)
+	{
+		ChangeVolumeSoundMem(paVal_,lpSoundMng.GetSoundHandle("pa.mp3"));
+		paVal_--;
+		lpSoundMng.SoundPlay("pa.mp3");
+		graphSpeedY_ = 10;
+		graphSpeedY_ *= -1;
+	}
+	else
+	{
+		graphSpeedY_++;
+	}
+
 	return own;
 }
 
@@ -175,6 +242,8 @@ ResultScene::ResultScene(UNBS own)
 ResultScene::~ResultScene()
 {
 	lpSoundMng.DeleteSound("not.mp3");
+	lpImglMng.DeleteGraph("gameWin.png");
+	lpImglMng.DeleteGraph("backGL.png");
 }
 
 void ResultScene::Draw()
@@ -182,11 +251,14 @@ void ResultScene::Draw()
 	ownS_->Draw();
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
-	DrawBox(0, 0, screenSize_.x, screenSize_.y, 0x000000, true);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-	lpImglMng.DrawImg("gameWin.png", { 0,graphY_ % 20 - 20 });
+	DrawGraph(0, 0, lpImglMng.GetGraphHandle("backGL.png"), true);
+	//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
+	//DrawBox(0, -screenSize_.y, screenSize_.x, screenSize_.y, 0x000000, true);
+	//SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	//lpImglMng.DrawImg("gameWin.png", { 0,static_cast<int>(graphY_) - 50 /*% 30 - 50*/ });
+	DrawGraph(0, static_cast<int>(graphY_) - 50, lpImglMng.GetGraphHandle("gameWin.png"), true);
 
+	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 160, 0xffffff, "現在のステージは　%4d", StatusCtr::GetStates(StatusID::Stage));
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 140, 0xffffff, "ゲットしたゴールド　%4d", resultMoney_);
 	DrawFormatString(screenSize_.x / 3, screenSize_.y / 2 - 100, 0xffffff, "もっているゴールド　%4d", lpMoneyMng.GetMoney());
 	DrawFormatString(screenSize_.x / 4, screenSize_.y / 2 - 50, 0xffffff, "きょうかしたいものを選んでください　価格100ゴールド");
@@ -221,36 +293,58 @@ void ResultScene::Draw()
 	{
 		if (resultNum_ == 0)
 		{
-			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "マップのたてのながさがふえるよ。\nいまのマップサイズ　%d", StatusCtr::GetStates(StatusID::MapSize));
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "マップの たてのながさが ふえるよ。\nいまの マップレベル　%d", StatusCtr::GetStates(StatusID::MapSize) - 11);
 		}
 		else
 		{
-			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ビショップのかたさ、こうげきりょくがあがるよ。\nいまのビショップレベル　%d", StatusCtr::GetStates(StatusID::Monster3));
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ビショップの かたさ、こうげきりょくが あがるよ。\nいまの ビショップレベル　%d", StatusCtr::GetStates(StatusID::Monster3));
 		}
 	}
 	if (isTarget_ == 1)
 	{
 		if (resultNum_ == 0)
 		{
-			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ポーンのかたさ、こうげきりょくがあがるよ\nいまのポーンレベル　%d", StatusCtr::GetStates(StatusID::Monster1));
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ポーンの かたさ、こうげきりょくが あがるよ\nいまの ポーンレベル　%d", StatusCtr::GetStates(StatusID::Monster1));
 		}
 		else
 		{
-			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "スパイクのかたさ、こうげきりょくがあがるよ\nいまのビショップレベル　%d", StatusCtr::GetStates(StatusID::GImmick1));
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "スパイクの かたさ、こうげきりょくが あがるよ\nいまの スパイクレベル　%d", StatusCtr::GetStates(StatusID::GImmick1));
+		}
+	}
+	if (isTarget_ == 2)
+	{
+		if (resultNum_ == 0)
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ルークの かたさ、こうげきりょくが あがるよ\nいまの ルークレベル　%d", StatusCtr::GetStates(StatusID::Monster2));
+		}
+		else
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ぼうへきの かたさが あがるよ\nいまの ぼうへきレベル　%d", StatusCtr::GetStates(StatusID::GImmick2));
+		}
+	}
+	if (isTarget_ == 3)
+	{
+		if (resultNum_ == 0)
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "ほかの せんたくし をみる");
+		}
+		else
+		{
+			DrawFormatString(screenSize_.x / 4, screenSize_.y / 2, 0xffffff, "きょてんの かたさ、エネルギーかいふくそくどが あがるよ\nいまのきょてんレベル　%d", StatusCtr::GetStates(StatusID::PlayerHP));
 		}
 	}
 	DrawName();
 
 	if (resultNum_ == 0)
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでキャンセルする");
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "みぎクリックでキャンセルする");
 	}
 	else
 	{
-		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "Xでもどる");
+		DrawFormatString(screenSize_.x / 2 - 50, screenSize_.y - 100, 0xffffff, "みぎクリックでゲームにもどる");
 	}
 
-	lpImglMng.ScreenAddDrawQue(screenH_, 79);
+	lpImglMng.ScreenAddDrawQue(screenH_, 49);
 }
 
 void ResultScene::DrawName()
@@ -301,7 +395,7 @@ void ResultScene::DrawName()
 	}
 	else
 	{
-		DrawFormatString(screenSize_.x / 2 + 100, screenSize_.y - screenSize_.y / 5, 0xffffff, "ゲート");
+		DrawFormatString(screenSize_.x / 2 + 100, screenSize_.y - screenSize_.y / 5, 0xffffff, "ぼうへき");
 	}
 	if (isTarget_ != 3)
 	{
@@ -330,15 +424,30 @@ void ResultScene::SetOwn(UNBS own)
 
 void ResultScene::Init(void)
 {
+	lpSoundMng.StopSound("game.mp3");
+	lpSoundMng.LoadSound("pa.mp3");
+	lpSoundMng.LoadSound("fanfan.mp3");
+	lpSoundMng.LoadSound("finfin.mp3");
+	lpSoundMng.SoundPlay("fanfan.mp3");
 	resultMoney_ = lpMoneyMng.GettmpMoney();
 	lpMoneyMng.AddMoney(resultMoney_);
 
 	lpReadMng.SetDate(setinglist::Money, lpMoneyMng.GetMoney());
 	isTarget_ = 0;
 	time_ = 0;
-	graphY_ = 0;
+	graphSpeedY_ = 0.5f;
+	graphY_ = 21;
 	GetDrawScreenSize(&screenSize_.x, &screenSize_.y);
 	screenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
 	lpImglMng.LoadGraph("gameWin.png");
-	lpSoundMng.LoadSound("not.mp3");
+	lpImglMng.LoadGraph("backGL.png");
+	lpSoundMng.LoadSound("not.mp3"); 
+
+	paVal_ = lpSoundMng.GetSoundVol();
+
+	lpMapMng.GetDropEndF(MapDropDateID::Desmodus);
+	lpMapMng.GetDropEndF(MapDropDateID::Gate);
+	lpMapMng.GetDropEndF(MapDropDateID::Rook);
+	lpMapMng.GetDropEndF(MapDropDateID::Slime);
+	lpMapMng.GetDropEndF(MapDropDateID::Spike);
 }

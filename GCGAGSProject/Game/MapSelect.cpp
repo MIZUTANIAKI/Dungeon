@@ -15,6 +15,7 @@
 #include "UIMng.h"
 #include "SoundMng.h"
 #include "StatusCtr.h"
+#include "KeyMng.h"
 
 MapSelect::MapSelect()
 {
@@ -76,6 +77,10 @@ void MapSelect::Update(float deltaTime_)
 	{
 		lpSoundMng.SoundPlay("crea.mp3");
 	}
+	if (lpSoundMng.CheckPlaySound("finfin.mp3"))
+	{
+		lpSoundMng.StopSound("finfin.mp3");
+	}
 	//if (CheckHitKey(KEY_INPUT_LCONTROL) && CheckHitKey(KEY_INPUT_R))
 	//{
 	//	mapPos_.x = -10;
@@ -104,6 +109,7 @@ void MapSelect::Update(float deltaTime_)
 			auto tmpMapDat = MapDatList::GetDate();
 			if (!tmpMapDat.empty())
 			{
+				lpMoneyMng.AddMoney(2);
 				mapdat_ = tmpMapDat;
 			}
 		}
@@ -116,7 +122,28 @@ void MapSelect::Update(float deltaTime_)
 	Vector2 nowMPos = lpMouseMng.GetMousePos();
 
 	BuildRoad(nowMPos);
-	if (CheckHitKey(KEY_INPUT_W))
+	if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE))
+	{
+		mouseOldPosY_ = lpMouseMng.GetMousePos().y;
+	}
+	else if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE)
+	{
+		if (mouseOldPosY_ < lpMouseMng.GetMousePos().y)
+		{
+			if (mapPos_.y < 1)
+			{
+				mapPos_.y++;
+			}
+		}
+		else if (mouseOldPosY_ > lpMouseMng.GetMousePos().y)
+		{
+			if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
+			{
+				mapPos_.y--;
+			}
+		}
+	}
+	if (lpKeyMng.CheckKeyNow(KeyBindID::Up))
 	{
 		if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
 		{
@@ -130,7 +157,7 @@ void MapSelect::Update(float deltaTime_)
 	//		mapPos_.x++;
 	//	}
 	//
-	if (CheckHitKey(KEY_INPUT_S))
+	if ( lpKeyMng.CheckKeyNow(KeyBindID::Down))
 	{
 		if (mapPos_.y < 1)
 		{
@@ -348,6 +375,7 @@ void MapSelect::Init()
 	} while (StatusCtr::GetStates(StatusID::MapSize) > mapSize_.y);
 	StatusCtr::SetStates(StatusID::MapSize, mapSize_.y);
 	StatusCtr::OutPutD();
+	MapDatList::Init();
 }
 
 void MapSelect::SetStageID(int stageID)

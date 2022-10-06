@@ -5,6 +5,7 @@
 
 Goal::Goal()
 {
+	MoveFMAX_ = 0.0f;
 	nowMoveVec_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
@@ -47,8 +48,11 @@ void Goal::Update(void)
 void Goal::Draw()
 {
 	Vector2 pos = { static_cast<int>(pos_.x) + mapPos_.x + 165, static_cast<int>(pos_.y) + mapPos_.y + 55 };
-	DrawCheck(pos);
-	lpImglMng.GraphAddDrawQue("player.png", pos, 21);
+	if (!DrawCheck(pos))
+	{
+		return;
+	}
+	lpImglMng.GraphAddDrawQue("player.png", pos, ShadName::dot, 21);
 }
 
 void Goal::Init()
@@ -65,19 +69,19 @@ void Goal::Damage(Explorer& target)
 {
 	if (ObjectID::Adventurer == target.GetObjectID())
 	{
-		HitAttack(target.GetAtk());
+		hp_--;
 	}
 	if (ObjectID::Knight == target.GetObjectID())
 	{
-		HitAttack(target.GetAtk());
+		hp_--;
 	}
 	if (ObjectID::Pawn == target.GetObjectID())
 	{
-		HitAttack(target.GetAtk());
+		hp_--;
 	}
 
 	if (ObjectID::EFire == target.GetObjectID())
 	{
-		HitAttack(target.GetAtk());
+		hp_--;
 	}
 }

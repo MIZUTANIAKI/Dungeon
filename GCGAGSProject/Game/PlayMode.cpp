@@ -50,7 +50,6 @@ PlayMode::PlayMode()
 	mapSize_.x = 35;
 	mapSize_.y = 17;
 	mapdat_.resize(mapSize_.y);
-	dorpDir_ = 0;
 	for (int y = 0; y < mapSize_.y; y++)
 	{
 		mapdat_[y].resize(mapSize_.x);
@@ -113,15 +112,6 @@ void PlayMode::SetMapDate(mapChipDate mapdate)
 
 void PlayMode::Update(void)
 {
-	if (lpMouseMng.GetInputDat() & MOUSE_INPUT_RIGHT&& !lpMouseMng.GetOldInputDat() & MOUSE_INPUT_RIGHT)
-	{
-		dorpDir_++;
-		if (dorpDir_ >= 4)
-		{
-			dorpDir_ = 0;
-		}
-	}
-
 	if (!lpSoundMng.CheckPlaySound("game.mp3"))
 	{
 		lpSoundMng.SoundPlay("game.mp3");
@@ -129,6 +119,16 @@ void PlayMode::Update(void)
 	if (lpCronoMng.IsOneSecond())
 	{
 		con_++;
+	}
+	if (CheckHitKey(KEY_INPUT_G))
+	{
+		lpMoneyMng.SetStartFlag(false);
+		return;
+	}
+	if (CheckHitKey(KEY_INPUT_R))
+	{
+		goalDelF_ = true;
+		return;
 	}
 	if (enemyKillCount_ >= 30 + 10 * nowStage_)
 	{
@@ -138,7 +138,8 @@ void PlayMode::Update(void)
 	lpEnergyMng.Update();
 	uIScrolller_->Update();
 	//if (con_ / 30 % 2 == 0)
-	if (/*CheckHitKey(KEY_INPUT_SPACE)*/con_ % spawnRate_ == 0)
+	//if (con_ % spawnRate_ == 0)
+	if(lpKeyMng.CheckKeyTrg(KeyBindID::Left))
 	{
 		//if (eneF)
 		//{
@@ -152,13 +153,13 @@ void PlayMode::Update(void)
 		}
 		if (tmpfinf /*&& rand() % (200 - min(con_ / 30 / 60, 150)) == 0*/)
 		{
-			if (con_ % 200 == 150 && !BoseF_ && nowStage_ != 0)
+			//if (con_ % 200 == 150 /*&& !BoseF_*/ && nowStage_ != 0)
+			//{
+			//	//BoseF_ = true;
+			//}
+			//else
 			{
-				BoseF_ = true;
-			}
-			else
-			{
-				if (!BoseF_ && eneSpawnCount_ <= 30 + 10 * nowStage_)
+				if (/*!BoseF_ &&*/ eneSpawnCount_ <= 30 + 10 * nowStage_)
 				{
 					SpawnEnemy();
 				}
@@ -182,31 +183,36 @@ void PlayMode::Update(void)
 		}
 	}
 
-	if (lpKeyMng.CheckKeyNow(KeyBindID::Up))
-	{
-		if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
-		{
-			mapPos_.y--;
-		}
-
-		if(!explorerVector_.empty())
-		{
-			Explorer::SetMapMos(mapPos_);
-		}
-	}
-
-	if (lpKeyMng.CheckKeyNow(KeyBindID::Up))
-	{
-		if (mapPos_.y < 1)
-		{
-			mapPos_.y++;
-		}
-
-		if (!explorerVector_.empty())
-		{
-			Explorer::SetMapMos(mapPos_);
-		}
-	}
+	//if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE))
+	//{
+	//	mouseOldPosY_ = lpMouseMng.GetMousePos().y;
+	//}
+	//else if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE)
+	//{
+	//	if (mouseOldPosY_ < lpMouseMng.GetMousePos().y)
+	//	{
+	//		if (mapPos_.y < 1)
+	//		{
+	//			mapPos_.y++;
+	//		}
+	//		if (!explorerVector_.empty())
+	//		{
+	//			Explorer::SetMapMos(mapPos_);
+	//		}
+	//	}
+	//	else if (mouseOldPosY_ > lpMouseMng.GetMousePos().y)
+	//	{
+	//		if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
+	//		{
+	//			mapPos_.y--;
+	//		}
+	//		if (!explorerVector_.empty())
+	//		{
+	//			Explorer::SetMapMos(mapPos_);
+	//		}
+	//	}
+	//}
+	MapDragNow();
 	bool spawnF = false;
 	std::vector<std::pair<std::pair<Vector2,bool>, std::pair<float, float>>> spawnFireVec_;
 	for (auto& explorer : explorerVector_)
@@ -291,6 +297,70 @@ void PlayMode::Update(void)
 	}
 }
 
+void PlayMode::MapDragNow()
+{
+	int mapmovenum = 0;
+	if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && !(lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE))
+{
+	mouseOldPosY_ = lpMouseMng.GetMousePos().y;
+}
+	else if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE && lpMouseMng.GetOldInputDat() & MOUSE_INPUT_MIDDLE)
+	{
+		if (mouseOldPosY_ < lpMouseMng.GetMousePos().y)
+		{
+			mapmovenum = 2;
+		}
+		else if (mouseOldPosY_ > lpMouseMng.GetMousePos().y)
+		{
+			mapmovenum = 1;
+		}
+	}
+	//if (lpMouseMng.GetInputDat() & MOUSE_INPUT_MIDDLE)
+	//{
+	//	if (screenSize_.y / 2 >= lpMouseMng.GetMousePos().y)
+	//	{
+	//		mapmovenum = 1;
+	//	}
+	//	if (screenSize_.y / 2 < lpMouseMng.GetMousePos().y)
+	//	{
+	//		mapmovenum = 2;
+	//	}
+	//}
+	if (lpKeyMng.CheckKeyNow(KeyBindID::Up) || CheckHitKey(KEY_INPUT_W))
+	{
+		mapmovenum = 1;
+	}
+
+	if (lpKeyMng.CheckKeyNow(KeyBindID::Down) || CheckHitKey(KEY_INPUT_D))
+	{
+		mapmovenum = 2;
+	}
+	if (mapmovenum == 1)
+	{
+		if ((mapSize_.y - 1) * 32 + mapPos_.y - 1 > 550 - 60)
+		{
+			mapPos_.y--;
+		}
+
+		if (!explorerVector_.empty())
+		{
+			Explorer::SetMapMos(mapPos_);
+		}
+	}
+	if (mapmovenum == 2)
+	{
+		if (mapPos_.y < 1)
+		{
+			mapPos_.y++;
+		}
+
+		if (!explorerVector_.empty())
+		{
+			Explorer::SetMapMos(mapPos_);
+		}
+	}
+}
+
 void PlayMode::CheckRouteForPlay()
 {
 	for (auto& explorer : explorerVector_)
@@ -342,6 +412,7 @@ void PlayMode::SpawnPawn()
 	tmpAdventure->EnemyPawn::SetHP(10);
 	tmpAdventure->SetDir(MoveDir::Down);
 	tmpAdventure->SetStatus(nowStage_);
+	tmpAdventure->BuildEnemyMoveDate(mapdat_, mapSize_, goalPos_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 
@@ -357,6 +428,10 @@ void PlayMode::CheckFireSpawnEnemy(std::unique_ptr<Explorer>& target, std::uniqu
 		return;
 	}
 	if (target->GetObjectID() == ObjectID::Fire)
+	{
+		return;
+	}
+	if (target->GetObjectID() == ObjectID::Spike)
 	{
 		return;
 	}
@@ -492,6 +567,10 @@ void PlayMode::SpawnGimmick2(Vector2& droppos, MapDropDateID id)
 			});
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
+		if (clearF_)
+		{
+			AsterForNowPos();
+		}
 	}
 }
 
@@ -512,6 +591,10 @@ void PlayMode::SpawnGimmick1(Vector2& droppos, MapDropDateID id)
 			});
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
+		if (clearF_)
+		{
+			AsterForNowPos();
+		}
 	}
 }
 
@@ -523,42 +606,30 @@ void PlayMode::SpawnMonster3(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
+		int tnum = lpMouseMng.GetGrabAngl();
 		MoveDir tmpDir = MoveDir::Down;
-		SetDropDir(tmpDir);
+		if (tnum == 0)
+		{
+			tmpDir = MoveDir::Up;
+		}
+		if (tnum == 1)
+		{
+			tmpDir = MoveDir::Right;
+		}
+		if (tnum == 2)
+		{
+			tmpDir = MoveDir::Down;
+		}
+		if (tnum == 3)
+		{
+			tmpDir = MoveDir::Left;
+		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster3));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		lpMapMng.SetDropEndF(id, true);
 		lpSoundMng.SoundPlay("koto.mp3");
 	}
-}
-
-void PlayMode::SetDropDir(MoveDir& tmpDir)
-{
-	int tnum = dorpDir_;
-	if (tnum == 0)
-	{
-		tmpDir = MoveDir::Up;
-	}
-	else
-		if (tnum == 1)
-		{
-			tmpDir = MoveDir::Right;
-		}
-		else
-			if (tnum == 2)
-			{
-				tmpDir = MoveDir::Down;
-			}
-			else
-				if (tnum == 3)
-				{
-					tmpDir = MoveDir::Left;
-				}
-				else
-				{
-					tmpDir = MoveDir::None;
-				}
 }
 
 void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
@@ -569,8 +640,24 @@ void PlayMode::SpawnMonster2(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
+		int tnum = lpMouseMng.GetGrabAngl();
 		MoveDir tmpDir = MoveDir::Down;
-		SetDropDir(tmpDir);
+		if (tnum == 0)
+		{
+			tmpDir = MoveDir::Up;
+		}
+		if (tnum == 1)
+		{
+			tmpDir = MoveDir::Right;
+		}
+		if (tnum == 2)
+		{
+			tmpDir = MoveDir::Down;
+		}
+		if (tnum == 3)
+		{
+			tmpDir = MoveDir::Left;
+		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster2));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
@@ -587,8 +674,24 @@ void PlayMode::SpawnMonster1(const Vector2& droppos, MapDropDateID id)
 		tmpAdventure->Init();
 		tmpAdventure->SetMapMos(mapPos_);
 		tmpAdventure->ReSetPos(droppos);
+		int tnum = lpMouseMng.GetGrabAngl();
 		MoveDir tmpDir = MoveDir::Down;
-		SetDropDir(tmpDir);
+		if (tnum == 0)
+		{
+			tmpDir = MoveDir::Up;
+		}
+		if (tnum == 1)
+		{
+			tmpDir = MoveDir::Right;
+		}
+		if (tnum == 2)
+		{
+			tmpDir = MoveDir::Down;
+		}
+		if (tnum == 3)
+		{
+			tmpDir = MoveDir::Left;
+		}
 		tmpAdventure->SetDir(lpRHSMng.CheckMove(droppos, tmpDir));
 		tmpAdventure->SetStatus(StatusCtr::GetStates(StatusID::Monster1));
 		explorerVector_.emplace_back(std::move<>(tmpAdventure));
@@ -607,6 +710,7 @@ void PlayMode::SpawnKnight()
 	tmpAdventure->Knight::SetHP(100);
 	tmpAdventure->SetDir(MoveDir::Down);
 	tmpAdventure->SetStatus(nowStage_);
+	tmpAdventure->BuildEnemyMoveDate(mapdat_, mapSize_, goalPos_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 
@@ -620,6 +724,7 @@ void PlayMode::SpawnAdventer()
 	tmpAdventure->Adventurer::SetHP(2);
 	tmpAdventure->SetDir(MoveDir::Down);
 	tmpAdventure->SetStatus(nowStage_);
+	tmpAdventure->BuildEnemyMoveDate(mapdat_, mapSize_, goalPos_);
 	explorerVector_.emplace_back(std::move<>(tmpAdventure));
 }
 
@@ -677,6 +782,15 @@ void PlayMode::Draw(void)
 	}
 	SetDrawScreen(DX_SCREEN_BACK);
 	lpImglMng.ScreenAddDrawQue(screenH_, Vector2(155, 65), 2);
+
+	if (goalDelF_)
+	{
+		return;
+	}
+	if (enemyKillCount_ >= 30 + 10 * nowStage_)
+	{
+		return;
+	}
 	uIScrolller_->Draw();
 }
 
@@ -688,7 +802,7 @@ void PlayMode::Init(void)
 	nowStage_ = 0;
 	con_ = 0;
 	eneSpawnCount_ = 0;
-	enemyKillCount_ = 0;
+	enemyKillCount_ = -1;
 	knightHP_ = 500;
 	goalDelF_ = false;
 	spawnRate_ = 500;
@@ -703,6 +817,8 @@ void PlayMode::Init(void)
 	//ゴール地点を設定
 	InitGoalNode();
 	SetMousePoint(screenSize_.x / 2, screenSize_.y / 2);
+
+	SetStage(StatusCtr::GetStates(StatusID::Stage));
 }
 
 void PlayMode::CheckGoal(void)
@@ -905,6 +1021,57 @@ void PlayMode::AsterCheck(void)
 		std::unique_lock<std::mutex> lock(finG_);
 		finF_ = true;
 	}
+}
+
+void PlayMode::AsterForNowPos()
+{
+	//for (auto& explorer : explorerVector_)
+	//{
+
+	//	finF_ = false;
+	//	clearF_ = false;
+	//	std::vector<Vector2> mygoalNode;
+	//	mygoalNode.clear();
+
+	//	//初期化
+	//	//lpAsterMng.Init(mapdat_, mapSize_);
+	//	//探索開始
+	//	lpAsterMng.Start(explorer->GetPos() / 32);
+	//	//ゴールできるかどうか
+	//	if (!lpAsterMng.IsGoal())
+	//	{
+	//		//ゴールできない場合
+	//		//クリアできないマップであることを設定
+	//		{
+	//			std::unique_lock<std::mutex> lock(clearG_);
+	//			clearF_ = false;
+	//		}
+	//		//ここで終了
+	//		{
+	//			std::unique_lock<std::mutex> lock(finG_);
+	//			finF_ = true;
+	//		}
+	//		explorer->SetMoveVec(std::vector<Vector2>());
+	//		break;
+	//	}
+	//	//もしゴールしているならば
+
+	//	//ゴールまでの道順を取得
+	//	std::list<Vector2> gpos = lpAsterMng.GetGoalRoute();
+
+	//	mygoalNode.emplace_back(explorer->GetPos() / 32);
+
+	//	//逆順なので使えるように変更。
+	//	{
+	//		std::unique_lock<std::mutex> lock(clearG_);
+	//		for (auto i = gpos.crbegin(); i != gpos.crend(); i++)
+	//		{
+	//			mygoalNode.emplace_back((*i));
+	//		}
+	//	}
+	//	explorer->SetMoveVec(mygoalNode);
+
+	//}
 }
 
 void PlayMode::InitMovingDate()

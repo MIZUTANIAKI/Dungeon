@@ -7,6 +7,8 @@ class TitleScene :
 {
 public:
 	UNBS Update(UNBS own) override;
+	void IsReStartGame();
+	void TitleNumChange();
 	TitleScene();
 	~TitleScene();
 	void Draw()override;
