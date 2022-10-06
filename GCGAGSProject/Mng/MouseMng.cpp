@@ -107,6 +107,9 @@ void MouseMng::Draw(void)
 	{
 		if (lpMoneyMng.GetStartFlag())
 		{
+			DrawFormatString(1280 / 2 - 50+1, 10+1, 0x000000, "残り　%4d 体！", enemyCount_);
+			DrawFormatString(1280 / 2 - 50, 10, 0xffffff, "残り　%4d 体！", enemyCount_);
+
 			if (grabF_)
 			{
 				DrawGraph(mousePos_.x, mousePos_.y - 25, lpImglMng.GetGraphHandle("handGrab.png"), true);
@@ -163,6 +166,11 @@ void MouseMng::SetGrab(bool flag)
 void MouseMng::SetNowGame(bool nowtrg)
 {
 	notGameF_ = nowtrg;
+}
+
+void MouseMng::SetEnemyCout(int num)
+{
+	enemyCount_ = num;
 }
 
 void MouseMng::SetOldPos(Vector2 pos)

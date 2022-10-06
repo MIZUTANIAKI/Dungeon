@@ -80,8 +80,8 @@ void Adventurer::Update(void)
 
 void Adventurer::SetStatus(int num)
 {
-	atk_ += 0.3 * num;
-	hp_ += 0.3*num;
+	atk_ += num;
+	hp_ += num;
 }
 
 void Adventurer::MoveTo(float deltaTime)

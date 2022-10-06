@@ -256,6 +256,7 @@ void PlayMode::Update(void)
 			if (spawn.first.second)
 			{
 				tmpAdventure->Fire::SetEneF();
+				tmpAdventure->SetAtk(nowStage_);
 			}
 			explorerVector_.emplace_back(std::move<>(tmpAdventure));
 		}
@@ -747,6 +748,7 @@ void PlayMode::Draw(void)
 	lpImglMng.GraphAddDrawQue("MapBack.png", { screenSize_.x / 10,screenSize_.y / 14 }, 0);
 	SetDrawScreen(screenH_);
 	ClsDrawScreen();
+	lpMouseMng.SetEnemyCout((30 + 10 * nowStage_) - enemyKillCount_);
 
 	for (int y = 0; y < mapSize_.y; y++)
 	{

@@ -89,6 +89,8 @@ public:
 	void SetGrab(bool flag);
 
 	void SetNowGame(bool nowtrg);
+
+	void SetEnemyCout(int num);
 private:
 	static MouseMng* sInstance;
 
@@ -101,6 +103,8 @@ private:
 
 	int inputdate_;
 	int inputdateold_;
+
+	int enemyCount_;
 
 	Vector2 mousePos_;
 	int grabAngl_;

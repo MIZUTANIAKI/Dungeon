@@ -43,8 +43,8 @@ void Knight::Update(void)
 
 void Knight::SetStatus(int num)
 {
-	atk_ += 0.3 * num;
-	hp_ += 0.3 * num;
+	atk_ += num;
+	hp_ += num;
 }
 
 void Knight::MoveTo(float deltaTime)

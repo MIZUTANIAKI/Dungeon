@@ -111,8 +111,8 @@ void EnemyPawn::Update(void)
 
 void EnemyPawn::SetStatus(int num)
 {
-	atk_ += 0.3 * num;
-	hp_ += 0.3 * num;
+	atk_ += num;
+	hp_ += num;
 }
 
 void EnemyPawn::MoveTo(float deltaTime)
