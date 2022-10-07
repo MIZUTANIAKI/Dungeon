@@ -73,7 +73,7 @@ UNBS GameOver::Update(UNBS own)
 			dropSoundVector_.emplace_back(tmpSoundHandle);
 			lpSoundMng.SoundPlay("don.mp3");
 		}
-		backWPosY_ = screenSize_.y;
+		//backWPosY_ = screenSize_.y;
 		dropF_ = true;
 		time_++;
 		//backWPosY_ = screenSize_.y + 200;
@@ -173,6 +173,11 @@ void GameOver::Draw()
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 150);
 	DrawBox(0, backWPosY_ - screenSize_.y - 1500 , screenSize_.x, backWPosY_, 0x000000, true);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	if (dropF_)
+	{
+		DrawGraph(0, backWPosY_ - screenSize_.y - 1500, lpImglMng.GetGraphHandle("GameOverWall.png"), true);
+	}
 	for (int i = dropPosAngle_.size() - 1; i >= 0; i--)
 	{
 		int id = 0;
@@ -193,18 +198,28 @@ void GameOver::Draw()
 
 	if (dropF_)
 	{
+		int id = 0;
 		if (time_ / 5 % 30 == 29 || time_ / 5 % 30 == 20)
 		{
-			lpImglMng.DrawImg("GameOver2.png", { rand() % 5 == 0 ? rand() % 10 - 5 : 0,0 });
+			id = lpImglMng.GetGraphHandle("GameOver2.png");
 		}
 		else if (time_ / 5 % 30 == 10)
 		{
-			lpImglMng.DrawImg("GameOver3.png", { rand() % 5 == 0 ? rand() % 10 - 5 : 0,0 });
+			id = lpImglMng.GetGraphHandle("GameOver3.png");
 		}
 		else
 		{
-			lpImglMng.DrawImg("GameOver1.png", { rand() % 10 == 0 ? rand() % 10 - 5 : 0,0 });
+			id = lpImglMng.GetGraphHandle("GameOver1.png");
 		}
+		if (time_ / 2 % 100 == 50)
+		{
+			DrawRotaGraph(screenSize_.x / 2 - 25, screenSize_.y / 2 - 20, 1, 0, id, true);
+		}
+		else
+		{
+			DrawRotaGraph(screenSize_.x / 2, screenSize_.y / 2, 1, 0, id, true);
+		}
+
 		if (time_ / 20 % 6 != 0)
 		{
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);

@@ -7,6 +7,29 @@ MoveDir RightHandSearch::CheckMove(Vector2 pos, MoveDir dir)
 
 	if (dir == MoveDir::Up)
 	{
+		if (Check(Vector2(pos.x, pos.y - 1)))
+		{
+			return MoveDir::Up;
+		}
+		else if (Check(Vector2(pos.x - 1, pos.y)))
+		{
+			return MoveDir::Left;
+		}
+		else if (Check(Vector2(pos.x, pos.y + 1)))
+		{
+			return MoveDir::Down;
+		}
+		else if (Check(Vector2(pos.x + 1, pos.y)))
+		{
+			return MoveDir::Right;
+		}
+		else
+		{
+			return MoveDir::None;
+		}
+	}
+	if (dir == MoveDir::Right)
+	{
 		if (Check(Vector2(pos.x + 1, pos.y)))
 		{
 			return MoveDir::Right;
@@ -28,9 +51,9 @@ MoveDir RightHandSearch::CheckMove(Vector2 pos, MoveDir dir)
 			return MoveDir::None;
 		}
 	}
-	if (dir == MoveDir::Right)
+	if (dir == MoveDir::Down)
 	{
-	if (Check(Vector2(pos.x, pos.y + 1)))
+		if (Check(Vector2(pos.x, pos.y + 1)))
 		{
 			return MoveDir::Down;
 		}
@@ -47,40 +70,13 @@ MoveDir RightHandSearch::CheckMove(Vector2 pos, MoveDir dir)
 			return MoveDir::Left;
 		}
 		else
-	{
-		return MoveDir::None;
-	}
-	}
-	if (dir == MoveDir::Down)
-	{
-		 if (Check(Vector2(pos.x - 1, pos.y)))
 		{
-			return MoveDir::Left;
+			return MoveDir::None;
 		}
-		else if (Check(Vector2(pos.x, pos.y + 1)))
-		{
-			return MoveDir::Down;
-		}
-		else if (Check(Vector2(pos.x + 1, pos.y)))
-		{
-			return MoveDir::Right;
-		}
-		else if (Check(Vector2(pos.x, pos.y - 1)))
-		{
-			return MoveDir::Up;
-		}
-		else
-		 {
-			 return MoveDir::None;
-		 }
 	}
 	if (dir == MoveDir::Left)
 	{
-		if (Check(Vector2(pos.x, pos.y - 1)))
-		{
-			return MoveDir::Up;
-		}
-		else if (Check(Vector2(pos.x - 1, pos.y)))
+		if (Check(Vector2(pos.x - 1, pos.y)))
 		{
 			return MoveDir::Left;
 		}
@@ -91,6 +87,10 @@ MoveDir RightHandSearch::CheckMove(Vector2 pos, MoveDir dir)
 		else if (Check(Vector2(pos.x + 1, pos.y)))
 		{
 			return MoveDir::Right;
+		}
+		else if (Check(Vector2(pos.x, pos.y - 1)))
+		{
+			return MoveDir::Up;
 		}
 		else
 		{

@@ -36,21 +36,22 @@ void Desmodus::Update(void)
 		auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
 
 		{
-			if (dir.up && dir.right && dir.down && dir.left)
-			{
-				dir_ = lpRHSMng.CheckMoveSweev(tmpPos / 32, dir_); \
-			}
-			else
-			{
-				if (rand() % 2)
-				{
-					dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
-				}
-				else
-				{
-					dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
-				}
-			}
+			dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+			//if (dir.up && dir.right && dir.down && dir.left)
+			//{
+			//	dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+			//}
+			//else
+			//{
+			//	//if (rand() % 2)
+			//	//{
+			//	//	dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
+			//	//}
+			//	//else
+			//	//{
+			//	//	dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
+			//	//}
+			//}
 		}
 	}
 }

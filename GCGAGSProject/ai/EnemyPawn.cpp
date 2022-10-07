@@ -31,7 +31,6 @@ void EnemyPawn::Update(void)
 	if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
 	{
 		ChangeNone();
-
 		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
 		//auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
 
