@@ -1,0 +1,123 @@
+h1{
+    font-size: 40px;
+    color:brown;
+    background-color: wheat;
+    padding: 15px;
+    margin: 10px 0px;
+}
+
+.content{
+    background-color: whitesmoke;
+    padding: 15px;
+    border: solid 1px #ccc;
+}
+
+section {
+    background-color: aliceblue;
+    margin: 10px;
+}
+
+.menu > li{
+    display: inline;
+    border-right: 2px solid #333;
+    border-left: 2px solid #333;
+    margin: 2;
+}
+
+li{
+    background-color: rgb(255, 255, 255);
+}
+
+img{
+    border: solid 1px #ccc;
+    /*border-radius: 50%;*/
+}
+
+a:hover {
+    color: red;
+}
+
+table{
+    border: solid 1px #ccc;
+    padding: 15px;
+    background-color: white;
+}
+
+td{
+    text-align: right;
+}
+
+ul{
+    list-style: none;
+}
+
+ul.li{
+    float: left;
+    text-align: center;
+}
+
+.header{
+    background-size: cover;
+    background-image: url(./img/barg.png);
+    color: white;
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+    font-size: 40px;
+    font-family: serif;
+    font-weight: bold;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.panel{
+    width: 50%;
+    padding: 10px;
+    box-sizing: border-box;
+    float: left;
+}
+
+.panel-odd{
+    clear: both;
+    padding-left: 0px;
+}
+
+.panel-even{
+    padding-right: 0px;
+}
+
+#wrapper{
+    padding: 20px 50px 50px 50px;
+}
+
+.clear{
+    clear: both;
+}
+
+body{
+    background-color: antiquewhite;
+    background-size: 125%;
+    background-attachment: fixed;
+    width: 100%;
+    margin: 0%;
+    padding: 0;
+    text-align: center;
+}
+
+#toTop{
+    position: fixed;
+    width: 20%;
+    background-color: white;
+    border: solid 1px #ccc;
+    z-index: 1;
+    bottom: 0;
+    left: 10px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+#toTop > a{
+    text-decoration: none;
+    display: block;
+    padding: 10px;
+    text-align: center;
+}
