@@ -8,7 +8,7 @@
 <body>
     <main>
         <header>
-            <h1>DungeonOwner</h1>
+            <h1 id="top">DungeonOwner</h1>
             <h2>マニュアル</h2>
             <ul class="menu">
                 <li><a href="#sec1">はじめに</a></li>
@@ -80,7 +80,7 @@
                 <p>ゲームを始めると、下にカードが流れてきます。 </p>
                 <img alt="ゲージ" class="auto-style1" src="img/g3.png" width="50%" height="50%"/>
                 <p>これは自分が持っている召喚ポイント（ゲージ）を使用して使用することができます。 </p>
-                <img alt="ゲージ" class="auto-style1" src="img/g2.png" width="50%" height="50%"/>
+                <img alt="ゲージ" class="auto-style1" src="img/g2.png" width="30%" height="30%"/>
                 <p>マウス左クリックで掴む事が出来、マップ上にドラックしてドロップできます</p>
                 <p>また、この時右クリックをすることで黄色の矢印の向きが変わります。</p>
                 <p>これは移動するキャラの進行方向を決めることができます。</p>
@@ -100,7 +100,7 @@
             </div>
             <h4>ダンジョン作成＝二日目編＝</h4>
             <div class="content">
-                <img alt="クリア" class="auto-style1" src="img/mapm3.png" width="300" height="200"/>
+                <img alt="クリア" class="auto-style1" src="img/mapm3.png" width="50%" height="50%"/>
                 <p>ダンジョンはあなたが生き残る度に一段階成長します</p>
                 <p>防衛成功時にマップ強化した場合も通常通り成長するので、1強化しておくと2強化されたことになります</p>
                 <p>なので、ゴールドをためて一気に強化することで１段の縛りなくダンジョンを設計できます</p>
@@ -108,7 +108,7 @@
                 <p>前日に設計したものはすでにダンジョンとして構築されているので取り消すことができません</p>
                 <p>なので赤くないところに設計する必要があります。</p>
                 <p>強化しなくても毎回一段階大きくなるので、このままだと一本道になってしまうので、</p>
-                <p>このゲームは難易度が高めになってます</p>
+                <p>難易度が上がってしまいます。後述する柵を駆使しましょう。</p>
             </div>
             <h4>ゲームの流れは以上です</h4>
             <div class="content">
@@ -126,53 +126,39 @@
                 <p>そこそこ固い戦車　ポーンよりはコストは高い程度　結構直進する。壁役にピッタリ</p>
                 <h4>ビショップ</h4>
                 <img alt="omake" class="auto-style1" src="img/menu5.png" width="100" height="100"/>
-                <p>すごく弱い　コストは高め　その場から動かない　しかし壁を貫通する魔法を放つ</p>
+                <p>すごく弱い　コストは高め　その場から動かない　しかし壁を貫通する魔法を放つ事ができる。遠距離タイプ</p>
                 <h4>罠</h4>
                 <img alt="omake" class="auto-style1" src="img/menu3.png" width="100" height="100"/>
                 <p>一度で壊れる　コストは高い　罠なので動きません　地雷としてどうぞ。　固い敵にも強化すると・・・</p>
                 <h4>柵</h4>
                 <img alt="omake" class="auto-style1" src="img/menu4.png" width="100" height="100"/>
-                <p>凄く硬い　コストも高い　設置タイプ　ダンジョン側は通行できる</p>
+                <p>凄く硬い　コストも高い　設置タイプ　ダンジョン側は通行できる。敵の侵攻ルートに影響する。</p>
             </div>
             <p></p>
             <p></p>
             <p></p>
-            <p>おまけ</p>
+            <p>経路探索について</p>
             <div class="content">
                 <p>敵はランダム移動、ゴールを目指す、ゴール目指す＋魔法使いの３パターン</p>
-                <p>柵設置後毎回経路を再探索してる</p>
-                <p>柵設置後に新しく入った敵のうちゴールを目指す敵は、経路を考え直したあとなので回避してきたりする。</p>
-                <p>が、壊したほうがいいと判断すると柵を壊しに来る</p>
+                <p>柵設置後毎回経路を再検索しています。</p>
+                <p>柵設置後に新しく入った敵のうちゴールを目指す敵は、新しい経路を通って来ます。</p>
             </div>
-            <p>↓クリアできない場合↓</p>
+            <p>↓クリアできない場合はご参考に↓</p>
             <hr>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
-            <hr>
-            <p>ビショップは耐久は皆無ですが、遠距離攻撃なので、たどり着けない場所に設置すると、魔法使い以外対処できなくなるので実はすごく強いです</p>
-            <img alt="omake" class="auto-style1" src="img/tec.png" width="300" height="200"/>
+            <a href="./img/omake.html">おまけに移動（プレイ動画あり）</a>
         </section>
     </main>
     <nav id="toTop">
         <ul>
             <li><h2>メニュー</h2></li>
+            <li><a href="#top">トップへ</a></li>
             <li><a href="#sec1">はじめに</a></li>
             <li><a href="#sec2">操作説明&フロー</a></li>
             <li><a href="#sec3">簡単に駒解説</a></li>
         </ul>
     </nav>
+    <footer>
+        <p>DungeonOwner Manual</p>
+    </footer>
 </body>
 </html>
