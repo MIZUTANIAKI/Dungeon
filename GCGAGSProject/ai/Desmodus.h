@@ -12,4 +12,5 @@ public:
 	void SetStatus(int num) override;
 private:
 	void Damage(Explorer& target)override;
+	int counter_;
 };

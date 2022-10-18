@@ -30,7 +30,7 @@ void Monster::Update(void)
 
 	DefoltMove(lpCronoMng.GetDeltaTime());
 
-	Vector2 tmpPos = WFUtility::VecFltToVecInt(pos_);
+	Vector2 tmpPos = WFUtility::VecFltToVecInt({ pos_.x,pos_.y });
 
 	if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
 	{

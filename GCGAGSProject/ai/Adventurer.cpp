@@ -64,7 +64,6 @@ void Adventurer::Update(void)
 				dir_ = MoveDir::Left;
 			}
 		}
-
 		ChangeNone();
 		auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
 		if (dir.up && dir.right && dir.down && dir.left)

@@ -66,10 +66,11 @@ public:
 	
 	BlockEdge GetMapChipHit(Vector2 pos);
 
+	bool Check(Vector2 pos);
+
 private:
 	static RightHandSearch* sInstance;
 
-	bool Check(Vector2 pos);
 	mapChipDate mapdat_;
 
 	int movenum = -1;

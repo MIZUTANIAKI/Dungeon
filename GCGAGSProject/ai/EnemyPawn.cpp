@@ -8,6 +8,7 @@ EnemyPawn::EnemyPawn()
 {
 	MoveFMAX_ = 3.0f;
 	nowMoveVec_ = 0;
+	counter_ = 0;
 	hp_ = 1;
 	pos_ = { 0,0 };
 	dir_ = MoveDir::None;
@@ -27,17 +28,111 @@ void EnemyPawn::Update(void)
 		return;
 	}
 	DefoltMove(lpCronoMng.GetDeltaTime());
-	Vector2 tmpPos = WFUtility::VecFltToVecInt(pos_);
-	if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
-	{
-		ChangeNone();
-		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
-		//auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
+	//if (counter_% (60*5) == 0)
+	//Vector2 tmpPos = WFUtility::VecFltToVecInt({ pos_.x + 32 / 2,pos_.y });
+	//switch (dir_)
+	//{
+	//case MoveDir::None:
+	//	ChangeNone();
+	//	break;
+	//case MoveDir::Up:
+	//	if (lpRHSMng.Check(WFUtility::VecFltToVecInt({ (pos_.x) / 32,(pos_.y - 16) / 32 })))
+	//	{
+	//		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+	//	}
+	//	break;
+	//case MoveDir::Right:
+	//	if (lpRHSMng.Check(WFUtility::VecFltToVecInt({ (pos_.x + 16) / 32,(pos_.y) / 32 })))
+	//	{
+	//		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+	//	}
+	//	break;
+	//case MoveDir::Down:
+	//	if (lpRHSMng.Check(WFUtility::VecFltToVecInt({ (pos_.x) / 32,(pos_.y + 16) / 32 })))
+	//	{
+	//		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+	//	}
+	//	break;
+	//case MoveDir::Left:
+	//	if (lpRHSMng.Check(WFUtility::VecFltToVecInt({ (pos_.x - 16) / 32,(pos_.y) / 32 })))
+	//	{
+	//		dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+	//	}
+	//	break;
+	//default:
+	//	break;
+	//}
+	//return;
 
-		//{
-		//	if (dir.up && dir.right && dir.down && dir.left)
-		//	{
-		//		dir_ = lpRHSMng.CheckMoveSweev(tmpPos / 32, dir_); \
+	Vector2 tmpPos = WFUtility::VecFltToVecInt({ pos_.x,pos_.y });
+	if (counter_ != 0)
+	{
+		if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
+		{
+			ChangeNone();
+			//auto tmpdir = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+			dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+			counter_ = 0;
+			return;
+			//auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
+
+			//switch (tmpdir)
+			//{
+			//case MoveDir::None:
+			//	if (dir.up)
+			//	{
+			//		dir_ = MoveDir::None;
+			//	}
+			//	break;
+			//case MoveDir::Up:
+			//	if (dir.up)
+			//	{
+			//		dir_ = tmpdir;
+			//	}
+			//	else
+			//	{
+			//		dir_ = MoveDir::None;
+			//	}
+			//	break;
+			//case MoveDir::Right:
+			//	if (dir.right)
+			//	{
+			//		dir_ = tmpdir;
+			//	}
+			//	else
+			//	{
+			//		dir_ = MoveDir::None;
+			//	}
+			//	break;
+			//case MoveDir::Down:
+			//	if (dir.down)
+			//	{
+			//		dir_ = tmpdir;
+			//	}
+			//	else
+			//	{
+			//		dir_ = MoveDir::None;
+			//	}
+			//	break;
+			//case MoveDir::Left:
+			//	if (dir.left)
+			//	{
+			//		dir_ = tmpdir;
+			//	}
+			//	else
+			//	{
+			//		dir_ = MoveDir::None;
+			//	}
+			//	break;
+			//default:
+			//	break;
+		}
+	}
+	counter_++;
+	//{
+	//	if (dir.up && dir.right && dir.down && dir.left)
+	//	{
+	//		dir_ = lpRHSMng.CheckMoveSweev(tmpPos / 32, dir_); \
 		//	}
 		//	else
 		//	{
@@ -51,7 +146,6 @@ void EnemyPawn::Update(void)
 		//		}
 		//	}
 		//}
-	}
 	/*if (WFUtility::VecFltToVecInt(pos_) <= goalPos_ && WFUtility::VecFltToVecInt(pos_) >= goalPos_)
 	{
 		hp_ = 0;

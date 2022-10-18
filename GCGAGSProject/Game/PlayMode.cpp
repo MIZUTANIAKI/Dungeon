@@ -138,8 +138,8 @@ void PlayMode::Update(void)
 	lpEnergyMng.Update();
 	uIScrolller_->Update();
 	//if (con_ / 30 % 2 == 0)
-	//if (con_ % spawnRate_ == 0)
-	if(lpKeyMng.CheckKeyTrg(KeyBindID::Left))
+	if (con_ % spawnRate_ == 0)
+	//if(lpKeyMng.CheckKeyTrg(KeyBindID::Left))
 	{
 		//if (eneF)
 		//{

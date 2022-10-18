@@ -39,5 +39,6 @@ private:
 	std::vector<Vector2> moveVec_;
 
 	Vector2 goalPos_;
+	int counter_;
 };
 

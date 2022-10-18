@@ -16,6 +16,7 @@ Desmodus::Desmodus()
 	oneTimeRetreatF_ = false;
 	MoveF_ = false;
 	MoveFCon_ = 0.0f;
+	counter_ = 0;
 }
 
 Desmodus::~Desmodus()
@@ -30,30 +31,35 @@ void Desmodus::Update(void)
 	}
 	DefoltMove(lpCronoMng.GetDeltaTime());
 	Vector2 tmpPos = WFUtility::VecFltToVecInt(pos_);
-	if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
+	if (counter_ != 0)
 	{
-		ChangeNone();
-		auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
-
+		if (Vector2(tmpPos.x / 32 * 32, tmpPos.y / 32 * 32) == tmpPos)
 		{
-			dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
-			//if (dir.up && dir.right && dir.down && dir.left)
-			//{
-			//	dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
-			//}
-			//else
-			//{
-			//	//if (rand() % 2)
-			//	//{
-			//	//	dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
-			//	//}
-			//	//else
-			//	//{
-			//	//	dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
-			//	//}
-			//}
+			ChangeNone();
+			auto dir = lpRHSMng.GetMapChipHit(tmpPos / 32);
+			counter_ = 0;
+			{
+				dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+				//if (dir.up && dir.right && dir.down && dir.left)
+				//{
+				//	dir_ = lpRHSMng.CheckMoveBlock(tmpPos / 32, dir_);
+				//}
+				//else
+				//{
+				//	//if (rand() % 2)
+				//	//{
+				//	//	dir_ = lpRHSMng.CheckMove(tmpPos / 32, dir_);
+				//	//}
+				//	//else
+				//	//{
+				//	//	dir_ = lpRHSMng.CheckMoveL(tmpPos / 32, dir_);
+				//	//}
+				//}
+			}
+			return;
 		}
 	}
+	counter_++;
 }
 
 void Desmodus::Draw()
