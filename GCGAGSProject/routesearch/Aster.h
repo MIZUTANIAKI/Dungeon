@@ -43,6 +43,7 @@ public:
 	}
 
 	void Init(mapChipDate date,Vector2 mapsize);
+	void PlayInit(mapChipDate date,Vector2 mapsize);
 	void Start(Vector2 startPos);
 
 	bool IsGoal(void);
@@ -57,6 +58,8 @@ public:
 	{
 		return goalRoute_;
 	}
+
+	void AddCost(Vector2 pos);
 private:
 	static Aster* sInstance;
 

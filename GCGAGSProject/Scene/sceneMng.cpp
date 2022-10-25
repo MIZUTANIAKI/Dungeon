@@ -140,7 +140,7 @@ void SceneMng::Run(void)
 		lpCronoMng.Last();
 
 		Draw();
-		fps->Wait();
+		//fps->Wait();
 	}
 
 	if (RemoveFontResourceEx(fontpath, FR_PRIVATE, NULL))

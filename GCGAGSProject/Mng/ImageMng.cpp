@@ -12,6 +12,10 @@ ImageMng* ImageMng::sInstance = nullptr;
 
 void ImageMng::DrawNaw(void)
 {
+	if (banImg_[0] == -1|| banImg_[0] == 0)
+	{
+		LoadDivGraph("resource\\img/ban.png", 35, 5, 7, 256, 256, banImg_);
+	}
 	if (dScreenH_ == -1)
 	{
 		dScreenH_ = MakeScreen(screenSize_.x, screenSize_.y, true);
@@ -59,6 +63,26 @@ void ImageMng::DrawNaw(void)
 
 			//MyDrawScreen(itr->second.first.x, itr->second.first.y, itr->first.first, sname, -1);
 			//SetDrawMyImg(itr->first.first, sname, itr->second.first.x, itr->second.first.y);
+		}
+
+		for (auto& banDate : banpos_)
+		{
+			SetDrawBright(bright_, bright_, bright_);
+			DrawRotaGraph(banDate.second.x+155, banDate.second.y+65,0.2f,0, banImg_[banDate.first / 10],true);
+			banDate.first += lpCronoMng.IsOneSecond();
+		}
+
+		for (auto it = banpos_.begin(); it != banpos_.end();) 
+		{
+			if (it->first / 10 >= 35) 
+			{
+
+				it = banpos_.erase(it);
+			}
+			else
+			{
+				++it;
+			}
 		}
 	}
 
@@ -144,6 +168,11 @@ int ImageMng::GetGraphHandle(std::string id)
 		imgList_.try_emplace(id, DxLib::LoadGraph(tstr.c_str()));
 	}
 	return imgList_.at(id);
+}
+
+void ImageMng::SetkillBanPos(Vector2 pos)
+{
+	banpos_.emplace_back(std::pair<int, Vector2>(0, pos));
 }
 
 void ImageMng::SetBright(int num)

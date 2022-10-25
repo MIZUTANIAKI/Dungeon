@@ -108,6 +108,9 @@ void PlayMode::SetMapDate(mapChipDate mapdate)
 	mapdat_ = mapdate;
 	//マップからデータを設定
 	InitMapDate();
+
+	//初期化
+	lpAsterMng.Init(mapdat_, mapSize_);
 }
 
 void PlayMode::Update(void)
@@ -270,23 +273,45 @@ void PlayMode::Update(void)
 			if ((*itr)->GetObjectID() == ObjectID::Adventurer)
 			{
 				enemyKillCount_++;
+				Vector2 tpos = (*itr)->GetPos();
+				tpos.x /= 32;
+				tpos.y /= 32;
+				lpAsterMng.AddCost(tpos);
+				CheckGoal();
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Knight)
 			{
 				enemyKillCount_++;
+				Vector2 tpos = (*itr)->GetPos();
+				tpos.x /= 32;
+				tpos.y /= 32;
+				lpAsterMng.AddCost(tpos);
+				CheckGoal();
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Pawn)
 			{
 				enemyKillCount_++;
+				Vector2 tpos = (*itr)->GetPos();
+				tpos.x /= 32;
+				tpos.y /= 32;
+				lpAsterMng.AddCost(tpos);
+				CheckGoal();
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Goal)
 			{
-				goalDelF_ = true; 
+				goalDelF_ = true;
 			}
 			if ((*itr)->GetObjectID() == ObjectID::Gate || (*itr)->GetObjectID() == ObjectID::Spike)
 			{
 				mapdat_[(*itr)->GetPos().y / 32][(*itr)->GetPos().x / 32] = BlockDate::Road;
 				CheckGoal();
+			}
+			if ((*itr)->GetObjectID() != ObjectID::Fire&& (*itr)->GetObjectID() != ObjectID::EFire)
+			{
+				Vector2 tpos = (*itr)->GetPos() + mapPos_;
+				tpos.x += 32 / 2;
+				tpos.y += 32 / 2;
+				lpImglMng.SetkillBanPos(tpos);
 			}
 
 			itr = explorerVector_.erase(itr);
@@ -770,7 +795,13 @@ void PlayMode::Draw(void)
 				DrawFormatString(x * 32 + mapPos_.x, y * 32 + mapPos_.y, 0xff0000, "%d", map_[y][x].nowstep);
 			}
 #endif // _DEBUG
-
+			{
+				std::unique_lock<std::mutex> lock(mapG_);
+				if (map_[y][x].nowstep > 0)
+				{
+					DrawCircle(x * 32 + mapPos_.x + 32 / 2, y * 32 + mapPos_.y + 32 / 2, 10, 0xff0000, true);
+				}
+			}
 		}
 	}
 
@@ -983,8 +1014,9 @@ const BlockEdge PlayMode::CheckEdge(Vector2& pos)
 
 void PlayMode::AsterCheck(void)
 {
+
 	//初期化
-	lpAsterMng.Init(mapdat_, mapSize_);
+	lpAsterMng.PlayInit(mapdat_, mapSize_);
 	//探索開始
  	lpAsterMng.Start(firstPos_);
 	//ゴールできるかどうか

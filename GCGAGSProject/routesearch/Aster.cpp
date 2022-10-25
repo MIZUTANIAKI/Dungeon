@@ -65,6 +65,59 @@ void Aster::Init(mapChipDate date, Vector2 mapsize)
 
 }
 
+void Aster::PlayInit(mapChipDate date, Vector2 mapsize)
+{
+	goalPos_ = { 0,0 };
+	startPos_ = { 0,0 };
+	mapSize_ = { 0,0 };
+	goalRoute_.clear();
+	goalRouteList_.clear();
+	mapdate_ = date;
+	for (int y = 0; y < mapSize_.y; y++)
+	{
+		for (int x = 0; x < mapSize_.x; x++)
+		{
+			map_[y][x].nowstep = 0;
+			map_[y][x].aboutstep = 0;
+			map_[y][x].aboutAlltep = 0;
+		}
+	}
+	mapSize_ = mapsize;
+	for (int y = 0; y < mapsize.y; y++)
+	{
+		for (int x = 0; x < mapsize.x; x++)
+		{
+			if (date[y][x] == BlockDate::Block)
+			{
+				map_[y][x].nowstep = -1;
+				map_[y][x].aboutstep = -1;
+				map_[y][x].aboutAlltep = -1;
+			}
+			if (date[y][x] == BlockDate::Gate)
+			{
+				map_[y][x].StepCost = 50;
+			}
+			if (date[y][x] == BlockDate::Spike)
+			{
+				map_[y][x].StepCost = 3;
+			}
+			if (date[y][x] == BlockDate::Start)
+			{
+				goalPos_ = { x,y };
+			}
+			if (date[y][x] == BlockDate::Goal)
+			{
+				map_[y][x].nowstep = 1;
+				startPos_ = { x,y };
+			}
+		}
+	}
+	map_[startPos_.y][startPos_.x].nowstep = 1;
+	map_[startPos_.y][startPos_.x].aboutstep = (startPos_.x - startPos_.y) - (goalPos_.x - startPos_.y);
+	map_[startPos_.y][startPos_.x].aboutAlltep = 1 + (startPos_.x - startPos_.y) - (goalPos_.x - startPos_.y);
+
+}
+
 void Aster::Start(Vector2 startPos)
 {
 	if (startPos.x < 0|| startPos.y < 0)
@@ -137,6 +190,30 @@ bool Aster::IsGoal(void)
 		return false;
 	}
 	return true;
+}
+
+void Aster::AddCost(Vector2 pos)
+{
+	if (pos.x >= mapSize_.x)
+	{
+		return;
+	}
+	if (pos.y >= mapSize_.y)
+	{
+		return;
+	}
+	if (pos.x < 0)
+	{
+		return;
+	}
+	if (pos.y < 0)
+	{
+		return;
+	}
+	if (map_[pos.y][pos.x].nowstep != -1)
+	{
+		map_[pos.y][pos.x].StepCost+=10;
+	}
 }
 
 void Aster::StartCheck(void)

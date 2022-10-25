@@ -365,7 +365,7 @@ int TitleScene::title1Update()
 			}
 			if (isTarget_ == 1)
 			{
-				system("start resource/html/ƒ}ƒjƒ…ƒAƒ‹.html");
+				system("start resource/html/manual.html");
 				return 0;
 			}
 			if (isTarget_ == 2)

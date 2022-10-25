@@ -118,6 +118,12 @@ public:
 	int GetGraphHandle(std::string id);
 
 	/// <summary>
+	/// 破壊されたエフェクト
+	/// </summary>
+	/// <param name="pos">座標</param>
+	void SetkillBanPos(Vector2 pos);
+
+	/// <summary>
 	/// 明るさを設定
 	/// </summary>
 	/// <param name="num">整数0~255</param>
@@ -159,6 +165,9 @@ private:
 
 	bool useGray_;
 	bool useShade_;
+
+	std::vector<std::pair<int, Vector2>> banpos_;
+	int banImg_[35];
 
 	Vector2 screenSize_;
 	ImageMng();
